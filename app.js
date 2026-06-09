@@ -39,6 +39,16 @@ app.use('/backup', require('./routes/backup'));
 app.use('/history', require('./routes/history'));
 app.use('/file-tracking', require('./routes/file-tracking'));
 
+const fs = require('fs');
+const path = require('path');
+
+// Create uploads directory if not exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log('📁 Created uploads directory');
+}
+
 // Home redirect
 app.get('/', (req, res) => {
   if (req.session.userId) {
