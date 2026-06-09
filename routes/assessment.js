@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+  limits: { fileSize: 10 * 1024 * 1024 }
 });
 
 // Middleware untuk mendapatkan kecamatan_id
@@ -51,35 +51,14 @@ const calculateAndSaveScore = (kecamatanId, callback) => {
                 aspectA, aspectB, aspectC, aspectD, aspectE, aspectF
               );
               
-              db.run(
-                `UPDATE aspect_a SET total_score = ? WHERE kecamatan_id = ?`,
-                [aspectA.totalScore, kecamatanId]
-              );
-              db.run(
-                `UPDATE aspect_b SET total_score = ? WHERE kecamatan_id = ?`,
-                [aspectB.totalScore, kecamatanId]
-              );
-              db.run(
-                `UPDATE aspect_c SET total_score = ? WHERE kecamatan_id = ?`,
-                [aspectC.totalScore, kecamatanId]
-              );
-              db.run(
-                `UPDATE aspect_d SET total_score = ? WHERE kecamatan_id = ?`,
-                [aspectD.totalScore, kecamatanId]
-              );
-              db.run(
-                `UPDATE aspect_e SET total_score = ? WHERE kecamatan_id = ?`,
-                [aspectE.totalScore, kecamatanId]
-              );
-              db.run(
-                `UPDATE aspect_f SET total_score = ? WHERE kecamatan_id = ?`,
-                [aspectF.totalScore, kecamatanId]
-              );
+              db.run(`UPDATE aspect_a SET total_score = ? WHERE kecamatan_id = ?`, [aspectA.totalScore, kecamatanId]);
+              db.run(`UPDATE aspect_b SET total_score = ? WHERE kecamatan_id = ?`, [aspectB.totalScore, kecamatanId]);
+              db.run(`UPDATE aspect_c SET total_score = ? WHERE kecamatan_id = ?`, [aspectC.totalScore, kecamatanId]);
+              db.run(`UPDATE aspect_d SET total_score = ? WHERE kecamatan_id = ?`, [aspectD.totalScore, kecamatanId]);
+              db.run(`UPDATE aspect_e SET total_score = ? WHERE kecamatan_id = ?`, [aspectE.totalScore, kecamatanId]);
+              db.run(`UPDATE aspect_f SET total_score = ? WHERE kecamatan_id = ?`, [aspectF.totalScore, kecamatanId]);
               
-              callback(null, {
-                aspectA, aspectB, aspectC, aspectD, aspectE, aspectF,
-                totalScore
-              });
+              callback(null, { aspectA, aspectB, aspectC, aspectD, aspectE, aspectF, totalScore });
             });
           });
         });
@@ -88,21 +67,24 @@ const calculateAndSaveScore = (kecamatanId, callback) => {
   });
 };
 
-// GET - Aspect A
+// ==================== ASPECT A ====================
 router.get('/aspect-a', ensureAuthenticated, getKecamatanId, (req, res) => {
   db.get('SELECT * FROM aspect_a WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    if (err) {
+      console.error('Error fetching aspect A:', err);
+      return res.status(500).send('Error loading data');
+    }
     res.render('assessment/aspect-a', {
       saved: req.query.saved === '1',
       data: row || {},
       kecamatan: req.session.kecamatan,
       isAdmin: req.session.isAdmin,
-      scoring: null,
-      kecamatan_id: req.kecamatan_id,      
+      kecamatan_id: req.kecamatan_id,
+      username: req.session.username
     });
   });
 });
 
-// POST - Aspect A dengan scoring otomatis
 router.post('/aspect-a', ensureAuthenticated, getKecamatanId, (req, res) => {
   const uploadFields = upload.fields([
     { name: 'ind_1_file', maxCount: 1 },
@@ -134,6 +116,7 @@ router.post('/aspect-a', ensureAuthenticated, getKecamatanId, (req, res) => {
 
     const data = req.body;
     
+    // ✅ PERBAIKAN: Tidak ada spasi di field names!
     const fieldMapping = {
       'ind_1_status': 'ind_1_status',
       'ind_2a_status': 'ind_2a_status',
@@ -176,8 +159,7 @@ router.post('/aspect-a', ensureAuthenticated, getKecamatanId, (req, res) => {
         
         Object.keys(fieldMapping).forEach(formField => {
           if (data[formField] !== undefined) {
-            const dbField = fieldMapping[formField];
-            updates.push(`${dbField} = ?`);
+            updates.push(`${fieldMapping[formField]} = ?`);
             values.push(data[formField]);
           }
         });
@@ -251,24 +233,28 @@ router.post('/aspect-a', ensureAuthenticated, getKecamatanId, (req, res) => {
   });
 });
 
-// GET - Aspect B
+// ==================== ASPECT B ====================
 router.get('/aspect-b', ensureAuthenticated, getKecamatanId, (req, res) => {
   db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    if (err) {
+      console.error('Error fetching aspect B:', err);
+      return res.status(500).send('Error loading data');
+    }
     res.render('assessment/aspect-b', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
       isAdmin: req.session.isAdmin,
-      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
-      kecamatan_id: req.kecamatan_id
+      saved: req.query.saved === '1',
+      kecamatan_id: req.kecamatan_id,
+      username: req.session.username
     });
   });
 });
 
-// POST - Aspect B
 router.post('/aspect-b', ensureAuthenticated, getKecamatanId, upload.any(), (req, res) => {
   const data = req.body;
     
-  // Mapping spesifik untuk Aspect B yang panjang
+  // ✅ PERBAIKAN: Tidak ada spasi di field names!
   const fieldMapping = {
     'ind_1_jumlah': 'ind_1_jumlah',
     'ind_2_jumlah': 'ind_2_jumlah',
@@ -344,7 +330,7 @@ router.post('/aspect-b', ensureAuthenticated, getKecamatanId, upload.any(), (req
     'ind_40_persen': 'ind_40_persen',
     'ind_41_nilai': 'ind_41_nilai',
     'ind_42_status': 'ind_42_status',
-    'ind_43_status': 'ind_43_status' // Mapping status umum untuk ind 43 jika perlu
+    'ind_43_status': 'ind_43_status'
   };
   
   db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
@@ -354,8 +340,7 @@ router.post('/aspect-b', ensureAuthenticated, getKecamatanId, upload.any(), (req
       
       Object.keys(fieldMapping).forEach(formField => {
         if (data[formField] !== undefined) {
-          const dbField = fieldMapping[formField];
-          updates.push(`${dbField} = ?`);
+          updates.push(`${fieldMapping[formField]} = ?`);
           values.push(data[formField]);
         }
       });
@@ -399,20 +384,25 @@ router.post('/aspect-b', ensureAuthenticated, getKecamatanId, upload.any(), (req
   });
 });
 
-// GET - Aspect C
+// ==================== ASPECT C ====================
+// ✅ PERBAIKAN: Pakai aspect_c (bukan aspect_b)!
 router.get('/aspect-c', ensureAuthenticated, getKecamatanId, (req, res) => {
-  db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
-    res.render('assessment/aspect-b', { 
+  db.get('SELECT * FROM aspect_c WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    if (err) {
+      console.error('Error fetching aspect C:', err);
+      return res.status(500).send('Error loading data');
+    }
+    res.render('assessment/aspect-c', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
       isAdmin: req.session.isAdmin,
-      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
-      kecamatan_id: req.kecamatan_id
+      saved: req.query.saved === '1',
+      kecamatan_id: req.kecamatan_id,
+      username: req.session.username
     });
   });
 });
 
-// POST Aspect C
 router.post('/aspect-c', ensureAuthenticated, getKecamatanId, upload.any(), (req, res) => {
   const data = req.body;
   const fields = [
@@ -462,20 +452,25 @@ router.post('/aspect-c', ensureAuthenticated, getKecamatanId, upload.any(), (req
   });
 });
 
-// GET Aspect D
+// ==================== ASPECT D ====================
+// ✅ PERBAIKAN: Pakai aspect_d (bukan aspect_b)!
 router.get('/aspect-d', ensureAuthenticated, getKecamatanId, (req, res) => {
-  db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
-    res.render('assessment/aspect-b', { 
+  db.get('SELECT * FROM aspect_d WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    if (err) {
+      console.error('Error fetching aspect D:', err);
+      return res.status(500).send('Error loading data');
+    }
+    res.render('assessment/aspect-d', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
       isAdmin: req.session.isAdmin,
-      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
-      kecamatan_id: req.kecamatan_id
+      saved: req.query.saved === '1',
+      kecamatan_id: req.kecamatan_id,
+      username: req.session.username
     });
   });
 });
 
-// POST Aspect D
 router.post('/aspect-d', ensureAuthenticated, getKecamatanId, upload.any(), (req, res) => {
   const data = req.body;
   const fields = [
@@ -524,20 +519,25 @@ router.post('/aspect-d', ensureAuthenticated, getKecamatanId, upload.any(), (req
   });
 });
 
-// GET Aspect E
+// ==================== ASPECT E ====================
+// ✅ PERBAIKAN: Pakai aspect_e (bukan aspect_b)!
 router.get('/aspect-e', ensureAuthenticated, getKecamatanId, (req, res) => {
-  db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
-    res.render('assessment/aspect-b', { 
+  db.get('SELECT * FROM aspect_e WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    if (err) {
+      console.error('Error fetching aspect E:', err);
+      return res.status(500).send('Error loading data');
+    }
+    res.render('assessment/aspect-e', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
       isAdmin: req.session.isAdmin,
-      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
-      kecamatan_id: req.kecamatan_id
+      saved: req.query.saved === '1',
+      kecamatan_id: req.kecamatan_id,
+      username: req.session.username
     });
   });
 });
 
-// POST Aspect E
 router.post('/aspect-e', ensureAuthenticated, getKecamatanId, upload.any(), (req, res) => {
   const data = req.body;
   const fields = [
@@ -587,24 +587,28 @@ router.post('/aspect-e', ensureAuthenticated, getKecamatanId, upload.any(), (req
   });
 });
 
-// GET Aspect F
+// ==================== ASPECT F ====================
+// ✅ PERBAIKAN: Pakai aspect_f (bukan aspect_b)!
 router.get('/aspect-f', ensureAuthenticated, getKecamatanId, (req, res) => {
-  db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
-    res.render('assessment/aspect-b', { 
+  db.get('SELECT * FROM aspect_f WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    if (err) {
+      console.error('Error fetching aspect F:', err);
+      return res.status(500).send('Error loading data');
+    }
+    res.render('assessment/aspect-f', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
       isAdmin: req.session.isAdmin,
-      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
-      kecamatan_id: req.kecamatan_id
+      saved: req.query.saved === '1',
+      kecamatan_id: req.kecamatan_id,
+      username: req.session.username
     });
   });
 });
 
-// POST Aspect F
 router.post('/aspect-f', ensureAuthenticated, getKecamatanId, upload.any(), (req, res) => {
   const data = req.body;
   
-  // Buat array field untuk ind_1_status sampai ind_40_status
   const fields = [];
   for (let i = 1; i <= 40; i++) {
     fields.push(`ind_${i}_status`);
@@ -648,7 +652,7 @@ router.post('/aspect-f', ensureAuthenticated, getKecamatanId, upload.any(), (req
   });
 });
 
-// GET - Lihat Skor (untuk admin dan kecamatan)
+// ==================== SCORING ====================
 router.get('/scoring', ensureAuthenticated, getKecamatanId, (req, res) => {
   db.get('SELECT * FROM aspect_a WHERE kecamatan_id = ?', [req.kecamatan_id], (err, aspectAData) => {
     db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, aspectBData) => {
@@ -669,11 +673,11 @@ router.get('/scoring', ensureAuthenticated, getKecamatanId, (req, res) => {
               );
               
               res.render('assessment/scoring-result', {
-  		scoring: totalScoreResult,
-  		kecamatan: req.session.kecamatan,
-  		isAdmin: req.session.isAdmin,
-  		kecamatan_id: req.kecamatan_id,
-  		username: req.session.username              
+                scoring: totalScoreResult,
+                kecamatan: req.session.kecamatan,
+                isAdmin: req.session.isAdmin,
+                kecamatan_id: req.kecamatan_id,
+                username: req.session.username
               });
             });
           });
@@ -683,7 +687,7 @@ router.get('/scoring', ensureAuthenticated, getKecamatanId, (req, res) => {
   });
 });
 
-// GET - Lihat file yang sudah diupload untuk aspect tertentu
+// ==================== FILES ====================
 router.get('/files/:aspect', ensureAuthenticated, getKecamatanId, (req, res) => {
   const aspect = req.params.aspect;
   const tableName = `aspect_${aspect.toLowerCase()}`;
@@ -693,13 +697,11 @@ router.get('/files/:aspect', ensureAuthenticated, getKecamatanId, (req, res) => 
       return res.json({ files: [] });
     }
     
-    // Ambil semua field yang mengandung '_file'
     const fileFields = Object.keys(row).filter(key => key.includes('_file'));
     const files = [];
     
     fileFields.forEach(field => {
       if (row[field]) {
-        // Bisa multiple file (dipisah koma)
         const fileNames = row[field].split(',');
         fileNames.forEach(fileName => {
           if (fileName.trim()) {
@@ -717,7 +719,6 @@ router.get('/files/:aspect', ensureAuthenticated, getKecamatanId, (req, res) => 
   });
 });
 
-// GET - Download file
 router.get('/download/:filename', ensureAuthenticated, (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(__dirname, '..', 'uploads', filename);
