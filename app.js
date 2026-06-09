@@ -10,14 +10,14 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
 // Session configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'default-secret',
+  secret: process.env.SESSION_SECRET || 'sinergitas-kecamatan-sumedang-2025-secret-key',
   resave: false,
   saveUninitialized: false,
   cookie: { 
