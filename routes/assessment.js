@@ -92,12 +92,12 @@ const calculateAndSaveScore = (kecamatanId, callback) => {
 router.get('/aspect-a', ensureAuthenticated, getKecamatanId, (req, res) => {
   db.get('SELECT * FROM aspect_a WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
     res.render('assessment/aspect-a', {
+      saved: req.query.saved === '1',
       data: row || {},
       kecamatan: req.session.kecamatan,
       isAdmin: req.session.isAdmin,
       scoring: null,
-      kecamatan_id: req.kecamatan_id,
-      saved: req.query.saved === '1'  // <- Baris yang ditambahkan
+      kecamatan_id: req.kecamatan_id,      
     });
   });
 });
@@ -257,7 +257,9 @@ router.get('/aspect-b', ensureAuthenticated, getKecamatanId, (req, res) => {
     res.render('assessment/aspect-b', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
-      isAdmin: req.session.isAdmin
+      isAdmin: req.session.isAdmin,
+      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
+      kecamatan_id: req.kecamatan_id
     });
   });
 });
@@ -399,11 +401,13 @@ router.post('/aspect-b', ensureAuthenticated, getKecamatanId, upload.any(), (req
 
 // GET - Aspect C
 router.get('/aspect-c', ensureAuthenticated, getKecamatanId, (req, res) => {
-  db.get('SELECT * FROM aspect_c WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
-    res.render('assessment/aspect-c', { 
+  db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    res.render('assessment/aspect-b', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
-      isAdmin: req.session.isAdmin
+      isAdmin: req.session.isAdmin,
+      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
+      kecamatan_id: req.kecamatan_id
     });
   });
 });
@@ -460,11 +464,13 @@ router.post('/aspect-c', ensureAuthenticated, getKecamatanId, upload.any(), (req
 
 // GET Aspect D
 router.get('/aspect-d', ensureAuthenticated, getKecamatanId, (req, res) => {
-  db.get('SELECT * FROM aspect_d WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
-    res.render('assessment/aspect-d', { 
+  db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    res.render('assessment/aspect-b', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
-      isAdmin: req.session.isAdmin
+      isAdmin: req.session.isAdmin,
+      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
+      kecamatan_id: req.kecamatan_id
     });
   });
 });
@@ -520,11 +526,13 @@ router.post('/aspect-d', ensureAuthenticated, getKecamatanId, upload.any(), (req
 
 // GET Aspect E
 router.get('/aspect-e', ensureAuthenticated, getKecamatanId, (req, res) => {
-  db.get('SELECT * FROM aspect_e WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
-    res.render('assessment/aspect-e', { 
+  db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    res.render('assessment/aspect-b', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
-      isAdmin: req.session.isAdmin
+      isAdmin: req.session.isAdmin,
+      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
+      kecamatan_id: req.kecamatan_id
     });
   });
 });
@@ -581,11 +589,13 @@ router.post('/aspect-e', ensureAuthenticated, getKecamatanId, upload.any(), (req
 
 // GET Aspect F
 router.get('/aspect-f', ensureAuthenticated, getKecamatanId, (req, res) => {
-  db.get('SELECT * FROM aspect_f WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
-    res.render('assessment/aspect-f', { 
+  db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.kecamatan_id], (err, row) => {
+    res.render('assessment/aspect-b', { 
       data: row || {}, 
       kecamatan: req.session.kecamatan,
-      isAdmin: req.session.isAdmin
+      isAdmin: req.session.isAdmin,
+      saved: req.query.saved === '1',   // ← TAMBAHKAN INI
+      kecamatan_id: req.kecamatan_id
     });
   });
 });
@@ -659,10 +669,11 @@ router.get('/scoring', ensureAuthenticated, getKecamatanId, (req, res) => {
               );
               
               res.render('assessment/scoring-result', {
-                scoring: totalScoreResult,
-                kecamatan: req.session.kecamatan,
-                isAdmin: req.session.isAdmin,
-                req: req
+  		scoring: totalScoreResult,
+  		kecamatan: req.session.kecamatan,
+  		isAdmin: req.session.isAdmin,
+  		kecamatan_id: req.kecamatan_id,
+  		username: req.session.username              
               });
             });
           });
