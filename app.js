@@ -1,7 +1,8 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const path = require('path');
+const path = require('path');  // ← INI YANG DIPERTAHANKAN
+const fs = require('fs');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -40,7 +41,6 @@ app.use('/history', require('./routes/history'));
 app.use('/file-tracking', require('./routes/file-tracking'));
 
 const fs = require('fs');
-const path = require('path');
 
 // Create uploads directory if not exists
 const uploadsDir = path.join(__dirname, 'uploads');
