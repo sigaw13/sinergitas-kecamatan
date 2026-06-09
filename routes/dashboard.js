@@ -1,19 +1,30 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/database');
-const { ensureAuthenticated, isAdmin } = require('../middleware/auth');
 const ScoringSystem = require('../utils/scoring');
 
+// Middleware untuk cek login
+function ensureAuthenticated(req, res, next) {
+  if (req.session && req.session.userId) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
+function isAdmin(req, res, next) {
+  if (req.session && req.session.username === 'admin') {
+    return next();
+  }
+  res.redirect('/dashboard');
+}
+
+// GET Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
   if (req.session.isAdmin) {
-    // Query JOIN untuk mendapatkan status dari semua tabel aspek
+    // Admin dashboard - tampilkan semua kecamatan
     const query = `
       SELECT 
-        k.id,
-        k.nama,
-        k.username,
-        k.nama_pengelola,
-        k.email,
+        k.id, k.nama, k.username, k.nama_pengelola, k.email,
         COALESCE(a.upload_status, 'Belum') as status_a,
         COALESCE(b.upload_status, 'Belum') as status_b,
         COALESCE(c.upload_status, 'Belum') as status_c,
@@ -31,29 +42,34 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
       ORDER BY k.id
     `;
     
-    db.all(query, (err, rows) => {
+    db.all(query, [], (err, rows) => {
       if (err) {
-        console.error(' Error fetching dashboard data:', err);
-        return res.status(500).send('Error loading dashboard');
+        console.error('❌ Error fetching dashboard data:', err);
+        return res.status(500).send('Error loading dashboard: ' + err.message);
       }
       
-      console.log(`✅ Dashboard admin: ${rows.length} kecamatan loaded`);
+      // Pastikan rows adalah array
+      const kecamatans = Array.isArray(rows) ? rows : [];
+      console.log(`✅ Dashboard admin: ${kecamatans.length} kecamatan loaded`);
       
       res.render('dashboard', { 
-        kecamatans: rows || [], // Pastikan selalu array
+        kecamatans: kecamatans,
         isAdmin: true,
         username: req.session.username,
-        success: req.query.success
+        success: req.query.success || null,
+        error: null
       });
     });
   } else {
-    // Untuk kecamatan - kirim data kosong untuk kecamatans
-    db.get('SELECT * FROM aspect_a WHERE kecamatan_id = ?', [req.session.userId], (err, aspectA) => {
-      db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [req.session.userId], (err, aspectB) => {
-        db.get('SELECT * FROM aspect_c WHERE kecamatan_id = ?', [req.session.userId], (err, aspectC) => {
-          db.get('SELECT * FROM aspect_d WHERE kecamatan_id = ?', [req.session.userId], (err, aspectD) => {
-            db.get('SELECT * FROM aspect_e WHERE kecamatan_id = ?', [req.session.userId], (err, aspectE) => {
-              db.get('SELECT * FROM aspect_f WHERE kecamatan_id = ?', [req.session.userId], (err, aspectF) => {
+    // Kecamatan dashboard
+    const userId = req.session.userId;
+    
+    db.all('SELECT * FROM aspect_a WHERE kecamatan_id = $1', [userId], (err, aspectA) => {
+      db.all('SELECT * FROM aspect_b WHERE kecamatan_id = $1', [userId], (err, aspectB) => {
+        db.all('SELECT * FROM aspect_c WHERE kecamatan_id = $1', [userId], (err, aspectC) => {
+          db.all('SELECT * FROM aspect_d WHERE kecamatan_id = $1', [userId], (err, aspectD) => {
+            db.all('SELECT * FROM aspect_e WHERE kecamatan_id = $1', [userId], (err, aspectE) => {
+              db.all('SELECT * FROM aspect_f WHERE kecamatan_id = $1', [userId], (err, aspectF) => {
                 res.render('dashboard', {
                   kecamatan: req.session.kecamatan,
                   aspectA: aspectA || {},
@@ -64,8 +80,9 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
                   aspectF: aspectF || {},
                   isAdmin: false,
                   username: req.session.username,
-                  success: req.query.success,
-                  kecamatans: [] // Kirim array kosong untuk kecamatan
+                  success: req.query.success || null,
+                  error: null,
+                  kecamatans: []
                 });
               });
             });
@@ -80,11 +97,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
 router.get('/report', ensureAuthenticated, isAdmin, (req, res) => {
   const query = `
     SELECT 
-      k.id,
-      k.nama,
-      k.username,
-      k.nama_pengelola,
-      k.email,
+      k.id, k.nama, k.username, k.nama_pengelola, k.email,
       COALESCE(a.upload_status, 'Belum') as status_a,
       COALESCE(b.upload_status, 'Belum') as status_b,
       COALESCE(c.upload_status, 'Belum') as status_c,
@@ -102,13 +115,13 @@ router.get('/report', ensureAuthenticated, isAdmin, (req, res) => {
     ORDER BY k.id
   `;
   
-  db.all(query, (err, rows) => {
+  db.all(query, [], (err, rows) => {
     if (err) {
       console.error('❌ Error fetching report data:', err);
       return res.status(500).send('Error loading report');
     }
     
-    const kecamatans = rows || [];
+    const kecamatans = Array.isArray(rows) ? rows : [];
     console.log(`✅ Report: ${kecamatans.length} kecamatan loaded`);
     
     res.render('report', { 
@@ -120,19 +133,27 @@ router.get('/report', ensureAuthenticated, isAdmin, (req, res) => {
 
 // GET Ranking
 router.get('/ranking', ensureAuthenticated, isAdmin, (req, res) => {
-  db.all('SELECT * FROM kecamatan WHERE username != "admin" ORDER BY nama', (err, kecamatans) => {
-    if (err) return res.status(500).send('Error');
+  db.all('SELECT * FROM kecamatan WHERE username != $1 ORDER BY nama', ['admin'], (err, kecamatans) => {
+    if (err) {
+      console.error('Error fetching kecamatan:', err);
+      return res.status(500).send('Error');
+    }
     
+    const kcList = Array.isArray(kecamatans) ? kecamatans : [];
     const allScores = [];
     let processed = 0;
     
-    kecamatans.forEach(kc => {
-      db.get('SELECT * FROM aspect_a WHERE kecamatan_id = ?', [kc.id], (err, a) => {
-        db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [kc.id], (err, b) => {
-          db.get('SELECT * FROM aspect_c WHERE kecamatan_id = ?', [kc.id], (err, c) => {
-            db.get('SELECT * FROM aspect_d WHERE kecamatan_id = ?', [kc.id], (err, d) => {
-              db.get('SELECT * FROM aspect_e WHERE kecamatan_id = ?', [kc.id], (err, e) => {
-                db.get('SELECT * FROM aspect_f WHERE kecamatan_id = ?', [kc.id], (err, f) => {
+    if (kcList.length === 0) {
+      return res.render('ranking', { rankings: [], username: req.session.username });
+    }
+    
+    kcList.forEach(kc => {
+      db.all('SELECT * FROM aspect_a WHERE kecamatan_id = $1', [kc.id], (err, a) => {
+        db.all('SELECT * FROM aspect_b WHERE kecamatan_id = $1', [kc.id], (err, b) => {
+          db.all('SELECT * FROM aspect_c WHERE kecamatan_id = $1', [kc.id], (err, c) => {
+            db.all('SELECT * FROM aspect_d WHERE kecamatan_id = $1', [kc.id], (err, d) => {
+              db.all('SELECT * FROM aspect_e WHERE kecamatan_id = $1', [kc.id], (err, e) => {
+                db.all('SELECT * FROM aspect_f WHERE kecamatan_id = $1', [kc.id], (err, f) => {
                   
                   const aspectA = ScoringSystem.calculateAspectA(a || {});
                   const aspectB = ScoringSystem.calculateAspectB(b || {});
@@ -152,7 +173,7 @@ router.get('/ranking', ensureAuthenticated, isAdmin, (req, res) => {
                   });
                   
                   processed++;
-                  if (processed === kecamatans.length) {
+                  if (processed === kcList.length) {
                     const ranked = ScoringSystem.calculateRanking(allScores);
                     res.render('ranking', {
                       rankings: ranked,
