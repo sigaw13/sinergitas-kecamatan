@@ -1,10 +1,17 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const path = require('path');  // ← INI YANG DIPERTAHANKAN
-const fs = require('fs');
+const path = require('path');
+const fs = require('fs');        // ← PERTAHANKAN YANG INI (di atas)
 const cors = require('cors');
 require('dotenv').config();
+
+// Auto-create uploads folder
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log('📁 Created uploads directory');
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,13 +48,6 @@ app.use('/history', require('./routes/history'));
 app.use('/file-tracking', require('./routes/file-tracking'));
 
 const fs = require('fs');
-
-// Create uploads directory if not exists
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-  console.log('📁 Created uploads directory');
-}
 
 // Home redirect
 app.get('/', (req, res) => {
