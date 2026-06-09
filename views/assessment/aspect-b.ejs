@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aspect B - Penyelenggaraan Pemerintahan</title>
+  <style>
+    /* Gunakan style yang sama dengan aspect-a.ejs agar konsisten */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; padding: 20px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; text-align: center; }
+    .header h1 { font-size: 24px; margin-bottom: 8px; }
+    .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+    .indicator-group { margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea; }
+    .indicator-group h4 { color: #333; margin-bottom: 10px; font-size: 15px; border-bottom: 1px solid #e9ecef; padding-bottom: 8px; }
+    .form-row { margin-bottom: 10px; padding: 8px; background: white; border-radius: 5px; }
+    .form-row label { display: block; margin-bottom: 5px; color: #444; font-weight: 500; font-size: 13px; }
+    .form-row small { display: block; margin-top: 3px; color: #666; font-size: 11px; }
+    select, input[type="number"], input[type="text"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+    .file-upload { margin-top: 8px; padding: 8px; background: #e9ecef; border-radius: 4px; }
+    .file-upload input[type="file"] { width: 100%; font-size: 12px; }
+    .btn-group { display: flex; gap: 15px; margin-top: 25px; justify-content: center; }
+    .btn { padding: 10px 25px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: transform 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn:hover { transform: translateY(-2px); }
+    .sub-section { margin-left: 15px; border-left: 2px solid #ccc; padding-left: 10px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>️ Aspek B - Penyelenggaraan Pemerintahan</h1>
+      <p>Kecamatan <%= kecamatan %> | Total Indikator: 43</p>
+    </div>
+      <!-- Tampilkan file yang sudah diupload -->
+<% if (data && data.upload_status === 'Sudah') { %>
+  <div class="uploaded-files" style="background: #d4edda; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #28a745;">
+    <h3 style="color: #155724; margin-bottom: 15px;">📎 File yang Sudah Diupload</h3>
+    <div id="fileList" style="color: #155724;">
+      <p>Memuat daftar file...</p>
+    </div>
+  </div>
+
+  <script>
+    // Load file list
+    fetch('/assessment/files/b?kecamatan_id=<%= req.query.kecamatan_id || "" %>')
+      .then(res => res.json())
+      .then(data => {
+        const fileList = document.getElementById('fileList');
+        if (data.files && data.files.length > 0) {
+          let html = '<ul style="list-style: none; padding: 0;">';
+          data.files.forEach(file => {
+            html += `
+              <li style="padding: 8px; background: white; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+                <span>📄 ${file.fieldName.replace('ind_', 'Indikator ').replace('_file', '')}: <strong>${file.fileName}</strong></span>
+                <a href="${file.url}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">👁️ Lihat</a>
+              </li>
+            `;
+          });
+          html += '</ul>';
+          fileList.innerHTML = html;
+        } else {
+          fileList.innerHTML = '<p>Belum ada file yang diupload</p>';
+        }
+      })
+      .catch(err => {
+        document.getElementById('fileList').innerHTML = '<p>Error memuat file</p>';
+      });
+  </script>
+<% } %>
+    <div class="form-container">
+      <form action="/assessment/aspect-b" method="POST" enctype="multipart/form-data">
+        
+        <!-- Indikator 1-2 -->
+        <div class="indicator-group">
+          <h4>1. Pembinaan Persatuan & Kesatuan Bangsa</h4>
+          <div class="form-row">
+            <label>Jumlah Peringatan Hari Besar Nasional</label>
+            <input type="number" name="ind_1_jumlah" min="0" value="<%= data.ind_1_jumlah || '' %>">
+          </div>
+        </div>
+
+        <div class="indicator-group">
+          <h4>2. Pembinaan Kerukunan Antarumat Beragama</h4>
+          <div class="form-row">
+            <label>Jumlah Dialog Rutin Camat dengan Tokoh Masyarakat/Agama</label>
+            <input type="number" name="ind_2_jumlah" min="0" value="<%= data.ind_2_jumlah || '' %>">
+          </div>
+        </div>
+
+        <!-- Indikator 3 -->
+        <div class="indicator-group">
+          <h4>3. Pelaksanaan Tugas Forkopimcam</h4>
+          <div class="form-row">
+            <label>Jumlah Rapat Forkopimcam</label>
+            <input type="number" name="ind_3_jumlah" min="0" value="<%= data.ind_3_jumlah || '' %>" placeholder="Masukkan angka total rapat">
+            <small>Sistem otomatis menghitung poin berdasarkan range: < 5, 6-11, 12-35, ≥ 36</small>
+          </div>
+        </div>
+
+        <!-- Indikator 4 -->
+        <div class="indicator-group">
+          <h4>4. Koordinasi Penegakan Perundang-undangan</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>4a. Jumlah pertemuan koordinasi (Camat, Polri, TNI)</label>
+              <input type="number" name="ind_4a_jumlah" min="0" value="<%= data.ind_4a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>4b. Rekomendasi pertemuan yang ditindaklanjuti</label>
+              <input type="number" name="ind_4b_jumlah" min="0" value="<%= data.ind_4b_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 5 -->
+        <div class="indicator-group">
+          <h4>5. Peningkatan Efektifitas Kegiatan Pemerintahan</h4>
+          <div class="form-row">
+            <label>Persentase Pertemuan Rutin Camat & Aparatur yang ditindaklanjuti</label>
+            <input type="number" name="ind_5_persen" min="0" max="100" step="0.01" value="<%= data.ind_5_persen || '' %>">
+          </div>
+        </div>
+
+        <!-- Indikator 6 -->
+        <div class="indicator-group">
+          <h4>6. Permasalahan Trantib yang Diselesaikan</h4>
+          <div class="form-row">
+            <label>Jumlah Permasalahan Trantib Tahun 2025</label>
+            <input type="number" name="ind_6_jumlah" min="0" value="<%= data.ind_6_jumlah || '' %>">
+          </div>
+        </div>
+
+        <!-- Indikator 7 -->
+        <div class="indicator-group">
+          <h4>7. Koordinasi Penyelenggaraan Trantibum</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>7a. Kasus trantibum dikoordinasikan dengan instansi berwenang</label>
+              <input type="number" name="ind_7a_jumlah" min="0" value="<%= data.ind_7a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>7b. Kasus trantibum dipantau penyelesaiannya</label>
+              <input type="number" name="ind_7b_jumlah" min="0" value="<%= data.ind_7b_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 8 -->
+        <div class="indicator-group">
+          <h4>8. Koordinasi/Sinergi Perencanaan</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>8a. Jumlah pertemuan koordinasi perencanaan</label>
+              <input type="number" name="ind_8a_jumlah" min="0" value="<%= data.ind_8a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>8b. Laporan hasil koordinasi yang ditindaklanjuti</label>
+              <input type="number" name="ind_8b_jumlah" min="0" value="<%= data.ind_8b_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 9 -->
+        <div class="indicator-group">
+          <h4>9. Fasilitasi Percepatan SPM</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>9a. Jumlah kegiatan fasilitasi SPM</label>
+              <input type="number" name="ind_9a_jumlah" min="0" value="<%= data.ind_9a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>9b. Target SPM yang tercapai</label>
+              <input type="number" name="ind_9b_jumlah" min="0" value="<%= data.ind_9b_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 10 -->
+        <div class="indicator-group">
+          <h4>10. Fasilitasi Penanganan Kebencanaan</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>10a. Ketersediaan KENCANA (Keputusan Kecamatan)</label>
+              <select name="ind_10a_status">
+                <option value="sudah" <%= data.ind_10a_status === 'sudah' ? 'selected' : '' %>>Sudah</option>
+                <option value="belum" <%= data.ind_10a_status === 'belum' ? 'selected' : '' %>>Belum</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>10b. Kegiatan Pengurangan Resiko Bencana</label>
+              <select name="ind_10b_status">
+                <option value="ada" <%= data.ind_10b_status === 'ada' ? 'selected' : '' %>>Ada</option>
+                <option value="tidak" <%= data.ind_10b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>10c. Kolaborasi Stakeholder SPM Kebencanaan</label>
+              <select name="ind_10c_status">
+                <option value="ada" <%= data.ind_10c_status === 'ada' ? 'selected' : '' %>>Ada</option>
+                <option value="tidak" <%= data.ind_10c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 11 -->
+        <div class="indicator-group">
+          <h4>11. Peningkatan Efektifitas Pelayanan Masyarakat</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>11a. Dokumen Standar Pelayanan dengan Masyarakat</label>
+              <input type="number" name="ind_11a_jumlah" min="0" value="<%= data.ind_11a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>11b. Dialog Monitoring Pelaksanaan Standar Pelayanan</label>
+              <input type="number" name="ind_11b_jumlah" min="0" value="<%= data.ind_11b_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 12 -->
+        <div class="indicator-group">
+          <h4>12. Harmonisasi Tokoh Agama & Masyarakat</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>12a. Fasilitasi FKUB Kecamatan</label>
+              <input type="number" name="ind_12a_jumlah" min="0" value="<%= data.ind_12a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>12b. Kehadiran Camat di Pertemuan FKUB</label>
+              <input type="number" name="ind_12b_jumlah" min="0" value="<%= data.ind_12b_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 13 -->
+        <div class="indicator-group">
+          <h4>13. Koordinasi Pemeliharaan Prasarana & Sarana Umum</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>13a. Sarana/Fasum/Fasos rusak dikoordinasikan</label>
+              <input type="number" name="ind_13a_jumlah" min="0" value="<%= data.ind_13a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>13b. Sarana/Fasum/Fasos rusak dipantau perbaikannya</label>
+              <input type="number" name="ind_13b_jumlah" min="0" value="<%= data.ind_13b_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 14 -->
+        <div class="indicator-group">
+          <h4>14. Persentase Sarana Prasarana Diperbaiki</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>14a. Jumlah ditemukan/dilaporkan rusak</label>
+              <input type="number" name="ind_14a_jumlah" min="0" value="<%= data.ind_14a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>14b. Jumlah diperbaiki oleh dinas terkait</label>
+              <input type="number" name="ind_14b_jumlah" min="0" value="<%= data.ind_14b_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>14c. Jumlah dipelihara dengan swasta</label>
+              <input type="number" name="ind_14c_jumlah" min="0" value="<%= data.ind_14c_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 15 -->
+        <div class="indicator-group">
+          <h4>15. Koordinasi Kegiatan Pemberdayaan Desa</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>15a. Kegiatan dilaporkan</label>
+              <input type="number" name="ind_15a_jumlah" min="0" value="<%= data.ind_15a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>15b. Kegiatan sesuai rencana</label>
+              <input type="number" name="ind_15b_jumlah" min="0" value="<%= data.ind_15b_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>15c. Kehadiran Forum Musrenbang</label>
+              <input type="number" name="ind_15c_jumlah" min="0" value="<%= data.ind_15c_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>15d. Usulan diakomodasi</label>
+              <input type="number" name="ind_15d_jumlah" min="0" value="<%= data.ind_15d_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 16 (Sangat Panjang, disederhanakan) -->
+        <div class="indicator-group">
+          <h4>16. Fasilitasi Pembinaan & Pengawasan Desa</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>16a1. Desa dengan Perdes Kewenangan Asli Usul</label>
+              <input type="number" name="ind_16a1_jumlah" min="0" value="<%= data.ind_16a1_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>16a2. Desa menyusun LPPD</label>
+              <input type="number" name="ind_16a2_jumlah" min="0" value="<%= data.ind_16a2_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>16a3. Raperdes ditetapkan sesuai ketentuan</label>
+              <input type="number" name="ind_16a3_jumlah" min="0" value="<%= data.ind_16a3_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>16b1. Evaluasi Rancangan Perdes APBDesa</label>
+              <input type="number" name="ind_16b1_jumlah" min="0" value="<%= data.ind_16b1_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>16b2. Evaluasi Pengelolaan Keuangan & Aset</label>
+              <input type="number" name="ind_16b2_jumlah" min="0" value="<%= data.ind_16b2_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>16b3. Evaluasi LPJ APBDesa</label>
+              <input type="number" name="ind_16b3_jumlah" min="0" value="<%= data.ind_16b3_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 17-26 (Ringkasan Input) -->
+        <div class="indicator-group">
+          <h4>17-26. Administrasi & Fasilitasi Desa Lainnya</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>17. Desa dengan Profil Dimutakhirkan</label>
+              <input type="number" name="ind_17_jumlah" min="0" value="<%= data.ind_17_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>18a. Desa Kinerja Keuangan Baik</label>
+              <input type="number" name="ind_18a_jumlah" min="0" value="<%= data.ind_18a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>18b. Desa Penatausahaan Aset</label>
+              <input type="number" name="ind_18b_jumlah" min="0" value="<%= data.ind_18b_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>19a. Kasus dikoordinasikan</label>
+              <input type="number" name="ind_19a_jumlah" min="0" value="<%= data.ind_19a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>19b. Kasus dipantau</label>
+              <input type="number" name="ind_19b_jumlah" min="0" value="<%= data.ind_19b_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>20a. Desa Struktur Organisasi</label>
+              <input type="number" name="ind_20a_jumlah" min="0" value="<%= data.ind_20a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>20b. Musrenbang Tepat Waktu</label>
+              <input type="number" name="ind_20b_jumlah" min="0" value="<%= data.ind_20b_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>20c. Dokumen Perencanaan Desa</label>
+              <input type="number" name="ind_20c_jumlah" min="0" value="<%= data.ind_20c_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>20d. Program Pembinaan Masyarakat</label>
+              <input type="number" name="ind_20d_jumlah" min="0" value="<%= data.ind_20d_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>20e. Program Pemberdayaan Masyarakat</label>
+              <input type="number" name="ind_20e_jumlah" min="0" value="<%= data.ind_20e_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>21. Pertemuan Kawasan Perdesaan</label>
+              <input type="number" name="ind_21_jumlah" min="0" value="<%= data.ind_21_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>22. Sosialisasi Trantibum Desa</label>
+              <input type="number" name="ind_22_jumlah" min="0" value="<%= data.ind_22_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>23a. Sosialisasi Lembaga Kemasyarakatan</label>
+              <input type="number" name="ind_23a_jumlah" min="0" value="<%= data.ind_23a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>23b. Lembaga Aktif</label>
+              <input type="number" name="ind_23b_jumlah" min="0" value="<%= data.ind_23b_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>24a. Sosialisasi Perencanaan Partisipatif</label>
+              <input type="number" name="ind_24a_jumlah" min="0" value="<%= data.ind_24a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>24b. Desa Perencanaan Partisipatif</label>
+              <input type="number" name="ind_24b_jumlah" min="0" value="<%= data.ind_24b_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>25a. Fasilitasi Kerja Sama Antar Desa</label>
+              <input type="number" name="ind_25a_jumlah" min="0" value="<%= data.ind_25a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>25b. Desa Kerja Sama Antar Desa</label>
+              <input type="number" name="ind_25b_jumlah" min="0" value="<%= data.ind_25b_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>26a. Sosialisasi Program Pemberdayaan</label>
+              <input type="number" name="ind_26a_jumlah" min="0" value="<%= data.ind_26a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>26b. Desa Program Pemberdayaan</label>
+              <input type="number" name="ind_26b_jumlah" min="0" value="<%= data.ind_26b_jumlah || '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 27-43 (Sisanya) -->
+        <div class="indicator-group">
+          <h4>27-43. Koordinasi, Prodeskel, BUMDes, dan Lainnya</h4>
+          <div class="sub-section">
+            <div class="form-row">
+              <label>27. Jumlah Koordinasi & Sinkronisasi Perencanaan</label>
+              <input type="number" name="ind_27_jumlah" min="0" value="<%= data.ind_27_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>28. % Desa Batas SIG (Input Persentase)</label>
+              <input type="number" name="ind_28_persen" min="0" max="100" value="<%= data.ind_28_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>29. % Desa Update Prodeskel</label>
+              <input type="number" name="ind_29_persen" min="0" max="100" value="<%= data.ind_29_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>30. % Klasifikasi Desa (Swasembada/Swakarsa/Swadaya)</label>
+              <input type="number" name="ind_30_persen" min="0" max="100" value="<%= data.ind_30_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>31. % Desa RPJMDesa/RKPDesa</label>
+              <input type="number" name="ind_31_persen" min="0" max="100" value="<%= data.ind_31_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>32. % Desa APBDesa Tepat Waktu</label>
+              <input type="number" name="ind_32_persen" min="0" max="100" value="<%= data.ind_32_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>33a. Desa BUMDes</label>
+              <input type="number" name="ind_33a_jumlah" min="0" value="<%= data.ind_33a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>33b. Desa BUMDesMa</label>
+              <input type="number" name="ind_33b_jumlah" min="0" value="<%= data.ind_33b_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>33c. Desa BUMDes Ma Hasil Transformasi</label>
+              <input type="number" name="ind_33c_jumlah" min="0" value="<%= data.ind_33c_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>33d. BUMDes Berbadan Hukum</label>
+              <input type="number" name="ind_33d_jumlah" min="0" value="<%= data.ind_33d_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>34. % Desa SISKEUDES</label>
+              <input type="number" name="ind_34_persen" min="0" max="100" value="<%= data.ind_34_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>35. % Desa Website/Medsos</label>
+              <input type="number" name="ind_35_persen" min="0" max="100" value="<%= data.ind_35_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>36. % Desa Anggaran Pengembangan Aparatur</label>
+              <input type="number" name="ind_36_persen" min="0" max="100" value="<%= data.ind_36_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>37. % Desa Evaluasi Diri</label>
+              <input type="number" name="ind_37_persen" min="0" max="100" value="<%= data.ind_37_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>38a. Desa Berkembang/Maju/Mandiri</label>
+              <input type="number" name="ind_38a_jumlah" min="0" value="<%= data.ind_38a_jumlah || '' %>">
+            </div>
+            <div class="form-row">
+              <label>39. % Posyandu Purnama/Mandiri</label>
+              <input type="number" name="ind_39_persen" min="0" max="100" value="<%= data.ind_39_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>40. % Padat Karya Tunai</label>
+              <input type="number" name="ind_40_persen" min="0" max="100" value="<%= data.ind_40_persen || '' %>">
+            </div>
+            <div class="form-row">
+              <label>41. Nilai SAKIP (Pilih)</label>
+              <select name="ind_41_nilai">
+                <option value="A" <%= data.ind_41_nilai === 'A' ? 'selected' : '' %>>A</option>
+                <option value="B" <%= data.ind_41_nilai === 'B' ? 'selected' : '' %>>B</option>
+                <option value="C" <%= data.ind_41_nilai === 'C' ? 'selected' : '' %>>C</option>
+                <option value="D" <%= data.ind_41_nilai === 'D' ? 'selected' : '' %>>D</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>42. Inventarisasi Aset</label>
+              <select name="ind_42_status">
+                <option value="ada" <%= data.ind_42_status === 'ada' ? 'selected' : '' %>>Ada</option>
+                <option value="tidak" <%= data.ind_42_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>43. Gambaran Umum Kerjasama</label>
+              <select name="ind_43_status">
+                <option value="ada" <%= data.ind_43_status === 'ada' ? 'selected' : '' %>>Ada</option>
+                <option value="tidak" <%= data.ind_43_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">💾 Simpan Data Aspect B</button>
+          <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

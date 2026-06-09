@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aspect E - Kompetensi SDM</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; padding: 20px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; text-align: center; }
+    .header h1 { font-size: 24px; margin-bottom: 8px; }
+    .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+    .indicator-group { margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea; }
+    .indicator-group h4 { color: #333; margin-bottom: 10px; font-size: 15px; border-bottom: 1px solid #e9ecef; padding-bottom: 8px; }
+    .form-row { margin-bottom: 10px; padding: 8px; background: white; border-radius: 5px; }
+    .form-row label { display: block; margin-bottom: 5px; color: #444; font-weight: 500; font-size: 13px; }
+    .form-row small { display: block; margin-top: 3px; color: #666; font-size: 11px; }
+    select, input[type="number"], input[type="text"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+    .file-upload { margin-top: 8px; padding: 8px; background: #e9ecef; border-radius: 4px; }
+    .file-upload input[type="file"] { width: 100%; font-size: 12px; }
+    .btn-group { display: flex; gap: 15px; margin-top: 25px; justify-content: center; }
+    .btn { padding: 10px 25px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: transform 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn:hover { transform: translateY(-2px); }
+    .sub-section { margin-left: 15px; border-left: 2px solid #ccc; padding-left: 10px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>👥 Aspect E - Kompetensi SDM Kecamatan</h1>
+      <p>Kecamatan <%= kecamatan %></p>
+    </div>
+      <!-- Tampilkan file yang sudah diupload -->
+<% if (data && data.upload_status === 'Sudah') { %>
+  <div class="uploaded-files" style="background: #d4edda; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #28a745;">
+    <h3 style="color: #155724; margin-bottom: 15px;">📎 File yang Sudah Diupload</h3>
+    <div id="fileList" style="color: #155724;">
+      <p>Memuat daftar file...</p>
+    </div>
+  </div>
+
+  <script>
+    // Load file list
+    fetch('/assessment/files/e?kecamatan_id=<%= req.query.kecamatan_id || "" %>')
+      .then(res => res.json())
+      .then(data => {
+        const fileList = document.getElementById('fileList');
+        if (data.files && data.files.length > 0) {
+          let html = '<ul style="list-style: none; padding: 0;">';
+          data.files.forEach(file => {
+            html += `
+              <li style="padding: 8px; background: white; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+                <span>📄 ${file.fieldName.replace('ind_', 'Indikator ').replace('_file', '')}: <strong>${file.fileName}</strong></span>
+                <a href="${file.url}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">👁️ Lihat</a>
+              </li>
+            `;
+          });
+          html += '</ul>';
+          fileList.innerHTML = html;
+        } else {
+          fileList.innerHTML = '<p>Belum ada file yang diupload</p>';
+        }
+      })
+      .catch(err => {
+        document.getElementById('fileList').innerHTML = '<p>Error memuat file</p>';
+      });
+  </script>
+<% } %>
+    <div class="form-container">
+      <form action="/assessment/aspect-e" method="POST" enctype="multipart/form-data">
+        
+        <!-- Indikator 1: Kualifikasi Pendidikan -->
+        <div class="indicator-group">
+          <h4>1. Kualifikasi Pendidikan Aparatur Kecamatan</h4>
+          <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Masukkan jumlah orang untuk setiap tingkat pendidikan:</p>
+          
+          <div class="sub-section">
+            <div class="form-row"><label>1.a. SD</label><input type="number" name="ind_1a_sd" min="0" value="<%= data && data.ind_1a_sd ? data.ind_1a_sd : '' %>"></div>
+            <div class="form-row"><label>1.b. SMP/SLTP</label><input type="number" name="ind_1b_smp" min="0" value="<%= data && data.ind_1b_smp ? data.ind_1b_smp : '' %>"></div>
+            <div class="form-row"><label>1.c. SMA/SMK</label><input type="number" name="ind_1c_sma" min="0" value="<%= data && data.ind_1c_sma ? data.ind_1c_sma : '' %>"></div>
+            <div class="form-row"><label>1.d. D3</label><input type="number" name="ind_1d_d3" min="0" value="<%= data && data.ind_1d_d3 ? data.ind_1d_d3 : '' %>"></div>
+            <div class="form-row"><label>1.e. Sarjana (S1)</label><input type="number" name="ind_1e_s1" min="0" value="<%= data && data.ind_1e_s1 ? data.ind_1e_s1 : '' %>"></div>
+            <div class="form-row"><label>1.f. Pasca Sarjana (S2)</label><input type="number" name="ind_1f_s2" min="0" value="<%= data && data.ind_1f_s2 ? data.ind_1f_s2 : '' %>"></div>
+            <div class="form-row"><label>1.g. Doktor (S3)</label><input type="number" name="ind_1g_s3" min="0" value="<%= data && data.ind_1g_s3 ? data.ind_1g_s3 : '' %>"></div>
+          </div>
+
+          <div class="form-row" style="margin-top: 15px;">
+            <label>Persentase Terbanyak Lulusan (Pilih salah satu kategori dominan):</label>
+            <select name="ind_1_persen_tertinggi">
+              <option value="a" <%= data && data.ind_1_persen_tertinggi === 'a' ? 'selected' : '' %>>a. % terbanyak lulusan SD dan SMP/SLTP (Nilai 0,50)</option>
+              <option value="b" <%= data && data.ind_1_persen_tertinggi === 'b' ? 'selected' : '' %>>b. % terbanyak lulusan SMA dan D3 (Nilai 0,75)</option>
+              <option value="c" <%= data && data.ind_1_persen_tertinggi === 'c' ? 'selected' : '' %>>c. % terbanyak lulusan Sarjana (Nilai 1)</option>
+              <option value="d" <%= data && data.ind_1_persen_tertinggi === 'd' ? 'selected' : '' %>>d. % terbanyak lulusan S2 dan S3 (Nilai 2)</option>
+            </select>
+          </div>
+
+          <div class="file-upload">
+            <label> Upload Dokumen (FC DUK Aparatur Kecamatan):</label>
+            <input type="file" name="file_1" accept=".pdf,.doc,.docx,.xlsx,.jpg,.png">
+          </div>
+        </div>
+
+        <!-- Indikator 2: Jumlah Pejabat -->
+        <div class="indicator-group">
+          <h4>2. Jumlah Pejabat yang Terdapat di Kecamatan</h4>
+          <div class="form-row">
+            <label>Jumlah Pejabat Struktural/Fungsional</label>
+            <input type="number" name="ind_2_jumlah" min="0" value="<%= data && data.ind_2_jumlah ? data.ind_2_jumlah : '' %>" placeholder="Contoh: 5">
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload Dokumen (FC DUK Tahun Terakhir):</label>
+            <input type="file" name="file_2" accept=".pdf,.doc,.docx,.xlsx,.jpg,.png">
+          </div>
+        </div>
+
+        <!-- Indikator 3: Diklat PIM -->
+        <div class="indicator-group">
+          <h4>3. Jumlah Pejabat yang Mengikuti Diklat PIM</h4>
+          <div class="form-row">
+            <label>Jumlah Pejabat dengan Sertifikat Diklat PIM (I, II, III, IV)</label>
+            <input type="number" name="ind_3_jumlah" min="0" value="<%= data && data.ind_3_jumlah ? data.ind_3_jumlah : '' %>" placeholder="Contoh: 3">
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload Dokumen (Rekapitulasi Sertifikat):</label>
+            <input type="file" name="file_3" accept=".pdf,.doc,.docx,.xlsx,.jpg,.png">
+          </div>
+        </div>
+
+        <!-- Indikator 4: Diklat Teknis -->
+        <div class="indicator-group">
+          <h4>4. Jumlah Pegawai yang Mengikuti Diklat Teknis</h4>
+          <div class="form-row">
+            <label>Jumlah Pegawai dengan Sertifikat Diklat Teknis</label>
+            <input type="number" name="ind_4_jumlah" min="0" value="<%= data && data.ind_4_jumlah ? data.ind_4_jumlah : '' %>" placeholder="Contoh: 8">
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload Dokumen (Rekapitulasi Sertifikat):</label>
+            <input type="file" name="file_4" accept=".pdf,.doc,.docx,.xlsx,.jpg,.png">
+          </div>
+        </div>
+
+        <!-- Indikator 5: Sosialisasi BerAKHLAK -->
+        <div class="indicator-group">
+          <h4>5. Sosialisasi Nilai Dasar ASN BerAKHLAK</h4>
+          <div class="form-row">
+            <label>Apakah Kecamatan melaksanakan kegiatan/sosialisasi terkait upaya peningkatan penerapan Nilai Dasar ASN BerAKHLAK?</label>
+            <select name="ind_5_status">
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data && data.ind_5_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data && data.ind_5_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="file-upload">
+            <label> Upload Dokumen (Laporan Kegiatan):</label>
+            <input type="file" name="file_5" accept=".pdf,.doc,.docx,.xlsx,.jpg,.png">
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">💾 Simpan Data Aspect E</button>
+          <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aspect F - Data Dukung Lainnya</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; text-align: center; }
+    .header h1 { font-size: 24px; margin-bottom: 8px; }
+    .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+    
+    .category-group { margin-bottom: 30px; border: 1px solid #e9ecef; border-radius: 8px; overflow: hidden; }
+    .category-header { background: #667eea; color: white; padding: 12px 20px; font-size: 16px; font-weight: bold; }
+    
+    .indicator-row { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid #f0f0f0; background: white; }
+    .indicator-row:last-child { border-bottom: none; }
+    .indicator-row:nth-child(even) { background: #f8f9fa; }
+    
+    .ind-label { flex: 1; font-size: 13px; color: #333; }
+    .ind-select { width: 120px; margin-right: 15px; }
+    .ind-file { width: 250px; }
+    
+    select { width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; }
+    input[type="file"] { width: 100%; font-size: 11px; }
+    
+    .btn-group { display: flex; gap: 15px; margin-top: 30px; justify-content: center; }
+    .btn { padding: 12px 30px; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn:hover { transform: translateY(-2px); }
+    
+    .sub-indicator { margin-left: 20px; font-size: 12px; color: #666; font-style: italic; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📊 Aspect F - Data Dukung Lainnya</h1>
+      <p>Kecamatan <%= kecamatan %> | Total 40 Indikator</p>
+    </div>
+      <!-- Tampilkan file yang sudah diupload -->
+<% if (data && data.upload_status === 'Sudah') { %>
+  <div class="uploaded-files" style="background: #d4edda; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #28a745;">
+    <h3 style="color: #155724; margin-bottom: 15px;">📎 File yang Sudah Diupload</h3>
+    <div id="fileList" style="color: #155724;">
+      <p>Memuat daftar file...</p>
+    </div>
+  </div>
+
+  <script>
+    // Load file list
+    fetch('/assessment/files/f?kecamatan_id=<%= req.query.kecamatan_id || "" %>')
+      .then(res => res.json())
+      .then(data => {
+        const fileList = document.getElementById('fileList');
+        if (data.files && data.files.length > 0) {
+          let html = '<ul style="list-style: none; padding: 0;">';
+          data.files.forEach(file => {
+            html += `
+              <li style="padding: 8px; background: white; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+                <span>📄 ${file.fieldName.replace('ind_', 'Indikator ').replace('_file', '')}: <strong>${file.fileName}</strong></span>
+                <a href="${file.url}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">👁️ Lihat</a>
+              </li>
+            `;
+          });
+          html += '</ul>';
+          fileList.innerHTML = html;
+        } else {
+          fileList.innerHTML = '<p>Belum ada file yang diupload</p>';
+        }
+      })
+      .catch(err => {
+        document.getElementById('fileList').innerHTML = '<p>Error memuat file</p>';
+      });
+  </script>
+<% } %>
+    <div class="form-container">
+      <form action="/assessment/aspect-f" method="POST" enctype="multipart/form-data">
+        
+        <!-- KELOMPOK 1: PENDIDIKAN (1-8) -->
+        <div class="category-group">
+          <div class="category-header">📚 Data Pendidikan (Indikator 1-8)</div>
+          <% for(let i=1; i<=8; i++) { %>
+            <div class="indicator-row">
+              <div class="ind-label">
+                <% if(i===1) { %>1. Data PAUD (Lembaga, Peserta, Pendidik)<% } %>
+                <% if(i===2) { %>2. Data TK/RA<% } %>
+                <% if(i===3) { %>3. Data SD/MI<% } %>
+                <% if(i===4) { %>4. Data SMP/MTs<% } %>
+                <% if(i===5) { %>5. Data SMA/MA/SMK<% } %>
+                <% if(i===6) { %>6. Data Pendidikan Kesetaraan (Paket A,B,C)<% } %>
+                <% if(i===7) { %>7. Data Penduduk Buta Aksara (Umur 15+)<% } %>
+                <% if(i===8) { %>8. Data Pendidikan Khusus/Layanan Khusus (SLB)<% } %>
+              </div>
+              <div class="ind-select">
+                <select name="ind_<%= i %>_status" required>
+                  <option value="">Pilih...</option>
+                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
+                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
+                </select>
+              </div>
+              <div class="ind-file">
+                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
+              </div>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- KELOMPOK 2: KESEHATAN & GIZI (9-19, 36) -->
+        <div class="category-group">
+          <div class="category-header">🏥 Data Kesehatan & Gizi (Indikator 9-19, 36)</div>
+          <% for(let i=9; i<=19; i++) { %>
+            <div class="indicator-row">
+              <div class="ind-label">
+                <% if(i===9) { %>9. Data Budaya Asli Daerah/Kelompok Adat<% } %>
+                <% if(i===10) { %>10. Data Jumlah Posyandu<% } %>
+                <% if(i===11) { %>11. Data Puskesmas Pembantu<% } %>
+                <% if(i===12) { %>12. Data Kunjungan Ibu Hamil<% } %>
+                <% if(i===13) { %>13. Data Bidan/Nakes Berkompetensi<% } %>
+                <% if(i===14) { %>14. Data Cakupan Rawat Jalan<% } %>
+                <% if(i===15) { %>15. Data Pelayanan Penyakit Tidak Menular<% } %>
+                <% if(i===16) { %>16. Data Angka Harapan Hidup (AHH)<% } %>
+                <% if(i===17) { %>17. Data Keluarga Pengguna Air Bersih<% } %>
+                <% if(i===18) { %>18. Data Rawan Penyakit<% } %>
+                <% if(i===19) { %>19. Papan Informasi PHBS<% } %>
+              </div>
+              <div class="ind-select">
+                <select name="ind_<%= i %>_status" required>
+                  <option value="">Pilih...</option>
+                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
+                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
+                </select>
+              </div>
+              <div class="ind-file">
+                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
+              </div>
+            </div>
+          <% } %>
+          
+          <!-- Indikator 36 (Stunting) -->
+          <div class="indicator-row" style="background: #fff3cd;">
+            <div class="ind-label">
+              <strong>36. Data Penanganan Stunting</strong>
+              <div class="sub-indicator">36.1 Remaja Putri | 36.2 Ibu Hamil | 36.3 Balita</div>
+            </div>
+            <div class="ind-select">
+              <select name="ind_36_status" required>
+                <option value="">Pilih...</option>
+                <option value="ada" <%= data && data.ind_36_status === 'ada' ? 'selected' : '' %>>Ada</option>
+                <option value="tidak" <%= data && data.ind_36_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+              </select>
+            </div>
+            <div class="ind-file">
+              <input type="file" name="ind_36_file" accept=".pdf,.xlsx,.jpg,.png">
+            </div>
+          </div>
+        </div>
+
+        <!-- KELOMPOK 3: EKONOMI & UMKM (20-30) -->
+        <div class="category-group">
+          <div class="category-header">💼 Data Ekonomi & UMKM (Indikator 20-30)</div>
+          <% for(let i=20; i<=30; i++) { %>
+            <div class="indicator-row">
+              <div class="ind-label">
+                <% if(i===20) { %>20. Data Jumlah UMKM & UMKM Perempuan<% } %>
+                <% if(i===21) { %>21. UMKM Memiliki NIB<% } %>
+                <% if(i===22) { %>22. UMKM Memiliki PIRT<% } %>
+                <% if(i===23) { %>23. UMKM Memiliki HaKI<% } %>
+                <% if(i===24) { %>24. UMKM Memiliki Sertifikat Halal<% } %>
+                <% if(i===25) { %>25. UMKM Memiliki SNI<% } %>
+                <% if(i===26) { %>26. UMKM Menggunakan Pemasaran Digital<% } %>
+                <% if(i===27) { %>27. Pelaku UMKM Menerima Kredit Bank/NonBank<% } %>
+                <% if(i===28) { %>28. Data Pasar Modern & Tradisional<% } %>
+                <% if(i===29) { %>29. Data Bank Pemerintah/Non Pemerintah<% } %>
+                <% if(i===30) { %>30. Data Jumlah Koperasi<% } %>
+              </div>
+              <div class="ind-select">
+                <select name="ind_<%= i %>_status" required>
+                  <option value="">Pilih...</option>
+                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
+                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
+                </select>
+              </div>
+              <div class="ind-file">
+                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
+              </div>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- KELOMPOK 4: SOSIAL & KEPENDUDUKAN (31-35, 40) -->
+        <div class="category-group">
+          <div class="category-header">👥 Data Sosial & Kependudukan (Indikator 31-35, 40)</div>
+          <% for(let i=31; i<=35; i++) { %>
+            <div class="indicator-row">
+              <div class="ind-label">
+                <% if(i===31) { %>31. SK/SP Tim Desa Siaga Tingkat Kecamatan<% } %>
+                <% if(i===32) { %>32. Data Masyarakat Miskin<% } %>
+                <% if(i===33) { %>33. Data Keluarga Rawan Pangan<% } %>
+                <% if(i===34) { %>34. Data Pengangguran<% } %>
+                <% if(i===35) { %>35. Data Lansia & Penyandang Cacat<% } %>
+              </div>
+              <div class="ind-select">
+                <select name="ind_<%= i %>_status" required>
+                  <option value="">Pilih...</option>
+                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
+                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
+                </select>
+              </div>
+              <div class="ind-file">
+                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
+              </div>
+            </div>
+          <% } %>
+          
+          <!-- Indikator 40 -->
+          <div class="indicator-row">
+            <div class="ind-label">40. Keberadaan PKK Kecamatan</div>
+            <div class="ind-select">
+              <select name="ind_40_status" required>
+                <option value="">Pilih...</option>
+                <option value="ada" <%= data && data.ind_40_status === 'ada' ? 'selected' : '' %>>Ada</option>
+                <option value="tidak" <%= data && data.ind_40_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+              </select>
+            </div>
+            <div class="ind-file">
+              <input type="file" name="ind_40_file" accept=".pdf,.xlsx,.jpg,.png">
+            </div>
+          </div>
+        </div>
+
+        <!-- KELOMPOK 5: HUKUM & PEMERINTAHAN (37-39) -->
+        <div class="category-group">
+          <div class="category-header">️ Data Hukum & Pemerintahan (Indikator 37-39)</div>
+          <% for(let i=37; i<=39; i++) { %>
+            <div class="indicator-row">
+              <div class="ind-label">
+                <% if(i===37) { %>37. Produk Hukum Kelurahan/Desa/Kecamatan<% } %>
+                <% if(i===38) { %>38. Jadwal Pembinaan Penyusunan Produk Hukum<% } %>
+                <% if(i===39) { %>39. Daftar Aparat Petugas Penyidik PNS<% } %>
+              </div>
+              <div class="ind-select">
+                <select name="ind_<%= i %>_status" required>
+                  <option value="">Pilih...</option>
+                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
+                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
+                </select>
+              </div>
+              <div class="ind-file">
+                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
+              </div>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">💾 Simpan Data Aspect F</button>
+          <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

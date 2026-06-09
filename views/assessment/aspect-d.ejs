@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aspect D - Inovasi Kecamatan</title>
+  <style>
+    /* Menggunakan style yang konsisten */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; padding: 20px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; text-align: center; }
+    .header h1 { font-size: 24px; margin-bottom: 8px; }
+    .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
+    .indicator-group { margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea; }
+    .indicator-group h4 { color: #333; margin-bottom: 10px; font-size: 15px; border-bottom: 1px solid #e9ecef; padding-bottom: 8px; }
+    .form-row { margin-bottom: 10px; padding: 8px; background: white; border-radius: 5px; }
+    .form-row label { display: block; margin-bottom: 5px; color: #444; font-weight: 500; font-size: 13px; }
+    .form-row small { display: block; margin-top: 3px; color: #666; font-size: 11px; }
+    select, input[type="number"], input[type="text"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+    textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-family: inherit; }
+    .file-upload { margin-top: 8px; padding: 8px; background: #e9ecef; border-radius: 4px; }
+    .file-upload input[type="file"] { width: 100%; font-size: 12px; }
+    .btn-group { display: flex; gap: 15px; margin-top: 25px; justify-content: center; }
+    .btn { padding: 10px 25px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: transform 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>💡 Aspect D - Inovasi Kecamatan</h1>
+      <p>Kecamatan <%= kecamatan %></p>
+    </div>
+      <!-- Tampilkan file yang sudah diupload -->
+<% if (data && data.upload_status === 'Sudah') { %>
+  <div class="uploaded-files" style="background: #d4edda; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #28a745;">
+    <h3 style="color: #155724; margin-bottom: 15px;">📎 File yang Sudah Diupload</h3>
+    <div id="fileList" style="color: #155724;">
+      <p>Memuat daftar file...</p>
+    </div>
+  </div>
+
+  <script>
+    // Load file list
+    fetch('/assessment/files/d?kecamatan_id=<%= req.query.kecamatan_id || "" %>')
+      .then(res => res.json())
+      .then(data => {
+        const fileList = document.getElementById('fileList');
+        if (data.files && data.files.length > 0) {
+          let html = '<ul style="list-style: none; padding: 0;">';
+          data.files.forEach(file => {
+            html += `
+              <li style="padding: 8px; background: white; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+                <span>📄 ${file.fieldName.replace('ind_', 'Indikator ').replace('_file', '')}: <strong>${file.fileName}</strong></span>
+                <a href="${file.url}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">👁️ Lihat</a>
+              </li>
+            `;
+          });
+          html += '</ul>';
+          fileList.innerHTML = html;
+        } else {
+          fileList.innerHTML = '<p>Belum ada file yang diupload</p>';
+        }
+      })
+      .catch(err => {
+        document.getElementById('fileList').innerHTML = '<p>Error memuat file</p>';
+      });
+  </script>
+<% } %>
+    <div class="form-container">
+      <form action="/assessment/aspect-d" method="POST" enctype="multipart/form-data">
+        
+        <!-- Indikator 1: Sistem Informasi -->
+        <div class="indicator-group">
+          <h4>1. Jumlah Sistem Informasi (SI) yang ada di kecamatan</h4>
+          <div class="form-row">
+            <label>1.a Nama Sistem Informasi yang Dibuat Kecamatan</label>
+            <textarea name="ind_1a_nama" rows="3" placeholder="Sebutkan nama SI (pisahkan dengan koma jika lebih dari satu)"><%= data && data.ind_1a_nama ? data.ind_1a_nama : '' %></textarea>
+          </div>
+          <div class="form-row">
+            <label>1.b Nama Sistem Informasi yang Sudah Ada (Dinas/Provinsi/Pusat)</label>
+            <textarea name="ind_1b_nama" rows="3" placeholder="Sebutkan nama SI"><%= data && data.ind_1b_nama ? data.ind_1b_nama : '' %></textarea>
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload Resume/Dokumentasi SI:</label>
+            <input type="file" name="file_1" accept=".pdf,.doc,.docx,.jpg,.png">
+          </div>
+        </div>
+
+        <!-- Indikator 2: Inovasi Camat -->
+        <div class="indicator-group">
+          <h4>2. Jumlah Inovasi yang dibuat oleh Camat</h4>
+          <div class="form-row">
+            <label>2.a Jumlah Inovasi (Hanya mempunyai 1 Inovasi)</label>
+            <input type="number" name="ind_2a_jumlah" min="0" value="<%= data && data.ind_2a_jumlah ? data.ind_2a_jumlah : '' %>" placeholder="Jumlah inovasi">
+          </div>
+          <div class="form-row">
+            <label>2.b Jumlah Inovasi (Mempunyai lebih dari 1 Inovasi)</label>
+            <input type="number" name="ind_2b_jumlah" min="0" value="<%= data && data.ind_2b_jumlah ? data.ind_2b_jumlah : '' %>" placeholder="Jumlah inovasi">
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload Resume Inovasi (Nama & Manfaat):</label>
+            <input type="file" name="file_2" accept=".pdf,.doc,.docx">
+          </div>
+        </div>
+
+        <!-- Indikator 3: SK Camat -->
+        <div class="indicator-group">
+          <h4>3. Jumlah Keputusan (SK) Camat Tahun 2025</h4>
+          <div class="form-row">
+            <label>Total Jumlah SK yang terbit di tahun 2025</label>
+            <input type="number" name="ind_3_jumlah" min="0" value="<%= data && data.ind_3_jumlah ? data.ind_3_jumlah : '' %>" placeholder="Contoh: 12">
+            <small>Sistem akan otomatis mengkategorikan: a) 1-5 SK, b) 6-10 SK, c) 11-15 SK, d) >15 SK</small>
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload Data Produk Hukum:</label>
+            <input type="file" name="file_3" accept=".pdf,.xlsx,.jpg,.png">
+          </div>
+        </div>
+
+        <!-- Indikator 4: Prestasi -->
+        <div class="indicator-group">
+          <h4>4. Jumlah Prestasi yang Diraih</h4>
+          
+          <div class="form-row">
+            <label>4.a.1 Prestasi Kecamatan Tingkat Nasional</label>
+            <input type="number" name="ind_4a_nasional" min="0" value="<%= data && data.ind_4a_nasional ? data.ind_4a_nasional : '' %>">
+          </div>
+          <div class="form-row">
+            <label>4.a.2 Prestasi Kecamatan Tingkat Provinsi</label>
+            <input type="number" name="ind_4a_provinsi" min="0" value="<%= data && data.ind_4a_provinsi ? data.ind_4a_provinsi : '' %>">
+          </div>
+          <div class="form-row">
+            <label>4.a.3 Prestasi Kecamatan Tingkat Kabupaten/Kota</label>
+            <input type="number" name="ind_4a_kabupaten" min="0" value="<%= data && data.ind_4a_kabupaten ? data.ind_4a_kabupaten : '' %>">
+          </div>
+          
+          <h4 style="margin-top:15px;">4.b Prestasi Desa dan Kelurahan yang Diraih</h4>
+          <div class="form-row">
+            <label>4.b.1 Prestasi Desa/Kel Tingkat Nasional</label>
+            <input type="number" name="ind_4b_nasional" min="0" value="<%= data && data.ind_4b_nasional ? data.ind_4b_nasional : '' %>">
+          </div>
+          <div class="form-row">
+            <label>4.b.2 Prestasi Desa/Kel Tingkat Provinsi</label>
+            <input type="number" name="ind_4b_provinsi" min="0" value="<%= data && data.ind_4b_provinsi ? data.ind_4b_provinsi : '' %>">
+          </div>
+
+          <div class="file-upload">
+            <label>📎 Upload Rekapitulasi Prestasi & Piagam:</label>
+            <input type="file" name="file_4" accept=".pdf,.xlsx,.jpg,.png" multiple>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">💾 Simpan Data Aspect D</button>
+          <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

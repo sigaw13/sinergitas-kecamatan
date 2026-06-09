@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aspect A - Pelayanan Publik</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    .header h1 { font-size: 24px; margin-bottom: 8px; }
+    .header p { font-size: 14px; opacity: 0.9; }
+    
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+    
+    .indicator-group {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+    .indicator-group h4 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 16px;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 10px;
+    }
+    
+    .form-row {
+      margin-bottom: 15px;
+      padding: 12px;
+      background: white;
+      border-radius: 5px;
+    }
+    .form-row label {
+      display: block;
+      margin-bottom: 8px;
+      color: #444;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .form-row small {
+      display: block;
+      margin-top: 5px;
+      color: #666;
+      font-size: 12px;
+      font-style: italic;
+    }
+    
+    select, input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+    select:focus, input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .file-upload {
+      margin-top: 10px;
+      padding: 10px;
+      background: #e9ecef;
+      border-radius: 5px;
+    }
+    .file-upload input[type="file"] {
+      width: 100%;
+      font-size: 13px;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      justify-content: center;
+    }
+    .btn {
+      padding: 12px 35px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    .status-sudah { background: #d4edda; color: #155724; }
+    .status-belum { background: #f8d7da; color: #721c24; }
+    
+    .required { color: #dc3545; }
+    
+    .uploaded-files {
+      background: #d4edda;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #28a745;
+    }
+    .uploaded-files h3 {
+      color: #155724;
+      margin-bottom: 15px;
+    }
+    
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      border-left: 4px solid #28a745;
+    }
+    
+    @media (max-width: 768px) {
+      .btn-group { flex-direction: column; }
+      .indicator-group { padding: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📋 Aspek A - Pelayanan Publik</h1>
+      <p>Kecamatan <%= kecamatan %> | Tahun Anggaran 2025</p>
+      <% if (data && data.upload_status === 'Sudah') { %>
+        <span class="status-badge status-sudah">✅ Sudah Diisi</span>
+      <% } else { %>
+        <span class="status-badge status-belum">⏳ Belum Diisi</span>
+      <% } %>
+    </div>
+
+    <% if (req.query.saved === '1') { %>
+      <div class="alert-success">
+        ✅ Data berhasil disimpan! Skor akan dihitung otomatis.
+      </div>
+    <% } %>
+
+    <!-- Tampilkan file yang sudah diupload -->
+    <% if (data && data.upload_status === 'Sudah') { %>
+      <div class="uploaded-files">
+        <h3>📎 File yang Sudah Diupload</h3>
+        <div id="fileList">
+          <p>Memuat daftar file...</p>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="form-container">
+      <form action="/assessment/aspect-a<%= kecamatan_id ? '?kecamatan_id=' + kecamatan_id : '' %>" method="POST" enctype="multipart/form-data" id="aspectAForm">
+        
+        <!-- Indikator 1 -->
+        <div class="indicator-group">
+          <h4>1. Kelengkapan Data dan Potensi Kecamatan <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Data Monografi Kecamatan</label>
+            <select name="ind_1_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_1_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_1_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+            <small>Dokumen: Peta Kecamatan, Tabel Data Penduduk, Buku Profil, Data Desa/Kel, Data BPD, Data Organisasi</small>
+            <div class="file-upload">
+              <label>📎 Upload Dokumen:</label>
+              <input type="file" name="ind_1_file" accept=".pdf,.doc,.docx,.xlsx,.jpg,.png">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 2 -->
+        <div class="indicator-group">
+          <h4>2. Struktur Organisasi Kecamatan <span class="required">*</span></h4>
+          
+          <div class="form-row">
+            <label>2a. Perda Pembentukan Kecamatan</label>
+            <select name="ind_2a_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_2a_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_2a_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+            <div class="file-upload">
+              <input type="file" name="ind_2a_file" accept=".pdf,.doc,.docx">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <label>2b. Perkada tentang Tupoksi</label>
+            <select name="ind_2b_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_2b_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_2b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+            <div class="file-upload">
+              <input type="file" name="ind_2b_file" accept=".pdf,.doc,.docx">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <label>2c. Bagan SOTK Kecamatan</label>
+            <select name="ind_2c_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_2c_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_2c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+            <div class="file-upload">
+              <input type="file" name="ind_2c_file" accept=".pdf,.jpg,.png">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 3 -->
+        <div class="indicator-group">
+          <h4>3. Perbup/Perwali Pendelegasian Kewenangan <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Peraturan Bupati/Walikota tentang pendelegasian kewenangan kepada Camat</label>
+            <select name="ind_3_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_3_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_3_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+            <div class="file-upload">
+              <input type="file" name="ind_3_file" accept=".pdf,.doc,.docx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 4 -->
+        <div class="indicator-group">
+          <h4>4. Perizinan Non-Usaha <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Jumlah urusan pemerintahan terkait perizinan non-usaha</label>
+            <input type="number" name="ind_4_jumlah" min="0" value="<%= data.ind_4_jumlah || '' %>" placeholder="Contoh: 3">
+            <div class="file-upload">
+              <input type="file" name="ind_4_file" accept=".pdf,.doc,.docx,.xlsx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 5 -->
+        <div class="indicator-group">
+          <h4>5. Kewenangan Lain yang Dilimpahkan <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>5a. Urusan yang telah dilengkapi instrumen pendukung</label>
+            <input type="number" name="ind_5a_jumlah" min="0" value="<%= data.ind_5a_jumlah || '' %>" placeholder="Jumlah urusan">
+            <div class="file-upload">
+              <input type="file" name="ind_5a_file" accept=".pdf,.doc,.docx">
+            </div>
+          </div>
+          <div class="form-row">
+            <label>5b. Urusan yang telah dilaksanakan</label>
+            <input type="number" name="ind_5b_jumlah" min="0" value="<%= data.ind_5b_jumlah || '' %>" placeholder="Jumlah urusan">
+            <div class="file-upload">
+              <input type="file" name="ind_5b_file" accept=".pdf,.doc,.docx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 6 -->
+        <div class="indicator-group">
+          <h4>6. Tim Pelimpahan Kewenangan <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Keberadaan Tim Pelimpahan</label>
+            <select name="ind_6_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_6_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_6_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+            <div class="file-upload">
+              <input type="file" name="ind_6_file" accept=".pdf,.doc,.docx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 7 -->
+        <div class="indicator-group">
+          <h4>7. Pelaporan Pelimpahan Kewenangan <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Jumlah laporan pelimpahan kewenangan</label>
+            <input type="number" name="ind_7_jumlah" min="0" value="<%= data.ind_7_jumlah || '' %>" placeholder="Contoh: 4">
+            <div class="file-upload">
+              <input type="file" name="ind_7_file" accept=".pdf,.doc,.docx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 8 -->
+        <div class="indicator-group">
+          <h4>8. Simpul Pelayanan Terpadu <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Apakah Kecamatan berfungsi sebagai simpul pelayanan terpadu?</label>
+            <select name="ind_8_status" required>
+              <option value="">Pilih...</option>
+              <option value="ya" <%= data.ind_8_status === 'ya' ? 'selected' : '' %>>Ya</option>
+              <option value="tidak" <%= data.ind_8_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+            <div class="file-upload">
+              <input type="file" name="ind_8_file" accept=".pdf,.jpg,.png">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 9 -->
+        <div class="indicator-group">
+          <h4>9. Pelaksana Teknis Pelayanan <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>9a. Petugas Loket/Penerima Berkas</label>
+            <select name="ind_9a_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_9a_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_9a_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>9b. Petugas Informasi</label>
+            <select name="ind_9b_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_9b_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_9b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>9c. Petugas Operator Komputer</label>
+            <select name="ind_9c_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_9c_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_9c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>9d. Petugas Khusus Unit Pengaduan</label>
+            <select name="ind_9d_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_9d_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_9d_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>9e. Petugas Keamanan</label>
+            <select name="ind_9e_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_9e_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_9e_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload SK Penetapan:</label>
+            <input type="file" name="ind_9_file" accept=".pdf,.doc,.docx">
+          </div>
+        </div>
+
+        <!-- Indikator 10 -->
+        <div class="indicator-group">
+          <h4>10. Informasi Pelayanan Publik <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>10a. Informasi Bagan Alur Pelayanan</label>
+            <select name="ind_10a_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_10a_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_10a_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>10b. Motto Pelayanan</label>
+            <select name="ind_10b_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_10b_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_10b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>10c. SOP Pelayanan</label>
+            <select name="ind_10c_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_10c_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_10c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>10d. Maklumat Pelayanan</label>
+            <select name="ind_10d_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_10d_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_10d_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>10e. Leaflet/Brosur Informasi</label>
+            <select name="ind_10e_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_10e_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_10e_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>10f. Loket Khusus Lansia & Penyandang Cacat</label>
+            <select name="ind_10f_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_10f_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_10f_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>10g. Website & Media Sosial Kecamatan</label>
+            <select name="ind_10g_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_10g_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_10g_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload Dokumentasi/Foto:</label>
+            <input type="file" name="ind_10_file" accept=".pdf,.jpg,.png" multiple>
+          </div>
+        </div>
+
+        <!-- Indikator 11 -->
+        <div class="indicator-group">
+          <h4>11. Tingkat Kepuasan Masyarakat <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Hasil Survei Kepuasan Masyarakat</label>
+            <select name="ind_11_status" required>
+              <option value="">Pilih...</option>
+              <option value="Sangat Baik" <%= data.ind_11_status === 'Sangat Baik' ? 'selected' : '' %>>Sangat Baik</option>
+              <option value="Baik" <%= data.ind_11_status === 'Baik' ? 'selected' : '' %>>Baik</option>
+              <option value="Kurang Baik" <%= data.ind_11_status === 'Kurang Baik' ? 'selected' : '' %>>Kurang Baik</option>
+              <option value="Tidak Baik" <%= data.ind_11_status === 'Tidak Baik' ? 'selected' : '' %>>Tidak Baik</option>
+              <option value="Tidak Ada Data" <%= data.ind_11_status === 'Tidak Ada Data' ? 'selected' : '' %>>Tidak Ada Data</option>
+            </select>
+            <div class="file-upload">
+              <input type="file" name="ind_11_file" accept=".pdf,.doc,.docx,.xlsx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 12 -->
+        <div class="indicator-group">
+          <h4>12. Penanganan Pengaduan Masyarakat <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>12a. Jumlah keluhan Tahun 2025 yang ditindaklanjuti</label>
+            <input type="number" name="ind_12a_jumlah" min="0" value="<%= data.ind_12a_jumlah || '' %>" placeholder="Contoh: 15">
+          </div>
+          <div class="form-row">
+            <label>12b. Jumlah keluhan Tahun 2024</label>
+            <input type="number" name="ind_12b_jumlah" min="0" value="<%= data.ind_12b_jumlah || '' %>" placeholder="Contoh: 20">
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload Rekapitulasi Pengaduan:</label>
+            <input type="file" name="ind_12_file" accept=".pdf,.xlsx,.doc,.docx">
+          </div>
+        </div>
+
+        <!-- Indikator 13 -->
+        <div class="indicator-group">
+          <h4>13. Kependudukan & Catatan Sipil <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Tersedianya Laporan Kependudukan</label>
+            <select name="ind_13_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_13_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_13_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+            <div class="file-upload">
+              <input type="file" name="ind_13_file" accept=".pdf,.doc,.docx,.xlsx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 14 -->
+        <div class="indicator-group">
+          <h4>14. SPBE (Sistem Pemerintahan Berbasis Elektronik) <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>14a. Sistem Pengaduan Masyarakat Berbasis Elektronik</label>
+            <select name="ind_14a_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_14a_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_14a_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>14b. Administrasi Pemerintahan Berbasis Elektronik</label>
+            <select name="ind_14b_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_14b_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_14b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>14c. Penerapan E-Office / Sistem Administrasi Online</label>
+            <select name="ind_14c_status" required>
+              <option value="">Pilih...</option>
+              <option value="ada" <%= data.ind_14c_status === 'ada' ? 'selected' : '' %>>Ada</option>
+              <option value="tidak" <%= data.ind_14c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
+            </select>
+          </div>
+          <div class="file-upload">
+            <label>📎 Upload Screenshot Aplikasi:</label>
+            <input type="file" name="ind_14_file" accept=".jpg,.png,.pdf" multiple>
+          </div>
+        </div>
+
+        <!-- Indikator 15 -->
+        <div class="indicator-group">
+          <h4>15. Pencapaian Target NIB <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Persentase Pencapaian Target NIB</label>
+            <input type="number" name="ind_15_persen" min="0" max="100" step="0.01" value="<%= data.ind_15_persen || '' %>" placeholder="Contoh: 85.50">
+            <small>Masukkan angka persentase (0-100)</small>
+            <div class="file-upload">
+              <input type="file" name="ind_15_file" accept=".pdf,.xlsx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Indikator 16 -->
+        <div class="indicator-group">
+          <h4>16. Pencapaian Pungutan PBB <span class="required">*</span></h4>
+          <div class="form-row">
+            <label>Persentase Realisasi Pungutan PBB</label>
+            <input type="number" name="ind_16_persen" min="0" max="100" step="0.01" value="<%= data.ind_16_persen || '' %>" placeholder="Contoh: 92.30">
+            <small>Masukkan angka persentase (0-100)</small>
+            <div class="file-upload">
+              <input type="file" name="ind_16_file" accept=".pdf,.xlsx">
+            </div>
+          </div>
+        </div>
+
+        <!-- Tombol Submit -->
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">💾 Simpan Data Aspect A</button>
+          <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Load file list jika data sudah pernah disimpan
+    <% if (data && data.upload_status === 'Sudah') { %>
+    (function() {
+      var fileListElement = document.getElementById('fileList');
+      if (fileListElement) {
+        fetch('/assessment/files/a?kecamatan_id=<%= kecamatan_id || "" %>')
+          .then(function(response) { return response.json(); })
+          .then(function(result) {
+            if (result.files && result.files.length > 0) {
+              var html = '<ul style="list-style: none; padding: 0;">';
+              result.files.forEach(function(file) {
+                html += '<li style="padding: 8px; background: white; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">';
+                html += '<span>📄 ' + file.fieldName + ': <strong>' + file.fileName + '</strong></span>';
+                html += '<a href="' + file.url + '" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">👁️ Lihat</a>';
+                html += '</li>';
+              });
+              html += '</ul>';
+              fileListElement.innerHTML = html;
+            } else {
+              fileListElement.innerHTML = '<p>Belum ada file yang diupload</p>';
+            }
+          })
+          .catch(function(err) {
+            console.error('Error loading files:', err);
+            fileListElement.innerHTML = '<p style="color: #dc3545;">⚠️ Error memuat daftar file</p>';
+          });
+      }
+    })();
+    <% } %>
+
+    // Validasi form
+    var form = document.getElementById('aspectAForm');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        var requiredFields = this.querySelectorAll('[required]');
+        var isValid = true;
+        
+        requiredFields.forEach(function(field) {
+          if (!field.value) {
+            isValid = false;
+            field.style.borderColor = '#dc3545';
+          } else {
+            field.style.borderColor = '#ddd';
+          }
+        });
+        
+        if (!isValid) {
+          e.preventDefault();
+          alert('⚠️ Mohon lengkapi semua field yang wajib diisi (*)');
+        }
+      });
+    }
+
+    // Reset border color on input
+    document.querySelectorAll('select, input').forEach(function(field) {
+      field.addEventListener('input', function() {
+        this.style.borderColor = '#ddd';
+      });
+    });
+  </script>
+</body>
+</html>

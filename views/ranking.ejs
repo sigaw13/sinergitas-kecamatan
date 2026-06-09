@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranking Kecamatan - Sinergitas Kinerja</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .header h1 { font-size: 28px; margin-bottom: 10px; }
+    
+    .ranking-table {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+    }
+    tr:hover { background: #f8f9fa; }
+    .rank-1 { background: #ffd700 !important; font-weight: bold; }
+    .rank-2 { background: #c0c0c0 !important; }
+    .rank-3 { background: #cd7f32 !important; }
+    
+    .score-badge {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      color: white;
+    }
+    .category-sangat-baik { background: #28a745; }
+    .category-baik { background: #17a2b8; }
+    .category-cukup { background: #ffc107; color: #333; }
+    .category-kurang { background: #fd7e14; }
+    .category-sangat-kurang { background: #dc3545; }
+    
+    .btn-group {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    @media print {
+      body { background: white; }
+      .btn-group { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1> Ranking Penilaian Sinergitas Kinerja Kecamatan</h1>
+      <p>Kabupaten Sumedang - Tahun Anggaran 2025</p>
+    </div>
+
+    <div class="ranking-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Ranking</th>
+            <th>Kecamatan</th>
+            <th>Aspek A</th>
+            <th>Aspek B</th>
+            <th>Aspek C</th>
+            <th>Aspek D</th>
+            <th>Aspek E</th>
+            <th>Aspek F</th>
+            <th>Total Skor</th>
+            <th>Persentase</th>
+            <th>Kategori</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% rankings.forEach((item, index) => { %>
+            <tr class="<%= index < 3 ? 'rank-' + (index + 1) : '' %>">
+              <td><strong><%= item.ranking %></strong></td>
+              <td><strong><%= item.kecamatan %></strong></td>
+              <td><%= item.aspects.A.totalScore %>/<%= item.aspects.A.maxScore %></td>
+              <td><%= item.aspects.B.totalScore %>/<%= item.aspects.B.maxScore %></td>
+              <td><%= item.aspects.C.totalScore %>/<%= item.aspects.C.maxScore %></td>
+              <td><%= item.aspects.D.totalScore %>/<%= item.aspects.D.maxScore %></td>
+              <td><%= item.aspects.E.totalScore %>/<%= item.aspects.E.maxScore %></td>
+              <td><%= item.aspects.F.totalScore %>/<%= item.aspects.F.maxScore %></td>
+              <td><strong><%= item.totalScore %>/<%= item.maxScore %></strong></td>
+              <td><%= item.percentage %>%</td>
+              <td>
+                <span class="score-badge category-<%= item.category.toLowerCase().replace(' ', '-') %>">
+                  <%= item.category %>
+                </span>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="btn-group">
+      <a href="/dashboard" class="btn">← Kembali ke Dashboard</a>
+      <a href="/ranking" class="btn" onclick="window.print()">🖨️ Cetak Ranking</a>
+    </div>
+  </div>
+</body>
+</html>

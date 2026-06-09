@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan - Sinergitas Kinerja Kecamatan</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+    }
+    .navbar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar h1 { font-size: 20px; }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.2);
+      margin-left: 10px;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .table-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: 14px;
+    }
+    th {
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+    }
+    tr:hover { background: #f8f9fa; }
+    .status-sudah { 
+      background: #d4edda; 
+      color: #155724; 
+      padding: 5px 10px; 
+      border-radius: 15px; 
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-belum { 
+      background: #f8d7da; 
+      color: #721c24; 
+      padding: 5px 10px; 
+      border-radius: 15px; 
+      font-size: 12px;
+      font-weight: 600;
+    }
+    h2 { margin-bottom: 20px; color: #333; }
+    @media print {
+      .navbar { display: none; }
+      .container { margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h1>📊 Laporan Penilaian Sinergitas</h1>
+    <div>
+      <a href="/dashboard">← Kembali</a>
+      <a href="javascript:window.print()">🖨️ Cetak</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="table-container">
+      <h2>Laporan Status Pengisian Instrumen Penilaian</h2>
+      <p style="margin-bottom: 20px; color: #666;">Kabupaten Sumedang - Tahun Anggaran 2025</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Kecamatan</th>
+            <th>Pengelola</th>
+            <th>Email</th>
+            <th>Aspek A</th>
+            <th>Aspek B</th>
+            <th>Aspek C</th>
+            <th>Aspek D</th>
+            <th>Aspek E</th>
+            <th>Aspek F</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% 
+            let totalSudah = 0;
+            kecamatans.forEach((kc, index) => {
+              let count = 0;
+              if (kc.status_a === 'Sudah') count++;
+              if (kc.status_b === 'Sudah') count++;
+              if (kc.status_c === 'Sudah') count++;
+              if (kc.status_d === 'Sudah') count++;
+              if (kc.status_e === 'Sudah') count++;
+              if (kc.status_f === 'Sudah') count++;
+              totalSudah += count;
+          %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><strong><%= kc.nama %></strong></td>
+              <td><%= kc.nama_pengelola || '-' %></td>
+              <td><%= kc.email || '-' %></td>
+              <td><span class="status-<%= kc.status_a === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_a || 'Belum' %></span></td>
+              <td><span class="status-<%= kc.status_b === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_b || 'Belum' %></span></td>
+              <td><span class="status-<%= kc.status_c === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_c || 'Belum' %></span></td>
+              <td><span class="status-<%= kc.status_d === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_d || 'Belum' %></span></td>
+              <td><span class="status-<%= kc.status_e === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_e || 'Belum' %></span></td>
+              <td><span class="status-<%= kc.status_f === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_f || 'Belum' %></span></td>
+              <td><strong><%= count %>/6</strong></td>
+            </tr>
+          <% }) %>
+            <tbody>
+      <% if (!kecamatans || kecamatans.length === 0) { %>
+        <tr>
+          <td colspan="10" style="text-align: center; padding: 20px; color: #666;">
+            ⚠️ Belum ada data kecamatan yang tersedia.
+          </td>
+        </tr>
+      <% } else { %>
+        
+        <% 
+          let totalSudah = 0;
+          kecamatans.forEach((kc, index) => {
+            // Karena query disederhanakan, kita tampilkan data dasar dulu
+            // Jika ingin menampilkan status upload, pastikan kolom tersebut ada di query SELECT
+            // Untuk sementara, kita tampilkan data dasar agar tidak error
+        %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><strong><%= kc.nama %></strong></td>
+            <td><%= kc.nama_pengelola || '-' %></td>
+            <td><%= kc.email || '-' %></td>
+            <td colspan="6" style="text-align: center; color: #666;">
+              (Data penilaian akan muncul setelah tabel database diperbarui)
+            </td>
+          </tr>
+        <% }) %>
+
+      <% } %>
+    </tbody>
