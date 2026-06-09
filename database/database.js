@@ -27,56 +27,42 @@ if (usePostgres) {
   });
 
   db = {
-    run: (sql, params, callback) => {
-  // Handle jika params adalah callback (untuk kompatibilitas SQLite)
+    get: (sql, params, callback) => {
   if (typeof params === 'function') {
     callback = params;
     params = [];
   }
-  
-  // Pastikan callback adalah function
   if (typeof callback !== 'function') {
     callback = () => {};
   }
   
   let index = 0;
   const pgSql = sql.replace(/\?/g, () => `$${++index}`);
-  
   pool.query(pgSql, params || [], (err, result) => {
     if (err) {
-      console.error('❌ Database run error:', err.message);
+      console.error('❌ Database get error:', err.message);
       return callback(err);
     }
-    callback(null, { 
-      lastID: result.rows && result.rows[0] ? result.rows[0].id : null, 
-      changes: result.rowCount || 0 
-    });
+    callback(null, result.rows[0] || null);
   });
 },
-    run: (sql, params, callback) => {
-  // Handle jika params adalah callback (untuk kompatibilitas SQLite)
+    all: (sql, params, callback) => {
   if (typeof params === 'function') {
     callback = params;
     params = [];
   }
-  
-  // Pastikan callback adalah function
   if (typeof callback !== 'function') {
     callback = () => {};
   }
   
   let index = 0;
   const pgSql = sql.replace(/\?/g, () => `$${++index}`);
-  
   pool.query(pgSql, params || [], (err, result) => {
     if (err) {
-      console.error('❌ Database run error:', err.message);
+      console.error('❌ Database all error:', err.message);
       return callback(err);
     }
-    callback(null, { 
-      lastID: result.rows && result.rows[0] ? result.rows[0].id : null, 
-      changes: result.rowCount || 0 
-    });
+    callback(null, result.rows || []);
   });
 },
     run: (sql, params, callback) => {
