@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Sinergitas Kinerja Kecamatan</title>
+  <title>SISELON - Login</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -13,126 +14,512 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 20px;
     }
-    .login-container {
-      background: white;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    .login-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-width: 1100px;
       width: 100%;
-      max-width: 450px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
-    .header {
+
+    /* LEFT SIDE - BRANDING */
+    .branding-side {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .branding-side::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .logo-container {
+      position: relative;
+      z-index: 1;
       margin-bottom: 30px;
     }
-    .header h1 {
-      color: #333;
+
+    .logo-gears {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .gear {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 24px;
+      font-weight: bold;
+      color: white;
+      position: relative;
+      animation: rotate 10s linear infinite;
+    }
+
+    .gear:nth-child(1) { background: rgba(46, 204, 113, 0.3); animation-delay: 0s; }
+    .gear:nth-child(2) { background: rgba(241, 196, 15, 0.3); animation-delay: -1s; }
+    .gear:nth-child(3) { background: rgba(52, 152, 219, 0.3); animation-delay: -2s; }
+    .gear:nth-child(4) { background: rgba(231, 76, 60, 0.3); animation-delay: -3s; }
+    .gear:nth-child(5) { background: rgba(155, 89, 182, 0.3); animation-delay: -4s; }
+    .gear:nth-child(6) { background: rgba(230, 126, 34, 0.3); animation-delay: -5s; }
+    .gear:nth-child(7) { background: rgba(26, 188, 156, 0.3); animation-delay: -6s; }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .brand-title {
+      font-size: 48px;
+      font-weight: bold;
+      letter-spacing: 8px;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .brand-subtitle {
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
+      max-width: 350px;
+    }
+
+    .brand-subtitle strong {
+      display: block;
+      font-size: 16px;
       margin-bottom: 5px;
     }
-    .header h2 {
-      color: #666;
-      font-size: 16px;
-      font-weight: normal;
+
+    .info-box {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 25px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 350px;
     }
+
+    .info-box h3 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-box ul {
+      list-style: none;
+      text-align: left;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .info-box ul li {
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .info-box ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #2ecc71;
+      font-weight: bold;
+    }
+
+    .deadline-box {
+      background: rgba(231, 76, 60, 0.2);
+      border: 2px solid rgba(231, 76, 60, 0.5);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 350px;
+    }
+
+    .deadline-box h4 {
+      font-size: 13px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .deadline-box p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .deadline-date {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ff6b6b;
+      margin-top: 5px;
+    }
+
+    /* RIGHT SIDE - LOGIN FORM */
+    .login-side {
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-header {
+      margin-bottom: 30px;
+    }
+
+    .login-header h2 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .login-header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .alert {
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .alert-error {
+      background: #fee;
+      color: #c33;
+      border: 1px solid #fcc;
+    }
+
+    .alert-success {
+      background: #efe;
+      color: #3c3;
+      border: 1px solid #cfc;
+    }
+
     .form-group {
       margin-bottom: 20px;
     }
+
     .form-group label {
       display: block;
       margin-bottom: 8px;
-      color: #555;
-      font-weight: 500;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
     }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper .icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #999;
+    }
+
     .form-group input {
       width: 100%;
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-      transition: border-color 0.3s;
+      padding: 14px 15px 14px 45px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s;
+      background: #f8f9fa;
     }
+
     .form-group input:focus {
       outline: none;
       border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
     }
+
     .btn-login {
       width: 100%;
-      padding: 12px;
+      padding: 15px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: all 0.3s;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
+
     .btn-login:hover {
       transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
     }
-    .error {
-      background: #fee;
-      color: #c33;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 20px;
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .login-footer {
+      margin-top: 25px;
       text-align: center;
+      font-size: 12px;
+      color: #999;
     }
-    .info-box {
-      background: #f0f7ff;
-      border-left: 4px solid #667eea;
+
+    .login-footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .help-box {
+      background: #f0f4ff;
+      border-radius: 10px;
       padding: 15px;
       margin-top: 20px;
-      border-radius: 3px;
+      border-left: 4px solid #667eea;
     }
-    .info-box h3 {
-      color: #667eea;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-    .info-box p {
-      color: #555;
+
+    .help-box h4 {
       font-size: 13px;
+      color: #667eea;
+      margin-bottom: 8px;
+    }
+
+    .help-box p {
+      font-size: 12px;
+      color: #666;
       line-height: 1.6;
-      margin-bottom: 5px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .login-wrapper {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+      }
+      
+      .branding-side {
+        padding: 30px 20px;
+      }
+      
+      .brand-title {
+        font-size: 36px;
+      }
+      
+      .gear {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .login-side {
+        padding: 30px 20px;
+      }
+      
+      .brand-title {
+        font-size: 28px;
+        letter-spacing: 4px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <div class="header">
-      <h1>Sinergitas Kinerja Kecamatan</h1>
-      <h2>Kabupaten Sumedang — TA 2025</h2>
+  <div class="login-wrapper">
+    <!-- LEFT SIDE: BRANDING & INFO -->
+    <div class="branding-side">
+      <div class="logo-container">
+        <div class="logo-gears">
+          <div class="gear">S</div>
+          <div class="gear">I</div>
+          <div class="gear">S</div>
+          <div class="gear">E</div>
+          <div class="gear">L</div>
+          <div class="gear">O</div>
+          <div class="gear">N</div>
+        </div>
+        <div class="brand-title">SISELON</div>
+        <div class="brand-subtitle">
+          <strong>Sistim Informasi Evaluasi</strong>
+          Sinergitas Kinerja dan Laporan Kecamatan
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h3> Informasi Aplikasi</h3>
+        <ul>
+          <li>Aplikasi monitoring & evaluasi kinerja kecamatan</li>
+          <li>7 Instrumen penilaian (A - F)</li>
+          <li>Upload dokumen pendukung</li>
+          <li>Scoring otomatis & ranking</li>
+          <li>Export data & backup database</li>
+        </ul>
+      </div>
+
+      <div class="deadline-box">
+        <h4>⏰ Pengingat Waktu</h4>
+        <p>Deadline pengisian instrumen:</p>
+        <div class="deadline-date">31 Desember 2025</div>
+        <p style="margin-top: 8px; font-size: 11px;">
+          Pastikan semua instrumen terisi sebelum deadline
+        </p>
+      </div>
     </div>
 
-    <% if (error) { %>
-      <div class="error"><%= error %></div>
-    <% } %>
-
-    <form action="/login" method="POST">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Contoh: wado atau admin" required>
+    <!-- RIGHT SIDE: LOGIN FORM -->
+    <div class="login-side">
+      <div class="login-header">
+        <h2>🔐 Masuk</h2>
+        <p>Silakan login dengan akun Anda</p>
       </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Password" required>
+      <% if (error) { %>
+        <div class="alert alert-error">
+          <span>️</span>
+          <span><%= error %></span>
+        </div>
+      <% } %>
+
+      <% if (success) { %>
+        <div class="alert alert-success">
+          <span>✅</span>
+          <span><%= success %></span>
+        </div>
+      <% } %>
+
+      <form action="/login" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="input-wrapper">
+            <span class="icon">👤</span>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              placeholder="Masukkan username"
+              required 
+              autofocus
+              autocomplete="username"
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <span class="icon"></span>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              placeholder="Masukkan password"
+              required
+              autocomplete="current-password"
+            >
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <span>🚀</span>
+          <span>Masuk ke Aplikasi</span>
+        </button>
+      </form>
+
+      <div class="help-box">
+        <h4>💡 Bantuan Login</h4>
+        <p>
+          <strong>Admin:</strong> username <code>admin</code> / password <code>admin123</code><br>
+          <strong>Kecamatan:</strong> username <code>[nama_kecamatan]</code> / password <code>[nama_kecamatan]123</code>
+        </p>
       </div>
 
-      <button type="submit" class="btn-login">Masuk</button>
-    </form>
-
-    <div class="info-box">
-      <h3>Informasi Login:</h3>
-      <p><strong>Akses admin:</strong> admin / admin123</p>
-      <p><strong>Contoh kecamatan:</strong></p>
-      <p>wado / wado123</p>
-      <p>jatinangor / jatinangor123</p>
-      <p><strong>Format:</strong> [nama_kecamatan] / [nama_kecamatan]123</p>
+      <div class="login-footer">
+        <p>© 2025 Pemkab Sumedang - Dinas Dalam Negeri</p>
+        <p style="margin-top: 5px;">
+          Butuh bantuan? Hubungi <a href="#">Admin Sistem</a>
+        </p>
+      </div>
     </div>
   </div>
+
+  <script>
+    // Auto-hide alert after 5 seconds
+    setTimeout(() => {
+      const alerts = document.querySelectorAll('.alert');
+      alerts.forEach(alert => {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+      });
+    }, 5000);
+
+    // Focus animation
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+      });
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+  </script>
 </body>
 </html>
