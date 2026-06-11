@@ -267,7 +267,24 @@ if (usePostgres) {
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
       `);
+      // Tambahkan di dalam initializePostgres() setelah tabel aspect_f
 
+      await client.query(`
+        CREATE TABLE IF NOT EXISTS config (
+          id SERIAL PRIMARY KEY,
+          key TEXT UNIQUE,
+          value TEXT,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // Insert default deadline jika belum ada
+      await client.query(`
+        INSERT INTO config (key, value) 
+        VALUES ('deadline_pengisian', '2025-12-31')
+        ON CONFLICT (key) DO NOTHING
+      `);
+      
       console.log('✅ PostgreSQL tables created successfully');
 
       // Insert default data
