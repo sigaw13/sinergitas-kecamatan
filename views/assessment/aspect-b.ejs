@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aspect B - Penyelenggaraan Pemerintahan</title>
+  <title>Instrumen B - Penyelenggaraan Pemerintahan</title>
   <style>
     /* Gunakan style yang sama dengan aspect-a.ejs agar konsisten */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,7 +31,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>️ Aspek B - Penyelenggaraan Pemerintahan</h1>
+      <h1>️ Instrumen B - Penyelenggaraan Pemerintahan</h1>
       <p>Kecamatan <%= kecamatan %> | Total Indikator: 43</p>
     </div>
       <!-- Tampilkan file yang sudah diupload -->
@@ -45,7 +45,9 @@
 
   <script>
     // Load file list
-    fetch('/assessment/files/b?kecamatan_id=<%= req.query.kecamatan_id || "" %>')
+    const kecamatanId = '<%= typeof kecamatan_id !== "undefined" ? kecamatan_id : "" %>';
+
+fetch('/assessment/files/b?kecamatan_id=' + encodeURIComponent(kecamatanId))
       .then(res => res.json())
       .then(data => {
         const fileList = document.getElementById('fileList');
@@ -71,7 +73,7 @@
   </script>
 <% } %>
     <div class="form-container">
-      <form action="/assessment/aspect-b" method="POST" enctype="multipart/form-data">
+      <form action="/assessment/aspect-b<%= kecamatan_id ? '?kecamatan_id=' + kecamatan_id : '' %>" method="POST" enctype="multipart/form-data">
         
         <!-- Indikator 1-2 -->
         <div class="indicator-group">
@@ -510,7 +512,7 @@
         </div>
 
         <div class="btn-group">
-          <button type="submit" class="btn btn-primary">💾 Simpan Data Aspect B</button>
+          <button type="submit" class="btn btn-primary">💾 Simpan Data Instrumen B</button>
           <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
         </div>
       </form>

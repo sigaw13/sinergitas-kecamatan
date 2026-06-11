@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aspect A - Pelayanan Publik</title>
+  <title>Instrumen A - Pelayanan Publik</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -165,7 +165,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>📋 Aspek A - Pelayanan Publik</h1>
+      <h1>📋 Instrumen A - Pelayanan Publik</h1>
       <p>Kecamatan <%= kecamatan %> | Tahun Anggaran 2025</p>
       <% if (data && data.upload_status === 'Sudah') { %>
         <span class="status-badge status-sudah">✅ Sudah Diisi</span>
@@ -191,7 +191,7 @@
     <% } %>
 
     <div class="form-container">
-      <form action="/assessment/aspect-a<%= kecamatan_id ? '?kecamatan_id=' + kecamatan_id : '' %>" method="POST" enctype="multipart/form-data" id="aspectAForm">
+      <form action="/assessment/aspect-a<%= kecamatan_id ? '?kecamatan_id=' + kecamatan_id : '' %>" method="POST" enctype="multipart/form-data" id="InstrumenAForm">
         
         <!-- Indikator 1 -->
         <div class="indicator-group">
@@ -570,7 +570,7 @@
 
         <!-- Tombol Submit -->
         <div class="btn-group">
-          <button type="submit" class="btn btn-primary">💾 Simpan Data Aspect A</button>
+          <button type="submit" class="btn btn-primary">💾 Simpan Data Instrumen A</button>
           <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
         </div>
         
@@ -610,7 +610,7 @@
     <% } %>
 
     // Validasi form
-    var form = document.getElementById('aspectAForm');
+    var form = document.getElementById('InstrumenAForm');
     if (form) {
       form.addEventListener('submit', function(e) {
         var requiredFields = this.querySelectorAll('[required]');

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aspect F - Data Dukung Lainnya</title>
+  <title>Instrumen F - Data Dukung Lainnya</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; padding: 20px; }
@@ -38,7 +38,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>📊 Aspect F - Data Dukung Lainnya</h1>
+      <h1>📊 Instrumen F - Data Dukung Lainnya</h1>
       <p>Kecamatan <%= kecamatan %> | Total 40 Indikator</p>
     </div>
       <!-- Tampilkan file yang sudah diupload -->
@@ -52,7 +52,9 @@
 
   <script>
     // Load file list
-    fetch('/assessment/files/f?kecamatan_id=<%= req.query.kecamatan_id || "" %>')
+    const kecamatanId = '<%= typeof kecamatan_id !== "undefined" ? kecamatan_id : "" %>';
+
+fetch('/assessment/files/f?kecamatan_id=' + encodeURIComponent(kecamatanId))
       .then(res => res.json())
       .then(data => {
         const fileList = document.getElementById('fileList');
@@ -78,7 +80,7 @@
   </script>
 <% } %>
     <div class="form-container">
-      <form action="/assessment/aspect-f" method="POST" enctype="multipart/form-data">
+      <form action="/assessment/aspect-f<%= kecamatan_id ? '?kecamatan_id=' + kecamatan_id : '' %>" method="POST" enctype="multipart/form-data">
         
         <!-- KELOMPOK 1: PENDIDIKAN (1-8) -->
         <div class="category-group">
@@ -257,7 +259,7 @@
         </div>
 
         <div class="btn-group">
-          <button type="submit" class="btn btn-primary">💾 Simpan Data Aspect F</button>
+          <button type="submit" class="btn btn-primary">💾 Simpan Data Instrumen F</button>
           <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
         </div>
       </form>
