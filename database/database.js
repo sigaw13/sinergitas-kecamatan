@@ -267,24 +267,23 @@ if (usePostgres) {
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
       `);
-      // Tambahkan di dalam initializePostgres() setelah tabel aspect_f
 
+      // Tabel config untuk menyimpan pengaturan aplikasi, termasuk deadline pengisian.
       await client.query(`
         CREATE TABLE IF NOT EXISTS config (
-          id SERIAL PRIMARY KEY,
-          key TEXT UNIQUE,
-          value TEXT,
+          key TEXT PRIMARY KEY,
+          value TEXT NOT NULL,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
       `);
 
-      // Insert default deadline jika belum ada
-      await client.query(`
-        INSERT INTO config (key, value) 
-        VALUES ('deadline_pengisian', '2025-12-31')
-        ON CONFLICT (key) DO NOTHING
-      `);
-      
+      // Default deadline hanya dibuat jika belum ada agar perubahan admin tidak tertimpa.
+      await client.query(
+        `INSERT INTO config (key, value) VALUES ($1, $2)
+         ON CONFLICT (key) DO NOTHING`,
+        ['deadline', '2025-12-31']
+      );
+
       console.log('✅ PostgreSQL tables created successfully');
 
       // Insert default data
@@ -335,10 +334,29 @@ if (usePostgres) {
   const dbPath = path.join(__dirname, 'sinergitas.db');
   const sqliteDb = new sqlite3.Database(dbPath);
 
+  // Wrapper SQLite dibuat kompatibel dengan wrapper PostgreSQL.
   db = {
-    get: (sql, params, callback) => sqliteDb.get(sql, params || [], callback),
-    all: (sql, params, callback) => sqliteDb.all(sql, params || [], callback),
-    run: (sql, params, callback) => sqliteDb.run(sql, params || [], callback)
+    get: (sql, params, callback) => {
+      if (typeof params === 'function') {
+        callback = params;
+        params = [];
+      }
+      sqliteDb.get(sql, params || [], callback || (() => {}));
+    },
+    all: (sql, params, callback) => {
+      if (typeof params === 'function') {
+        callback = params;
+        params = [];
+      }
+      sqliteDb.all(sql, params || [], callback || (() => {}));
+    },
+    run: (sql, params, callback) => {
+      if (typeof params === 'function') {
+        callback = params;
+        params = [];
+      }
+      sqliteDb.run(sql, params || [], callback || (() => {}));
+    }
   };
 
   sqliteDb.serialize(() => {
@@ -486,6 +504,19 @@ if (usePostgres) {
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (kecamatan_id) REFERENCES kecamatan(id)
     )`);
+
+    // Tabel config untuk menyimpan pengaturan aplikasi, termasuk deadline pengisian.
+    sqliteDb.run(`CREATE TABLE IF NOT EXISTS config (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`);
+
+    // Default deadline hanya dibuat jika belum ada agar perubahan admin tidak tertimpa.
+    sqliteDb.run(
+      `INSERT OR IGNORE INTO config (key, value) VALUES (?, ?)`,
+      ['deadline', '2025-12-31']
+    );
 
     // Insert default data for SQLite
     sqliteDb.get('SELECT COUNT(*) as count FROM kecamatan', (err, row) => {

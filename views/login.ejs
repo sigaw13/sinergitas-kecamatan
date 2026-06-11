@@ -3,497 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISELON - Login</title>
+  <title>Login - SIESELON</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 32%),
+        linear-gradient(135deg, #0f766e 0%, #2563eb 55%, #4f46e5 100%);
     }
-
     .login-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      max-width: 1100px;
       width: 100%;
-      background: white;
-      border-radius: 20px;
+      max-width: 980px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      background: rgba(255,255,255,0.95);
+      border-radius: 22px;
       overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 25px 80px rgba(15, 23, 42, 0.28);
     }
-
-    /* LEFT SIDE - BRANDING */
-    .branding-side {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .brand-panel {
+      padding: 48px;
       color: white;
-      padding: 50px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+      background: linear-gradient(135deg, #0f766e 0%, #1d4ed8 100%);
       position: relative;
       overflow: hidden;
     }
-
-    .branding-side::before {
+    .brand-panel::after {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: pulse 4s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(1.1); opacity: 0.8; }
-    }
-
-    .logo-container {
-      position: relative;
-      z-index: 1;
-      margin-bottom: 30px;
-    }
-
-    .logo-gears {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .gear {
-      width: 60px;
-      height: 60px;
+      width: 260px;
+      height: 260px;
       border-radius: 50%;
-      border: 4px solid rgba(255,255,255,0.8);
-      display: flex;
+      right: -80px;
+      bottom: -80px;
+      background: rgba(255,255,255,0.12);
+    }
+    .logo {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: white;
-      position: relative;
-      animation: rotate 10s linear infinite;
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.18);
+      margin-bottom: 24px;
+      font-size: 36px;
     }
-
-    .gear:nth-child(1) { background: rgba(46, 204, 113, 0.3); animation-delay: 0s; }
-    .gear:nth-child(2) { background: rgba(241, 196, 15, 0.3); animation-delay: -1s; }
-    .gear:nth-child(3) { background: rgba(52, 152, 219, 0.3); animation-delay: -2s; }
-    .gear:nth-child(4) { background: rgba(231, 76, 60, 0.3); animation-delay: -3s; }
-    .gear:nth-child(5) { background: rgba(155, 89, 182, 0.3); animation-delay: -4s; }
-    .gear:nth-child(6) { background: rgba(230, 126, 34, 0.3); animation-delay: -5s; }
-    .gear:nth-child(7) { background: rgba(26, 188, 156, 0.3); animation-delay: -6s; }
-
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .brand-title {
-      font-size: 48px;
-      font-weight: bold;
-      letter-spacing: 8px;
-      margin-bottom: 15px;
-      position: relative;
-      z-index: 1;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .brand-subtitle {
-      font-size: 14px;
-      line-height: 1.6;
-      opacity: 0.95;
-      position: relative;
-      z-index: 1;
-      max-width: 350px;
-    }
-
-    .brand-subtitle strong {
-      display: block;
-      font-size: 16px;
-      margin-bottom: 5px;
-    }
-
-    .info-box {
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 25px;
-      position: relative;
-      z-index: 1;
+    .brand-panel h1 { font-size: 42px; letter-spacing: 2px; margin-bottom: 12px; }
+    .brand-panel h2 { font-size: 20px; font-weight: 600; margin-bottom: 18px; line-height: 1.35; }
+    .brand-panel p { line-height: 1.7; opacity: 0.92; }
+    .form-panel { padding: 48px 42px; }
+    .form-panel h3 { font-size: 26px; color: #111827; margin-bottom: 8px; }
+    .subtitle { color: #6b7280; margin-bottom: 28px; font-size: 14px; line-height: 1.5; }
+    .alert { padding: 12px 14px; border-radius: 10px; margin-bottom: 18px; font-size: 14px; }
+    .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 8px; color: #374151; font-weight: 700; font-size: 14px; }
+    input[type="text"], input[type="password"] {
       width: 100%;
-      max-width: 350px;
-    }
-
-    .info-box h3 {
+      padding: 13px 14px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
       font-size: 14px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      transition: border-color 0.25s, box-shadow 0.25s;
     }
-
-    .info-box ul {
-      list-style: none;
-      text-align: left;
-      font-size: 12px;
-      line-height: 1.8;
+    input[type="text"]:focus, input[type="password"]:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
     }
-
-    .info-box ul li {
-      padding-left: 20px;
-      position: relative;
-    }
-
-    .info-box ul li::before {
-      content: '✓';
-      position: absolute;
-      left: 0;
-      color: #2ecc71;
-      font-weight: bold;
-    }
-
-    .deadline-box {
-      background: rgba(231, 76, 60, 0.2);
-      border: 2px solid rgba(231, 76, 60, 0.5);
-      border-radius: 12px;
-      padding: 15px;
-      margin-top: 15px;
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 350px;
-    }
-
-    .deadline-box h4 {
-      font-size: 13px;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .deadline-box p {
-      font-size: 12px;
-      opacity: 0.9;
-    }
-
-    .deadline-date {
-      font-size: 18px;
-      font-weight: bold;
-      color: #ff6b6b;
-      margin-top: 5px;
-    }
-
-    /* RIGHT SIDE - LOGIN FORM */
-    .login-side {
-      padding: 50px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .login-header {
-      margin-bottom: 30px;
-    }
-
-    .login-header h2 {
-      font-size: 28px;
-      color: #333;
-      margin-bottom: 8px;
-    }
-
-    .login-header p {
-      color: #666;
-      font-size: 14px;
-    }
-
-    .alert {
-      padding: 12px 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .alert-error {
-      background: #fee;
-      color: #c33;
-      border: 1px solid #fcc;
-    }
-
-    .alert-success {
-      background: #efe;
-      color: #3c3;
-      border: 1px solid #cfc;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: #333;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-wrapper .icon {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 18px;
-      color: #999;
-    }    
-
     .btn-login {
       width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 13px;
+      margin-top: 4px;
+      background: linear-gradient(135deg, #0f766e 0%, #2563eb 100%);
       color: white;
       border: none;
       border-radius: 10px;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 800;
       cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-
-    .btn-login:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-login:active {
-      transform: translateY(0);
-    }
-
-    .login-footer {
-      margin-top: 25px;
-      text-align: center;
-      font-size: 12px;
-      color: #999;
-    }
-
-    .login-footer a {
-      color: #667eea;
-      text-decoration: none;
-    }
-
-    .login-footer a:hover {
-      text-decoration: underline;
-    }
-
+    .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(37,99,235,0.25); }
     .help-box {
-      background: #f0f4ff;
-      border-radius: 10px;
-      padding: 15px;
-      margin-top: 20px;
-      border-left: 4px solid #667eea;
-    }
-
-    .help-box h4 {
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: #475569;
       font-size: 13px;
-      color: #667eea;
-      margin-bottom: 8px;
-    }
-
-    .help-box p {
-      font-size: 12px;
-      color: #666;
       line-height: 1.6;
     }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .login-wrapper {
-        grid-template-columns: 1fr;
-        max-width: 500px;
-      }
-      
-      .branding-side {
-        padding: 30px 20px;
-      }
-      
-      .brand-title {
-        font-size: 36px;
-      }
-      
-      .gear {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
-      }
-    }
-
-    @media (max-width: 500px) {
-      .login-side {
-        padding: 30px 20px;
-      }
-      
-      .brand-title {
-        font-size: 28px;
-        letter-spacing: 4px;
-      }
+    .help-box strong { color: #111827; }
+    .footer { margin-top: 22px; text-align: center; font-size: 12px; color: #9ca3af; }
+    @media (max-width: 820px) {
+      .login-wrapper { grid-template-columns: 1fr; }
+      .brand-panel { padding: 34px; }
+      .form-panel { padding: 34px; }
+      .brand-panel h1 { font-size: 34px; }
     }
   </style>
 </head>
 <body>
   <div class="login-wrapper">
-    <!-- LEFT SIDE: BRANDING & INFO -->
-    <div class="branding-side">
-      <div class="logo-container">
-        <div class="logo-gears">
-          <div class="gear">S</div>
-          <div class="gear">I</div>
-          <div class="gear">S</div>
-          <div class="gear">E</div>
-          <div class="gear">L</div>
-          <div class="gear">O</div>
-          <div class="gear">N</div>
-        </div>
-        <div class="brand-title">SISELON</div>
-        <div class="brand-subtitle">
-          <strong>Sistim Informasi Evaluasi</strong>
-          Sinergitas Kinerja dan Laporan Kecamatan
-        </div>
-      </div>
+    <section class="brand-panel">
+      <div class="logo">⚙️</div>
+      <h1>SIESELON</h1>
+      <h2>Sistem Informasi Evaluasi Sinergitas Kinerja dan Laporan Kecamatan</h2>
+      <p>Kabupaten Sumedang - Tahun Anggaran 2025. Silakan masuk menggunakan akun kecamatan masing-masing untuk melakukan pengisian instrumen evaluasi.</p>
+    </section>
 
-      <div class="info-box">
-        <h3> Informasi Aplikasi</h3>
-        <ul>
-          <li>Aplikasi monitoring & evaluasi kinerja kecamatan</li>
-          <li>7 Instrumen penilaian (A - F)</li>
-          <li>Upload dokumen pendukung</li>
-          <li>Scoring otomatis & ranking</li>
-          <li>Export data & backup database</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- RIGHT SIDE: LOGIN FORM -->
-    <div class="login-side">
-      <div class="login-header">
-        <h2>🔐 Masuk</h2>
-        <p>Silakan login dengan akun Anda</p>
-      </div>
+    <section class="form-panel">
+      <h3>🔐 Login</h3>
+      <p class="subtitle">Masuk ke aplikasi SIESELON Kabupaten Sumedang.</p>
 
       <% if (error) { %>
-        <div class="alert alert-error">
-          <span>️</span>
-          <span><%= error %></span>
-        </div>
+        <div class="alert alert-error">⚠️ <%= error %></div>
       <% } %>
 
       <% if (success) { %>
-        <div class="alert alert-success">
-          <span>✅</span>
-          <span><%= success %></span>
-        </div>
+        <div class="alert alert-success">✅ <%= success %></div>
       <% } %>
 
       <form action="/login" method="POST">
         <div class="form-group">
           <label for="username">Username</label>
-          <div class="input-wrapper">
-            <span class="icon">👤</span>
-            <input 
-              type="text" 
-              id="username" 
-              name="username" 
-              placeholder="Masukkan username"
-              required 
-              autofocus
-              autocomplete="username"
-            >
-          </div>
+          <input type="text" id="username" name="username" placeholder="Masukkan username" required autofocus>
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <div class="input-wrapper">
-            <span class="icon"></span>
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              placeholder="Masukkan password"
-              required
-              autocomplete="current-password"
-            >
-          </div>
+          <input type="password" id="password" name="password" placeholder="Masukkan password" required>
         </div>
 
-        <button type="submit" class="btn-login">
-          <span>🚀</span>
-          <span>Masuk ke Aplikasi</span>
-        </button>
+        <button type="submit" class="btn-login">🔑 Masuk</button>
       </form>
 
       <div class="help-box">
-        <h4>💡 Bantuan Login</h4>
-        <p>
-          <strong>Admin:</strong> username <code>admin</code> / password <code>admin123</code><br>
-          <strong>Kecamatan:</strong> username <code>[nama_kecamatan]</code> / password <code>[nama_kecamatan]123</code>
-        </p>
+        <strong>Bantuan Login Kecamatan</strong><br>
+        Username kecamatan menggunakan nama kecamatan huruf kecil tanpa spasi.<br>
+        Password awal kecamatan mengikuti format: <strong>username + 123</strong>.<br>
+        Contoh: Kecamatan Wado → username <strong>wado</strong>, password <strong>wado123</strong>.
       </div>
 
-      <div class="login-footer">
-        <p>© 2025 Pemkab Sumedang - Dinas Dalam Negeri</p>
-        <p style="margin-top: 5px;">
-          Butuh bantuan? Hubungi <a href="#">Admin Sistem</a>
-        </p>
-      </div>
-    </div>
+      <div class="footer">&copy; 2025 Pemerintah Kabupaten Sumedang</div>
+    </section>
   </div>
-
-  <script>
-    // Auto-hide alert after 5 seconds
-    setTimeout(() => {
-      const alerts = document.querySelectorAll('.alert');
-      alerts.forEach(alert => {
-        alert.style.transition = 'opacity 0.5s';
-        alert.style.opacity = '0';
-        setTimeout(() => alert.remove(), 500);
-      });
-    }, 5000);
-
-    // Focus animation
-    document.querySelectorAll('input').forEach(input => {
-      input.addEventListener('focus', function() {
-        this.parentElement.style.transform = 'scale(1.02)';
-      });
-      input.addEventListener('blur', function() {
-        this.parentElement.style.transform = 'scale(1)';
-      });
-    });
-  </script>
 </body>
 </html>
