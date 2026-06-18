@@ -209,6 +209,23 @@
         </div>
       </details>
     </div>
+
+    <div class="card danger-zone" id="reset-data">
+      <h3 style="color:#991b1b;">🧹 Reset Data Uji Coba</h3>
+      <p>
+        Gunakan setelah simulasi selesai dan sebelum pengisian resmi dimulai.
+        Tindakan ini menghapus seluruh isian Instrumen A–F, bukti upload,
+        progres, penilaian, riwayat, dan hasil final.
+      </p>
+      <div class="alert alert-warning">
+        <strong>Data yang tetap dipertahankan:</strong> akun admin dan kecamatan,
+        akun evaluator, pembagian wilayah kerja, deadline, serta baseline Excel.
+      </div>
+      <form action="/admin/settings/reset-trial-data" method="POST" onsubmit="return confirmTrialReset(this);">
+        <input type="hidden" name="confirm_reset" value="">
+        <button type="submit" class="btn btn-danger">Hapus Seluruh Data Uji Coba</button>
+      </form>
+    </div>
   </div>
 
   <script>
@@ -226,6 +243,16 @@
       const value = askRestoreConfirmation('Restore dari berkas yang dipilih? Data aktif akan diganti setelah server direstart.');
       if (!value) return false;
       form.querySelector('[name="confirm_restore"]').value = value;
+      return true;
+    }
+    function confirmTrialReset(form) {
+      const answer = window.prompt(
+        'PERINGATAN: seluruh isian, bukti, progres, penilaian, dan hasil final akan dihapus permanen.' +
+        '\n\nKetik HAPUS DATA UJI COBA untuk melanjutkan:'
+      );
+      if (!answer || answer.trim().toUpperCase() !== 'HAPUS DATA UJI COBA') return false;
+      if (!window.confirm('Anda yakin ingin mengembalikan data evaluasi ke kondisi awal?')) return false;
+      form.querySelector('[name="confirm_reset"]').value = 'HAPUS DATA UJI COBA';
       return true;
     }
   </script>
