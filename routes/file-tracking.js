@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/database');
-const { ensureAuthenticated, isAdmin } = require('../middleware/auth');
+const { ensureAuthenticated, isSuperAdmin } = require('../middleware/auth');
 
 // GET - Halaman File Tracking
-router.get('/', ensureAuthenticated, isAdmin, (req, res) => {
+router.get('/', ensureAuthenticated, isSuperAdmin, (req, res) => {
   res.render('file-tracking', {
     username: req.session.username,
     dateStart: req.query.dateStart || new Date().toISOString().split('T')[0],
@@ -13,7 +13,7 @@ router.get('/', ensureAuthenticated, isAdmin, (req, res) => {
 });
 
 // GET API - Data tracking untuk grafik dan tabel
-router.get('/api/data', ensureAuthenticated, isAdmin, (req, res) => {
+router.get('/api/data', ensureAuthenticated, isSuperAdmin, (req, res) => {
   const { dateStart, dateEnd } = req.query;
   
   const query = `
@@ -26,7 +26,7 @@ router.get('/api/data', ensureAuthenticated, isAdmin, (req, res) => {
       a.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_a a ON k.id = a.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (a.updated_at IS NULL OR (DATE(a.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -40,7 +40,7 @@ router.get('/api/data', ensureAuthenticated, isAdmin, (req, res) => {
       b.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_b b ON k.id = b.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (b.updated_at IS NULL OR (DATE(b.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -54,7 +54,7 @@ router.get('/api/data', ensureAuthenticated, isAdmin, (req, res) => {
       c.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_c c ON k.id = c.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (c.updated_at IS NULL OR (DATE(c.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -68,7 +68,7 @@ router.get('/api/data', ensureAuthenticated, isAdmin, (req, res) => {
       d.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_d d ON k.id = d.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (d.updated_at IS NULL OR (DATE(d.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -82,7 +82,7 @@ router.get('/api/data', ensureAuthenticated, isAdmin, (req, res) => {
       e.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_e e ON k.id = e.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (e.updated_at IS NULL OR (DATE(e.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -96,7 +96,7 @@ router.get('/api/data', ensureAuthenticated, isAdmin, (req, res) => {
       f.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_f f ON k.id = f.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (f.updated_at IS NULL OR (DATE(f.updated_at) BETWEEN ? AND ?))
     
     ORDER BY upload_date DESC, kecamatan, aspect
@@ -120,7 +120,7 @@ router.get('/api/data', ensureAuthenticated, isAdmin, (req, res) => {
 });
 
 // GET API - Statistik untuk dashboard
-router.get('/api/statistics', ensureAuthenticated, isAdmin, (req, res) => {
+router.get('/api/statistics', ensureAuthenticated, isSuperAdmin, (req, res) => {
   const { dateStart, dateEnd } = req.query;
   
   const query = `
@@ -130,17 +130,17 @@ router.get('/api/statistics', ensureAuthenticated, isAdmin, (req, res) => {
       COUNT(DISTINCT CASE WHEN upload_status = 'Sudah' THEN kecamatan END) as kecamatan_uploaded,
       COUNT(DISTINCT kecamatan) as total_kecamatan
     FROM (
-      SELECT k.nama as kecamatan, 'A' as aspect, a.upload_status FROM kecamatan k LEFT JOIN aspect_a a ON k.id = a.kecamatan_id WHERE k.username != 'admin' AND (a.updated_at IS NULL OR DATE(a.updated_at) BETWEEN ? AND ?)
+      SELECT k.nama as kecamatan, 'A' as aspect, a.upload_status FROM kecamatan k LEFT JOIN aspect_a a ON k.id = a.kecamatan_id WHERE k.role = 'kecamatan' AND (a.updated_at IS NULL OR DATE(a.updated_at) BETWEEN ? AND ?)
       UNION ALL
-      SELECT k.nama, 'B', b.upload_status FROM kecamatan k LEFT JOIN aspect_b b ON k.id = b.kecamatan_id WHERE k.username != 'admin' AND (b.updated_at IS NULL OR DATE(b.updated_at) BETWEEN ? AND ?)
+      SELECT k.nama, 'B', b.upload_status FROM kecamatan k LEFT JOIN aspect_b b ON k.id = b.kecamatan_id WHERE k.role = 'kecamatan' AND (b.updated_at IS NULL OR DATE(b.updated_at) BETWEEN ? AND ?)
       UNION ALL
-      SELECT k.nama, 'C', c.upload_status FROM kecamatan k LEFT JOIN aspect_c c ON k.id = c.kecamatan_id WHERE k.username != 'admin' AND (c.updated_at IS NULL OR DATE(c.updated_at) BETWEEN ? AND ?)
+      SELECT k.nama, 'C', c.upload_status FROM kecamatan k LEFT JOIN aspect_c c ON k.id = c.kecamatan_id WHERE k.role = 'kecamatan' AND (c.updated_at IS NULL OR DATE(c.updated_at) BETWEEN ? AND ?)
       UNION ALL
-      SELECT k.nama, 'D', d.upload_status FROM kecamatan k LEFT JOIN aspect_d d ON k.id = d.kecamatan_id WHERE k.username != 'admin' AND (d.updated_at IS NULL OR DATE(d.updated_at) BETWEEN ? AND ?)
+      SELECT k.nama, 'D', d.upload_status FROM kecamatan k LEFT JOIN aspect_d d ON k.id = d.kecamatan_id WHERE k.role = 'kecamatan' AND (d.updated_at IS NULL OR DATE(d.updated_at) BETWEEN ? AND ?)
       UNION ALL
-      SELECT k.nama, 'E', e.upload_status FROM kecamatan k LEFT JOIN aspect_e e ON k.id = e.kecamatan_id WHERE k.username != 'admin' AND (e.updated_at IS NULL OR DATE(e.updated_at) BETWEEN ? AND ?)
+      SELECT k.nama, 'E', e.upload_status FROM kecamatan k LEFT JOIN aspect_e e ON k.id = e.kecamatan_id WHERE k.role = 'kecamatan' AND (e.updated_at IS NULL OR DATE(e.updated_at) BETWEEN ? AND ?)
       UNION ALL
-      SELECT k.nama, 'F', f.upload_status FROM kecamatan k LEFT JOIN aspect_f f ON k.id = f.kecamatan_id WHERE k.username != 'admin' AND (f.updated_at IS NULL OR DATE(f.updated_at) BETWEEN ? AND ?)
+      SELECT k.nama, 'F', f.upload_status FROM kecamatan k LEFT JOIN aspect_f f ON k.id = f.kecamatan_id WHERE k.role = 'kecamatan' AND (f.updated_at IS NULL OR DATE(f.updated_at) BETWEEN ? AND ?)
     )
   `;
   
@@ -162,7 +162,7 @@ router.get('/api/statistics', ensureAuthenticated, isAdmin, (req, res) => {
 });
 
 // EXPORT - Excel format
-router.get('/export/excel', ensureAuthenticated, isAdmin, (req, res) => {
+router.get('/export/excel', ensureAuthenticated, isSuperAdmin, (req, res) => {
   const { dateStart, dateEnd } = req.query;
   
   const query = `
@@ -175,7 +175,7 @@ router.get('/export/excel', ensureAuthenticated, isAdmin, (req, res) => {
       a.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_a a ON k.id = a.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (a.updated_at IS NULL OR (DATE(a.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -189,7 +189,7 @@ router.get('/export/excel', ensureAuthenticated, isAdmin, (req, res) => {
       b.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_b b ON k.id = b.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (b.updated_at IS NULL OR (DATE(b.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -203,7 +203,7 @@ router.get('/export/excel', ensureAuthenticated, isAdmin, (req, res) => {
       c.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_c c ON k.id = c.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (c.updated_at IS NULL OR (DATE(c.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -217,7 +217,7 @@ router.get('/export/excel', ensureAuthenticated, isAdmin, (req, res) => {
       d.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_d d ON k.id = d.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (d.updated_at IS NULL OR (DATE(d.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -231,7 +231,7 @@ router.get('/export/excel', ensureAuthenticated, isAdmin, (req, res) => {
       e.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_e e ON k.id = e.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (e.updated_at IS NULL OR (DATE(e.updated_at) BETWEEN ? AND ?))
     
     UNION ALL
@@ -245,7 +245,7 @@ router.get('/export/excel', ensureAuthenticated, isAdmin, (req, res) => {
       f.total_score as score
     FROM kecamatan k
     LEFT JOIN aspect_f f ON k.id = f.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     AND (f.updated_at IS NULL OR (DATE(f.updated_at) BETWEEN ? AND ?))
     
     ORDER BY upload_date DESC, kecamatan, aspect
@@ -266,7 +266,7 @@ router.get('/export/excel', ensureAuthenticated, isAdmin, (req, res) => {
     }
     
     // Create CSV content
-    let csv = 'No,Kecamatan,Pengelola,Aspek,Status,Tanggal Upload,Skor\n';
+    let csv = 'No,Kecamatan,Pengelola,Instrumen,Status,Tanggal Upload,Skor\n';
     rows.forEach((row, index) => {
       csv += `${index + 1},"${row.kecamatan}","${row.nama_pengelola || '-'}","${row.aspect}","${row.status || 'Belum'}","${row.upload_date || '-'}","${row.score || 0}"\n`;
     });

@@ -1,0 +1,36 @@
+<%
+  const evidenceIndicatorKey = `ind_${indicator}`;
+  const evidenceUploaded = (uploadedFiles || []).some(
+    file => String(file.indicatorKey || '') === evidenceIndicatorKey
+  );
+  const evidenceInputName = `${evidenceIndicatorKey}_file`;
+  const evidenceLabel = typeof label !== 'undefined' && label
+    ? label
+    : `Bukti Indikator ${indicator}`;
+  const evidenceAccept = typeof accept !== 'undefined' && accept
+    ? accept
+    : '.pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png';
+  const evidenceCompact = typeof compact !== 'undefined' && compact;
+%>
+<div class="evidence-upload-control <%= evidenceUploaded ? 'evidence-upload-complete' : '' %>"
+     style="<%= evidenceCompact
+       ? 'padding:8px; border-radius:6px; background:' + (evidenceUploaded ? '#d4edda' : '#eef1f4') + '; border:1px solid ' + (evidenceUploaded ? '#9ed5aa' : '#d8dde3') + ';'
+       : 'margin-top:8px; padding:10px; border-radius:6px; background:' + (evidenceUploaded ? '#d4edda' : '#e9ecef') + '; border:1px solid ' + (evidenceUploaded ? '#9ed5aa' : '#d8dde3') + ';' %>">
+  <label style="display:block; margin-bottom:6px; font-weight:600; font-size:<%= evidenceCompact ? '12px' : '13px' %>; color:#333;">
+    <%= evidenceLabel %>
+    <% if (evidenceUploaded) { %>
+      <span style="display:inline-block; margin-left:6px; padding:3px 7px; border-radius:12px; background:#198754; color:white; font-size:10px; font-weight:700;">SUDAH</span>
+    <% } %>
+  </label>
+
+  <% if (evidenceUploaded) { %>
+    <div style="margin-bottom:7px; padding:7px; border-radius:5px; background:#f4fff6; color:#155724; font-size:<%= evidenceCompact ? '11px' : '12px' %>; line-height:1.35;">
+      ✅ Bukti telah tersimpan. Hapus file pada daftar di atas untuk mengunggah pengganti.
+    </div>
+    <input type="file" disabled aria-label="<%= evidenceLabel %> sudah terunggah"
+           style="width:100%; font-size:12px; cursor:not-allowed; opacity:.55;">
+  <% } else { %>
+    <input type="file" name="<%= evidenceInputName %>" accept="<%= evidenceAccept %>"
+           style="width:100%; font-size:12px;">
+  <% } %>
+</div>

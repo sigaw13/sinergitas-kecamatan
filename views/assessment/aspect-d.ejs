@@ -3,165 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instrumen D - Inovasi Kecamatan</title>
+  <title>Instrumen D — Inovasi Kecamatan dan Upaya yang Dilakukan Kecamatan</title>
   <style>
-    /* Menggunakan style yang konsisten */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; padding: 20px; }
-    .container { max-width: 1100px; margin: 0 auto; }
-    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; text-align: center; }
-    .header h1 { font-size: 24px; margin-bottom: 8px; }
-    .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
-    .indicator-group { margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea; }
-    .indicator-group h4 { color: #333; margin-bottom: 10px; font-size: 15px; border-bottom: 1px solid #e9ecef; padding-bottom: 8px; }
-    .form-row { margin-bottom: 10px; padding: 8px; background: white; border-radius: 5px; }
-    .form-row label { display: block; margin-bottom: 5px; color: #444; font-weight: 500; font-size: 13px; }
-    .form-row small { display: block; margin-top: 3px; color: #666; font-size: 11px; }
-    select, input[type="number"], input[type="text"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
-    textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-family: inherit; }
-    .file-upload { margin-top: 8px; padding: 8px; background: #e9ecef; border-radius: 4px; }
-    .file-upload input[type="file"] { width: 100%; font-size: 12px; }
-    .btn-group { display: flex; gap: 15px; margin-top: 25px; justify-content: center; }
-    .btn { padding: 10px 25px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: transform 0.2s; }
-    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .btn-secondary { background: #6c757d; color: white; }
-    .btn:hover { transform: translateY(-2px); }
+    *{box-sizing:border-box;margin:0;padding:0}body{font-family:"Segoe UI",Tahoma,sans-serif;background:#f4f6fb;padding:18px;color:#273142}.container{max-width:1120px;margin:auto}.header{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff;padding:24px;border-radius:12px;text-align:center;margin-bottom:18px}.header h1{font-size:23px;margin-bottom:7px}.form{background:#fff;padding:24px;border-radius:12px;box-shadow:0 3px 14px rgba(25,42,70,.08)}.indicator{background:#f8f9fc;border-left:5px solid #5d73df;padding:17px;border-radius:9px;margin-bottom:15px}.indicator h3{font-size:15px;line-height:1.45;margin-bottom:10px}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}.field{background:#fff;padding:10px;border-radius:7px}.field label{display:block;font-size:13px;font-weight:600;line-height:1.4;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:9px;border:1px solid #cfd5df;border-radius:6px;font-size:13px;font-family:inherit}.note{background:#eef1ff;color:#4b5680;padding:9px 11px;border-radius:7px;font-size:12px;line-height:1.5;margin-bottom:10px}.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}.btn{border:0;border-radius:7px;padding:11px 20px;font-weight:700;text-decoration:none;cursor:pointer}.primary{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff}.draft{background:#f0b90b;color:#222}.secondary{background:#667085;color:#fff}.choice-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.choice-option{background:#fff;border:1px solid #d7deea;border-radius:9px;padding:12px}.choice-option.is-selected{border-color:#5d73df;box-shadow:0 0 0 2px rgba(93,115,223,.12);background:#f5f7ff}.choice-option-head{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}.choice-option-head input[type=radio]{width:auto;margin-top:3px}.choice-option-label{font-size:13px;font-weight:700;line-height:1.4}.choice-option-score{display:inline-block;margin-top:5px;background:#e8edff;color:#3348aa;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800}.inline-evidence-block{margin-top:10px}.inline-evidence-grid{display:grid;grid-template-columns:1fr;gap:9px}.inline-evidence-slot{background:#f8f9fc;border:1px solid #d7dee9;border-radius:8px;padding:10px}.inline-evidence-slot-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px;font-size:12px}.inline-evidence-status{font-size:9px;font-weight:800;border-radius:999px;padding:3px 7px}.inline-evidence-status.done{background:#198754;color:#fff}.inline-evidence-status.pending{background:#fff1c7;color:#7c5700}.inline-evidence-folder{font-size:10px;color:#687386;margin-bottom:7px}.inline-evidence-file{font-size:11px}.inline-evidence-actions{display:flex;gap:5px;margin-top:6px}.inline-evidence-actions a,.inline-evidence-delete{border:0;border-radius:5px;padding:5px 7px;font-size:10px;font-weight:700;text-decoration:none}.inline-evidence-actions a{background:#5d73df;color:#fff}.inline-evidence-delete{background:#c0392b;color:#fff}
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>💡 Instrumen D - Inovasi Kecamatan</h1>
-      <p>Kecamatan <%= kecamatan %></p>
-    </div>
-      <!-- Tampilkan file yang sudah diupload -->
-<% if (data && data.upload_status === 'Sudah') { %>
-  <div class="uploaded-files" style="background: #d4edda; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #28a745;">
-    <h3 style="color: #155724; margin-bottom: 15px;">📎 File yang Sudah Diupload</h3>
-    <div id="fileList" style="color: #155724;">
-      <p>Memuat daftar file...</p>
-    </div>
+<div class="container">
+  <header class="header">
+    <h1>Instrumen D — Inovasi Kecamatan dan Upaya yang Dilakukan Kecamatan</h1>
+    <p>Kecamatan <%= kecamatan %> · 4 indikator</p>
+  </header>
+
+  <%- include('_progress-summary', { progress }) %>
+  <%- include('_standards-panel', { standard }) %>
+  <%- include('_file-panel', { instrument:'d', data, uploadedFiles, missingEvidenceKeys, saved, saveResult, kecamatan_id, isAdmin }) %>
+
+  <%
+    const dQuestions = Array.isArray(questionDefinitions) ? questionDefinitions : [];
+    const dQuestionByNumber = Object.fromEntries(dQuestions.map(question => [Number(question.number), question]));
+    const dEvidenceFor = (number, key) => {
+      const question = dQuestionByNumber[Number(number)] || { evidence: [] };
+      return (question.evidence || []).filter(item => String(item.key) === String(key));
+    };
+    const dHasLegacyEvidence = key => (uploadedFiles || []).some(file => String(file.indicatorKey || file.indicator_key || '') === String(key));
+    const dLocked = typeof evaluationLocked !== 'undefined' ? Boolean(evaluationLocked) : false;
+  %>
+
+  <div class="form">
+    <form action="/assessment/instrument-d<%= kecamatan_id ? '?kecamatan_id='+kecamatan_id : '' %>" method="POST" enctype="multipart/form-data">
+      <section class="indicator">
+        <h3>1. Jumlah Sistem Informasi (SI) yang tersedia di kecamatan</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> resume atau dokumentasi yang disertai penjelasan singkat mengenai Sistem Informasi (SI) yang digunakan oleh kecamatan.</div>
+        <div class="fields">
+          <div class="field">
+            <label>1.a. Nama Sistem Informasi (SI) yang dibuat oleh kecamatan</label>
+            <textarea name="ind_1a_nama" rows="4"><%= data.ind_1a_nama ?? '' %></textarea>
+          </div>
+          <div class="field">
+            <label>1.b. Nama Sistem Informasi (SI) yang sudah tersedia dan digunakan oleh kecamatan</label>
+            <textarea name="ind_1b_nama" rows="4"><%= data.ind_1b_nama ?? '' %></textarea>
+          </div>
+        </div>
+        <%- include('_question-evidence', { question: dQuestionByNumber[1], uploadedFiles, evaluationLocked: dLocked }) %>
+      </section>
+
+      <section class="indicator">
+        <h3>2. Jumlah inovasi yang dibuat oleh Camat</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> resume inovasi kecamatan yang memuat nama inovasi, jenis inovasi, dan manfaat yang diperoleh dari penerapannya.</div>
+        <div class="fields">
+          <div class="field">
+            <label>Jumlah inovasi yang dibuat oleh Camat</label>
+            <input type="number" name="ind_2_jumlah" min="0" value="<%= (data.ind_2_jumlah ?? Math.max(Number(data.ind_2a_jumlah || 0), Number(data.ind_2b_jumlah || 0))) || '' %>">
+          </div>
+          <div class="field">
+            <label>Nama, jenis, dan manfaat setiap inovasi</label>
+            <textarea name="ind_2_detail" rows="6"><%= data.ind_2_detail ?? '' %></textarea>
+          </div>
+        </div>
+        <%- include('_single-evidence-input', { instrument:'d', indicator:2, label:'Bukti indikator 2 — Resume inovasi kecamatan', uploadedFiles }) %>
+      </section>
+
+      <%
+        const dQ3 = dQuestionByNumber[3] || { options: [] };
+        const dLegacyQ3 = Number(data.ind_3_jumlah);
+        const dQ3Choice = data.ind_3_pilihan || (dHasLegacyEvidence('ind_3')
+          ? (dLegacyQ3 >= 1 && dLegacyQ3 <= 5 ? 'a' : dLegacyQ3 >= 6 && dLegacyQ3 <= 10 ? 'b' : dLegacyQ3 >= 11 && dLegacyQ3 <= 15 ? 'c' : dLegacyQ3 > 15 ? 'd' : '')
+          : '');
+      %>
+      <section class="indicator" id="question-3">
+        <h3>3. Jumlah Keputusan (SK) Camat Tahun 2025</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> data produk hukum yang dikeluarkan oleh kecamatan dalam kurun waktu 1 tahun</div>
+        <%- include('_choice-question', {
+          question: dQ3,
+          selectedChoice: dQ3Choice,
+          uploadedFiles,
+          evaluationLocked: dLocked,
+          evidenceFor: dEvidenceFor
+        }) %>
+      </section>
+
+      <section class="indicator">
+        <h3>4. Jumlah dan jenis prestasi yang diraih oleh kecamatan, desa, dan kelurahan</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> rekapitulasi prestasi yang diterima kecamatan, desa, dan kelurahan pada tahun penilaian beserta piagam, sertifikat, atau dokumen pendukung.</div>
+        <div class="fields">
+          <div class="field"><label>4.a.1. Jumlah prestasi kecamatan tingkat nasional</label><input type="number" name="ind_4a_nasional" min="0" value="<%= data.ind_4a_nasional ?? '' %>"></div>
+          <div class="field"><label>4.a.2. Jumlah prestasi kecamatan tingkat provinsi</label><input type="number" name="ind_4a_provinsi" min="0" value="<%= data.ind_4a_provinsi ?? '' %>"></div>
+          <div class="field"><label>4.a.3. Jumlah prestasi kecamatan tingkat kabupaten atau kota</label><input type="number" name="ind_4a_kabupaten" min="0" value="<%= data.ind_4a_kabupaten ?? '' %>"></div>
+          <div class="field"><label>4.b.1. Jumlah prestasi desa dan kelurahan tingkat nasional</label><input type="number" name="ind_4b_nasional" min="0" value="<%= data.ind_4b_nasional ?? '' %>"></div>
+          <div class="field"><label>4.b.2. Jumlah prestasi desa dan kelurahan tingkat provinsi</label><input type="number" name="ind_4b_provinsi" min="0" value="<%= data.ind_4b_provinsi ?? '' %>"></div>
+        </div>
+        <div class="field">
+          <label>Nama dan jenis prestasi yang diraih</label>
+          <textarea name="ind_4_detail" rows="7"><%= data.ind_4_detail ?? '' %></textarea>
+        </div>
+        <%- include('_question-evidence', { question: dQuestionByNumber[4], uploadedFiles, evaluationLocked: dLocked }) %>
+      </section>
+
+      <div class="btns">
+        <button class="btn draft" name="save_action" value="draft">Simpan Draft</button>
+        <button class="btn primary" name="save_action" value="final">Kirim Final</button>
+        <a class="btn secondary" href="/dashboard">Kembali</a>
+      </div>
+    </form>
   </div>
-
-  <script>
-    // Load file list
-const kecamatanId = '<%= typeof kecamatan_id !== "undefined" ? kecamatan_id : "" %>';
-
-fetch('/assessment/files/d?kecamatan_id=' + encodeURIComponent(kecamatanId))
-      .then(res => res.json())
-      .then(data => {
-        const fileList = document.getElementById('fileList');
-        if (data.files && data.files.length > 0) {
-          let html = '<ul style="list-style: none; padding: 0;">';
-          data.files.forEach(file => {
-            html += `
-              <li style="padding: 8px; background: white; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
-                <span>📄 ${file.fieldName.replace('ind_', 'Indikator ').replace('_file', '')}: <strong>${file.fileName}</strong></span>
-                <a href="${file.url}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">👁️ Lihat</a>
-              </li>
-            `;
-          });
-          html += '</ul>';
-          fileList.innerHTML = html;
-        } else {
-          fileList.innerHTML = '<p>Belum ada file yang diupload</p>';
-        }
-      })
-      .catch(err => {
-        document.getElementById('fileList').innerHTML = '<p>Error memuat file</p>';
-      });
-  </script>
-<% } %>
-    <div class="form-container">
-<form action="/assessment/aspect-d<%= kecamatan_id ? '?kecamatan_id=' + kecamatan_id : '' %>" method="POST" enctype="multipart/form-data">
-        
-        <!-- Indikator 1: Sistem Informasi -->
-        <div class="indicator-group">
-          <h4>1. Jumlah Sistem Informasi (SI) yang ada di kecamatan</h4>
-          <div class="form-row">
-            <label>1.a Nama Sistem Informasi yang Dibuat Kecamatan</label>
-            <textarea name="ind_1a_nama" rows="3" placeholder="Sebutkan nama SI (pisahkan dengan koma jika lebih dari satu)"><%= data && data.ind_1a_nama ? data.ind_1a_nama : '' %></textarea>
-          </div>
-          <div class="form-row">
-            <label>1.b Nama Sistem Informasi yang Sudah Ada (Dinas/Provinsi/Pusat)</label>
-            <textarea name="ind_1b_nama" rows="3" placeholder="Sebutkan nama SI"><%= data && data.ind_1b_nama ? data.ind_1b_nama : '' %></textarea>
-          </div>
-          <div class="file-upload">
-            <label>📎 Upload Resume/Dokumentasi SI:</label>
-            <input type="file" name="file_1" accept=".pdf,.doc,.docx,.jpg,.png">
-          </div>
-        </div>
-
-        <!-- Indikator 2: Inovasi Camat -->
-        <div class="indicator-group">
-          <h4>2. Jumlah Inovasi yang dibuat oleh Camat</h4>
-          <div class="form-row">
-            <label>2.a Jumlah Inovasi (Hanya mempunyai 1 Inovasi)</label>
-            <input type="number" name="ind_2a_jumlah" min="0" value="<%= data && data.ind_2a_jumlah ? data.ind_2a_jumlah : '' %>" placeholder="Jumlah inovasi">
-          </div>
-          <div class="form-row">
-            <label>2.b Jumlah Inovasi (Mempunyai lebih dari 1 Inovasi)</label>
-            <input type="number" name="ind_2b_jumlah" min="0" value="<%= data && data.ind_2b_jumlah ? data.ind_2b_jumlah : '' %>" placeholder="Jumlah inovasi">
-          </div>
-          <div class="file-upload">
-            <label>📎 Upload Resume Inovasi (Nama & Manfaat):</label>
-            <input type="file" name="file_2" accept=".pdf,.doc,.docx">
-          </div>
-        </div>
-
-        <!-- Indikator 3: SK Camat -->
-        <div class="indicator-group">
-          <h4>3. Jumlah Keputusan (SK) Camat Tahun 2025</h4>
-          <div class="form-row">
-            <label>Total Jumlah SK yang terbit di tahun 2025</label>
-            <input type="number" name="ind_3_jumlah" min="0" value="<%= data && data.ind_3_jumlah ? data.ind_3_jumlah : '' %>" placeholder="Contoh: 12">
-            <small>Sistem akan otomatis mengkategorikan: a) 1-5 SK, b) 6-10 SK, c) 11-15 SK, d) >15 SK</small>
-          </div>
-          <div class="file-upload">
-            <label>📎 Upload Data Produk Hukum:</label>
-            <input type="file" name="file_3" accept=".pdf,.xlsx,.jpg,.png">
-          </div>
-        </div>
-
-        <!-- Indikator 4: Prestasi -->
-        <div class="indicator-group">
-          <h4>4. Jumlah Prestasi yang Diraih</h4>
-          
-          <div class="form-row">
-            <label>4.a.1 Prestasi Kecamatan Tingkat Nasional</label>
-            <input type="number" name="ind_4a_nasional" min="0" value="<%= data && data.ind_4a_nasional ? data.ind_4a_nasional : '' %>">
-          </div>
-          <div class="form-row">
-            <label>4.a.2 Prestasi Kecamatan Tingkat Provinsi</label>
-            <input type="number" name="ind_4a_provinsi" min="0" value="<%= data && data.ind_4a_provinsi ? data.ind_4a_provinsi : '' %>">
-          </div>
-          <div class="form-row">
-            <label>4.a.3 Prestasi Kecamatan Tingkat Kabupaten/Kota</label>
-            <input type="number" name="ind_4a_kabupaten" min="0" value="<%= data && data.ind_4a_kabupaten ? data.ind_4a_kabupaten : '' %>">
-          </div>
-          
-          <h4 style="margin-top:15px;">4.b Prestasi Desa dan Kelurahan yang Diraih</h4>
-          <div class="form-row">
-            <label>4.b.1 Prestasi Desa/Kel Tingkat Nasional</label>
-            <input type="number" name="ind_4b_nasional" min="0" value="<%= data && data.ind_4b_nasional ? data.ind_4b_nasional : '' %>">
-          </div>
-          <div class="form-row">
-            <label>4.b.2 Prestasi Desa/Kel Tingkat Provinsi</label>
-            <input type="number" name="ind_4b_provinsi" min="0" value="<%= data && data.ind_4b_provinsi ? data.ind_4b_provinsi : '' %>">
-          </div>
-
-          <div class="file-upload">
-            <label>📎 Upload Rekapitulasi Prestasi & Piagam:</label>
-            <input type="file" name="file_4" accept=".pdf,.xlsx,.jpg,.png" multiple>
-          </div>
-        </div>
-
-        <div class="btn-group">
-          <button type="submit" class="btn btn-primary">💾 Simpan Data Instrumen D</button>
-          <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
-        </div>
-      </form>
-    </div>
-  </div>
+</div>
+<script>
+(function(){
+  const updateChoiceGroup = fieldName => {
+    const group = document.querySelector(`[data-choice-group="${fieldName}"]`);
+    if (!group) return;
+    const checked = group.querySelector(`input[name="${fieldName}"]:checked`);
+    group.querySelectorAll('[data-choice-option]').forEach(card => {
+      const selected = checked && card.dataset.choiceOption === checked.value;
+      card.classList.toggle('is-selected', Boolean(selected));
+      card.querySelectorAll('input[type="file"][name]').forEach(input => { input.disabled = !selected; });
+    });
+  };
+  document.querySelectorAll('[data-choice-group]').forEach(group => {
+    const fieldName = group.dataset.choiceGroup;
+    group.querySelectorAll(`input[name="${fieldName}"]`).forEach(input => input.addEventListener('change', () => updateChoiceGroup(fieldName)));
+    updateChoiceGroup(fieldName);
+  });
+})();
+</script>
 </body>
 </html>

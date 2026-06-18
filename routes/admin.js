@@ -1,61 +1,98 @@
 const express = require('express');
 const router = express.Router();
+
 const db = require('../database/database');
+const { getBackupOverview } = require('../utils/backup');
+const { isSuperAdmin } = require('../middleware/auth');
 
-const DEFAULT_DEADLINE = '2025-12-31';
+const DEFAULT_DEADLINE = '2026-12-31';
 
-// Middleware admin: hanya admin pusat yang boleh membuka halaman settings.
+
+// =========================
+// 🔐 MIDDLEWARE ADMIN
+// =========================
 function ensureAdmin(req, res, next) {
-  if (req.session && req.session.userId && (req.session.isAdmin || req.session.username === 'admin')) {
-    return next();
-  }
-  res.redirect('/dashboard');
+  return isSuperAdmin(req, res, next);
 }
 
+
+// =========================
+// 🧩 DATABASE HELPER
+// =========================
 function dbGet(sql, params = []) {
   return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => (err ? reject(err) : resolve(row || null)));
+    db.get(sql, params, (err, row) => {
+      if (err) return reject(err);
+      resolve(row || null);
+    });
   });
 }
 
 function dbRun(sql, params = []) {
   return new Promise((resolve, reject) => {
-    db.run(sql, params, (err, result) => (err ? reject(err) : resolve(result)));
+    db.run(sql, params, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
   });
 }
 
+
+// =========================
+// ⏳ DEADLINE CONFIG
+// =========================
 async function getDeadline() {
-  const row = await dbGet('SELECT value FROM config WHERE key = ?', ['deadline']);
-  return row && row.value ? row.value : DEFAULT_DEADLINE;
+  const row = await dbGet(
+    'SELECT value FROM config WHERE key = ?',
+    ['deadline']
+  );
+
+  return row?.value || DEFAULT_DEADLINE;
 }
 
 function isValidDateInput(value) {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(new Date(`${value}T00:00:00`).getTime());
+  return (
+    /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+    !Number.isNaN(new Date(`${value}T00:00:00`).getTime())
+  );
 }
 
-// GET /admin/settings - halaman pengaturan admin.
+
+// =========================
+// 📊 ADMIN SETTINGS PAGE
+// =========================
 router.get('/admin/settings', ensureAdmin, async (req, res) => {
   try {
     const deadline = await getDeadline();
-    res.render('admin/settings', {
+    const backupInfo = getBackupOverview();
+
+    return res.render('admin/settings', {
       username: req.session.username,
       deadline,
+      backupInfo,
       success: req.query.success || null,
       error: req.query.error || null
     });
+
   } catch (err) {
     console.error('❌ Error loading admin settings:', err);
-    res.status(500).send('Error loading settings');
+    return res.status(500).send('Error loading settings');
   }
 });
 
-// POST /admin/settings/update-deadline - update deadline pengisian.
+
+// =========================
+// 🕒 UPDATE DEADLINE
+// =========================
 router.post('/admin/settings/update-deadline', ensureAdmin, async (req, res) => {
   try {
     const deadline = String(req.body.deadline || '').trim();
 
     if (!isValidDateInput(deadline)) {
-      return res.redirect('/admin/settings?error=' + encodeURIComponent('Format deadline tidak valid'));
+      return res.redirect(
+        '/admin/settings?error=' +
+        encodeURIComponent('Format deadline tidak valid')
+      );
     }
 
     await dbRun(
@@ -67,11 +104,23 @@ router.post('/admin/settings/update-deadline', ensureAdmin, async (req, res) => 
       ['deadline', deadline]
     );
 
-    res.redirect('/admin/settings?success=' + encodeURIComponent('Deadline berhasil diperbarui'));
+    return res.redirect(
+      '/admin/settings?success=' +
+      encodeURIComponent('Deadline berhasil diperbarui')
+    );
+
   } catch (err) {
     console.error('❌ Error updating deadline:', err);
-    res.redirect('/admin/settings?error=' + encodeURIComponent('Gagal memperbarui deadline'));
+
+    return res.redirect(
+      '/admin/settings?error=' +
+      encodeURIComponent('Gagal memperbarui deadline')
+    );
   }
 });
 
+
+// =========================
+// 📦 EXPORT
+// =========================
 module.exports = router;

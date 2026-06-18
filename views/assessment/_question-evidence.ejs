@@ -1,0 +1,33 @@
+<%
+  const safeQuestion = question || { evidence: [] };
+  const safeUploadedFiles = Array.isArray(uploadedFiles) ? uploadedFiles : [];
+  const safeLocked = typeof evaluationLocked !== 'undefined' ? Boolean(evaluationLocked) : false;
+  const safeEvidence = (typeof evidenceItems !== 'undefined' && Array.isArray(evidenceItems))
+    ? evidenceItems
+    : (Array.isArray(safeQuestion.evidence) ? safeQuestion.evidence : []);
+  const showEvidenceTitle = typeof showTitle === 'undefined' ? true : Boolean(showTitle);
+  const compactEvidence = typeof compact !== 'undefined' ? Boolean(compact) : false;
+  const evidenceTitleText = typeof evidenceTitle !== 'undefined' && evidenceTitle
+    ? String(evidenceTitle)
+    : 'Data dukung pertanyaan ini';
+%>
+
+<div class="inline-evidence-block <%= compactEvidence ? 'is-compact' : '' %>">
+  <% if (showEvidenceTitle) { %>
+    <div class="inline-evidence-title">
+      <span><%= evidenceTitleText %></span>
+      <small><%= safeEvidence.length %> slot upload resmi</small>
+    </div>
+  <% } %>
+
+  <div class="inline-evidence-grid <%= compactEvidence ? 'is-compact' : '' %>">
+    <% safeEvidence.forEach(evidence => { %>
+      <%- include('_question-evidence-slot', {
+        evidence,
+        uploadedFiles: safeUploadedFiles,
+        evaluationLocked: safeLocked,
+        csrfToken: typeof csrfToken !== 'undefined' ? csrfToken : ''
+      }) %>
+    <% }) %>
+  </div>
+</div>

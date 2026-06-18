@@ -1,0 +1,54 @@
+<%
+  const safeEvidenceItem = evidence || { key: '', folder: '' };
+  const safeUploadedFilesSlot = Array.isArray(uploadedFiles) ? uploadedFiles : [];
+  const safeLockedSlot = typeof evaluationLocked !== 'undefined' ? Boolean(evaluationLocked) : false;
+  const safeCsrfSlot = typeof csrfToken !== 'undefined' && csrfToken ? String(csrfToken) : '';
+  const fileForEvidence = safeUploadedFilesSlot.find(
+    file => String(file.indicatorKey || '').toLowerCase() === String(safeEvidenceItem.key || '').toLowerCase()
+  );
+  const folderText = String(safeEvidenceItem.folder || '');
+  const folderParts = folderText.split('/').filter(Boolean);
+  const evidenceLabel = folderParts.length ? folderParts[folderParts.length - 1] : String(safeEvidenceItem.key || 'Data dukung');
+%>
+<div class="inline-evidence-slot <%= fileForEvidence ? 'is-complete' : '' %>" data-evidence-key="<%= safeEvidenceItem.key %>">
+  <div class="inline-evidence-slot-head">
+    <strong><%= evidenceLabel %></strong>
+    <span class="inline-evidence-status <%= fileForEvidence ? 'done' : 'pending' %>">
+      <%= fileForEvidence ? 'SUDAH' : 'BELUM' %>
+    </span>
+  </div>
+
+  <div class="inline-evidence-folder">
+    Folder resmi <strong><%= folderText %></strong>
+  </div>
+
+  <% if (fileForEvidence) { %>
+    <div class="inline-evidence-file">
+      <span><%= fileForEvidence.fileName %></span>
+      <div class="inline-evidence-actions">
+        <a href="<%= fileForEvidence.url %>" target="_blank" rel="noopener">Lihat</a>
+        <% if (!fileForEvidence.legacy && !safeLockedSlot) { %>
+          <button
+            type="submit"
+            class="inline-evidence-delete"
+            formaction="/assessment/files/<%= fileForEvidence.id %>/delete<%= safeCsrfSlot ? '?_csrf=' + encodeURIComponent(safeCsrfSlot) : '' %>"
+            formmethod="post"
+            formnovalidate
+            onclick="return confirm('Hapus bukti <%= evidenceLabel %>?');"
+          >Hapus</button>
+        <% } %>
+      </div>
+    </div>
+    <input type="file" disabled aria-label="<%= evidenceLabel %> sudah terunggah">
+  <% } else if (safeLockedSlot) { %>
+    <div class="inline-evidence-locked">Hasil telah difinalkan. Upload dikunci.</div>
+    <input type="file" disabled>
+  <% } else { %>
+    <input
+      type="file"
+      name="<%= safeEvidenceItem.key %>_file"
+      accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+    >
+    <small>PDF, Word, Excel, JPG, JPEG, atau PNG. Maksimal 10 MB.</small>
+  <% } %>
+</div>

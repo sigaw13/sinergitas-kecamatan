@@ -1,80 +1,83 @@
+'use strict';
+
 const express = require('express');
 const router = express.Router();
 const db = require('../database/database');
-const { ensureAuthenticated, isAdmin } = require('../middleware/auth');
-const ScoringSystem = require('../utils/scoring');
+const { ensureAuthenticated, isAdmin, getAuthorizedKecamatanIds } = require('../middleware/auth');
+const { TOTAL_MAX_SCORE } = require('../utils/standards');
 
-// Export data ke format CSV
-router.get('/csv', ensureAuthenticated, isAdmin, (req, res) => {
-  db.all('SELECT * FROM kecamatan WHERE username != "admin" ORDER BY nama', (err, kecamatans) => {
-    if (err) {
-      console.error('Error fetching data:', err);
-      return res.status(500).send('Error mengambil data');
-    }
-
-    // CSV Header
-    let csv = 'No,Kecamatan,Pengelola,Email,Aspek A,Aspek B,Aspek C,Aspek D,Aspek E,Aspek F,Total Skor,Persentase,Kategori,Peringkat\n';
-
-    let processed = 0;
-    const results = [];
-
-    kecamatans.forEach(kc => {
-      db.get('SELECT * FROM aspect_a WHERE kecamatan_id = ?', [kc.id], (err, a) => {
-        db.get('SELECT * FROM aspect_b WHERE kecamatan_id = ?', [kc.id], (err, b) => {
-          db.get('SELECT * FROM aspect_c WHERE kecamatan_id = ?', [kc.id], (err, c) => {
-            db.get('SELECT * FROM aspect_d WHERE kecamatan_id = ?', [kc.id], (err, d) => {
-              db.get('SELECT * FROM aspect_e WHERE kecamatan_id = ?', [kc.id], (err, e) => {
-                db.get('SELECT * FROM aspect_f WHERE kecamatan_id = ?', [kc.id], (err, f) => {
-                  
-                  const aspectA = ScoringSystem.calculateAspectA(a || {});
-                  const aspectB = ScoringSystem.calculateAspectB(b || {});
-                  const aspectC = ScoringSystem.calculateAspectC(c || {});
-                  const aspectD = ScoringSystem.calculateAspectD(d || {});
-                  const aspectE = ScoringSystem.calculateAspectE(e || {});
-                  const aspectF = ScoringSystem.calculateAspectF(f || {});
-                  
-                  const totalScore = ScoringSystem.calculateTotalScore(
-                    aspectA, aspectB, aspectC, aspectD, aspectE, aspectF
-                  );
-                  
-                  results.push({
-                    nama: kc.nama,
-                    pengelola: kc.nama_pengelola || '-',
-                    email: kc.email || '-',
-                    scoreA: aspectA.totalScore,
-                    scoreB: aspectB.totalScore,
-                    scoreC: aspectC.totalScore,
-                    scoreD: aspectD.totalScore,
-                    scoreE: aspectE.totalScore,
-                    scoreF: aspectF.totalScore,
-                    totalScore: totalScore.totalScore,
-                    percentage: totalScore.percentage,
-                    category: totalScore.category
-                  });
-                  
-                  processed++;
-                  if (processed === kecamatans.length) {
-                    // Sort by total score descending untuk ranking
-                    results.sort((a, b) => b.totalScore - a.totalScore);
-                    
-                    // Add ranking dan generate CSV
-                    results.forEach((r, idx) => {
-                      csv += `${idx + 1},"${r.nama}","${r.pengelola}","${r.email}",${r.scoreA},${r.scoreB},${r.scoreC},${r.scoreD},${r.scoreE},${r.scoreF},${r.totalScore},${r.percentage}%,${r.category},${idx + 1}\n`;
-                    });
-                    
-                    // Set headers untuk download CSV
-                    res.header('Content-Type', 'text/csv; charset=utf-8');
-                    res.attachment(`Laporan-Sinergitas-Kecamatan-${new Date().toISOString().split('T')[0]}.csv`);
-                    res.send(csv);
-                  }
-                });
-              });
-            });
-          });
-        });
-      });
-    });
+function dbAll(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (error, rows) => (error ? reject(error) : resolve(Array.isArray(rows) ? rows : [])));
   });
+}
+
+function csvEscape(value) {
+  const text = value === null || value === undefined ? '' : String(value);
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function formatDate(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString('id-ID');
+}
+
+async function getOfficialRows() {
+  return dbAll(
+    `SELECT er.*, k.nama AS kecamatan, k.nama_pengelola, k.email
+     FROM evaluation_results er
+     JOIN kecamatan k ON k.id = er.kecamatan_id
+     WHERE er.status = ?
+     ORDER BY er.total_score DESC, er.finalized_at ASC, k.nama ASC`,
+    ['Final']
+  );
+}
+
+router.get('/official.csv', ensureAuthenticated, isAdmin, async (req, res) => {
+  try {
+    const rows = await getOfficialRows();
+    const authorizedIds = await getAuthorizedKecamatanIds(req);
+    const allowed = Array.isArray(authorizedIds) ? new Set(authorizedIds.map(Number)) : null;
+    const visibleRows = rows.filter(row => !allowed || allowed.has(Number(row.kecamatan_id)));
+    const header = [
+      'Peringkat','Kecamatan','Pengelola','Email','Instrumen A','Instrumen B','Instrumen C',
+      'Instrumen D','Instrumen E','Instrumen F','Total Skor','Skor Maksimum','Persentase',
+      'Kategori','Tanggal Finalisasi'
+    ];
+    const lines = [header.map(csvEscape).join(',')];
+    visibleRows.forEach((row, index) => {
+      lines.push([
+        index + 1,
+        row.kecamatan,
+        row.nama_pengelola || '-',
+        row.email || '-',
+        Number(row.score_a || 0),
+        Number(row.score_b || 0),
+        Number(row.score_c || 0),
+        Number(row.score_d || 0),
+        Number(row.score_e || 0),
+        Number(row.score_f || 0),
+        Number(row.total_score || 0),
+        Number(row.max_score || TOTAL_MAX_SCORE),
+        `${Number(row.percentage || 0)}%`,
+        row.category || '-',
+        formatDate(row.finalized_at)
+      ].map(csvEscape).join(','));
+    });
+
+    res.header('Content-Type', 'text/csv; charset=utf-8');
+    res.attachment(`Hasil-Resmi-Sinergitas-Kecamatan-${new Date().toISOString().slice(0, 10)}.csv`);
+    res.send(`\uFEFF${lines.join('\n')}`);
+  } catch (error) {
+    console.error('Gagal mengekspor hasil resmi:', error);
+    res.status(500).send('Gagal mengekspor hasil resmi penilaian sinergitas.');
+  }
+});
+
+// Kompatibilitas tautan lama: ekspor utama sekarang hanya memakai hasil yang sudah final.
+router.get('/csv', ensureAuthenticated, isAdmin, (req, res) => {
+  res.redirect('/export/official.csv');
 });
 
 module.exports = router;

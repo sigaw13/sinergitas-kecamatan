@@ -1,0 +1,2892 @@
+{
+  "A": {
+    "code": "A",
+    "name": "Pelayanan Publik",
+    "maxScore": 30,
+    "questions": [
+      {
+        "key": "ind_1",
+        "number": 1,
+        "label": "Kelengkapan Data dan Potensi Kecamatan: Data Monografi Kecamatan",
+        "maxScore": 2.0,
+        "rubricValues": [
+          2.0
+        ],
+        "scoreOptions": [
+          0.0,
+          2.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_1",
+            "folder": "Pertanyaan 1"
+          }
+        ]
+      },
+      {
+        "key": "ind_2",
+        "number": 2,
+        "label": "Struktur Organisasi Kecamatan",
+        "maxScore": 2.0,
+        "rubricValues": [
+          0.5,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5,
+          1.0,
+          1.5,
+          2.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_2a",
+            "folder": "Pertanyaan 2/Pertanyaan 2.a"
+          },
+          {
+            "key": "ind_2b",
+            "folder": "Pertanyaan 2/Pertanyaan 2.b"
+          },
+          {
+            "key": "ind_2c",
+            "folder": "Pertanyaan 2/Pertanyaan 2.c"
+          }
+        ]
+      },
+      {
+        "key": "ind_3",
+        "number": 3,
+        "label": "Peraturan Bupati/Walikota tentang pendelegasian sebagian kewenangan kepada Camat",
+        "maxScore": 2.5,
+        "rubricValues": [
+          2.5
+        ],
+        "scoreOptions": [
+          0.0,
+          2.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_3",
+            "folder": "Pertanyaan 3"
+          }
+        ]
+      },
+      {
+        "key": "ind_4",
+        "number": 4,
+        "label": "Pelaksanaan Urusan Pemerintahan yang Terkait Dengan Pelayanan Perizinan NonUsaha: Jumlah urusan Pemerintahan yang terkait dengan perizinan NonUsaha yang telah dilengkapi dengan instrumen pendukung",
+        "maxScore": 2.0,
+        "rubricValues": [
+          2.0
+        ],
+        "scoreOptions": [
+          0.0,
+          2.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_4",
+            "folder": "Pertanyaan 4"
+          }
+        ]
+      },
+      {
+        "key": "ind_5",
+        "number": 5,
+        "label": "Pelaksanaan Urusan Pemerintahan yang Terkait Dengan Kewenangan Lain yang Dilimpahkan",
+        "maxScore": 2.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0,
+          2.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_5a",
+            "folder": "Pertanyaan 5/Pertanyaan 5.a"
+          },
+          {
+            "key": "ind_5b",
+            "folder": "Pertanyaan 5/Pertanyaan 5.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_6",
+        "number": 6,
+        "label": "Keberadaan Tim Pelimpahan Sebagian Kewenangan Bupati/Wali Kota kepada Camat",
+        "maxScore": 2.5,
+        "rubricValues": [
+          2.5
+        ],
+        "scoreOptions": [
+          0.0,
+          2.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_6",
+            "folder": "Pertanyaan 6"
+          }
+        ]
+      },
+      {
+        "key": "ind_7",
+        "number": 7,
+        "label": "Ketersediaan pelaporan pelimpahan kewenangan.",
+        "maxScore": 2.5,
+        "rubricValues": [
+          2.5
+        ],
+        "scoreOptions": [
+          0.0,
+          2.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_7",
+            "folder": "Pertanyaan 7"
+          }
+        ]
+      },
+      {
+        "key": "ind_8",
+        "number": 8,
+        "label": "Apakah Kecamatan berfungsi sebagai simpul pelayanan terpadu satu pintu atau simpul pelayanan dari Perangkat Daerah terkait?",
+        "maxScore": 1.5,
+        "rubricValues": [
+          1.5
+        ],
+        "scoreOptions": [
+          0.0,
+          1.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_8",
+            "folder": "Pertanyaan 8"
+          }
+        ]
+      },
+      {
+        "key": "ind_9",
+        "number": 9,
+        "label": "Jumlah pelaksana teknis pelayanan:",
+        "maxScore": 1.5,
+        "rubricValues": [
+          0.25,
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0,
+          1.25,
+          1.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_9a",
+            "folder": "Pertanyaan 9/Pertanyaan 9.a"
+          },
+          {
+            "key": "ind_9b",
+            "folder": "Pertanyaan 9/Pertanyaan 9.b"
+          },
+          {
+            "key": "ind_9c",
+            "folder": "Pertanyaan 9/Pertanyaan 9.c"
+          },
+          {
+            "key": "ind_9d",
+            "folder": "Pertanyaan 9/Pertanyaan 9.d"
+          },
+          {
+            "key": "ind_9e",
+            "folder": "Pertanyaan 9/Pertanyaan 9.e"
+          }
+        ]
+      },
+      {
+        "key": "ind_10",
+        "number": 10,
+        "label": "Keberadaan informasi pelayanan yang diketahui publik:",
+        "maxScore": 3.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5,
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0,
+          3.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_10a",
+            "folder": "Pertanyaan 10/Pertanyaan 10.a"
+          },
+          {
+            "key": "ind_10b",
+            "folder": "Pertanyaan 10/Pertanyaan 10.b"
+          },
+          {
+            "key": "ind_10c",
+            "folder": "Pertanyaan 10/Pertanyaan 10.c"
+          },
+          {
+            "key": "ind_10d",
+            "folder": "Pertanyaan 10/Pertanyaan 10.d"
+          },
+          {
+            "key": "ind_10e",
+            "folder": "Pertanyaan 10/Pertanyaan 10.e"
+          },
+          {
+            "key": "ind_10f",
+            "folder": "Pertanyaan 10/Pertanyaan 10.f"
+          },
+          {
+            "key": "ind_10g",
+            "folder": "Pertanyaan 10/Pertanyaan 10.g"
+          }
+        ]
+      },
+      {
+        "key": "ind_11",
+        "number": 11,
+        "label": "Tingkat kepuasan masyarakat terhadap pelayanan di kecamatan",
+        "maxScore": 1.5,
+        "rubricValues": [
+          1.5
+        ],
+        "scoreOptions": [
+          0.0,
+          1.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_11",
+            "folder": "Pertanyaan 11"
+          }
+        ]
+      },
+      {
+        "key": "ind_12",
+        "number": 12,
+        "label": "Persentase keluhan / Pengaduan masyarakat yang ditindaklanjuti oleh Kecamatan",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_12a",
+            "folder": "Pertanyaan 12/Pertanyaan 12.a"
+          },
+          {
+            "key": "ind_12b",
+            "folder": "Pertanyaan 12/Pertanyaan 12.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_13",
+        "number": 13,
+        "label": "Bidang Kependudukan dan Catatan Sipil Tersedianya Laporan kependudukan",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_13",
+            "folder": "Pertanyaan 13"
+          }
+        ]
+      },
+      {
+        "key": "ind_14",
+        "number": 14,
+        "label": "Penyelanggaraan pemerintahan Berbasis Elektronik (SPBE):",
+        "maxScore": 1.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5,
+          1.0,
+          1.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_14a",
+            "folder": "Pertanyaan 14/Pertanyaan 14.a"
+          },
+          {
+            "key": "ind_14b",
+            "folder": "Pertanyaan 14/Pertanyaan 14.b"
+          },
+          {
+            "key": "ind_14c",
+            "folder": "Pertanyaan 14/Pertanyaan 14.c"
+          }
+        ]
+      },
+      {
+        "key": "ind_15",
+        "number": 15,
+        "label": "Pencapaian Target NIB",
+        "maxScore": 1.5,
+        "rubricValues": [
+          1.5
+        ],
+        "scoreOptions": [
+          0.0,
+          1.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_15",
+            "folder": "Pertanyaan 15"
+          }
+        ]
+      },
+      {
+        "key": "ind_16",
+        "number": 16,
+        "label": "Pencapaian Pungutan PBB",
+        "maxScore": 1.5,
+        "rubricValues": [
+          1.5
+        ],
+        "scoreOptions": [
+          0.0,
+          1.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_16",
+            "folder": "Pertanyaan 16"
+          }
+        ]
+      }
+    ]
+  },
+  "B": {
+    "code": "B",
+    "name": "Koordinasi Penyelenggaraan Pemerintahan",
+    "maxScore": 30,
+    "questions": [
+      {
+        "key": "ind_1",
+        "number": 1,
+        "label": "Pembinaan Persatuan dan Kesatuan Bangsa: Peringatan hari-hari besar nasional di kecamatan",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_1",
+            "folder": "Pertanyaan 1"
+          }
+        ]
+      },
+      {
+        "key": "ind_2",
+        "number": 2,
+        "label": "Pembinaan Kerukunan Antarsuku dan Intrasuku, Umat Beragama, Ras, dan Golongan Lainnya Guna Mewujudkan Stabilitas Keamanan Lokal, Regional, dan Nasional: Dialog rutin camat dengan para tokoh masyarakat, tokoh adat dan tokoh agama",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_2",
+            "folder": "Pertanyaan 2"
+          }
+        ]
+      },
+      {
+        "key": "ind_3",
+        "number": 3,
+        "label": "Pelaksanaan tugas Forum Koordinasi Pimpinan di Kecamatan (Forkopimcam)",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_3a",
+            "folder": "Pertanyaan 3/Pilihan a"
+          },
+          {
+            "key": "ind_3b",
+            "folder": "Pertanyaan 3/Pilihan b"
+          },
+          {
+            "key": "ind_3c",
+            "folder": "Pertanyaan 3/Pilihan c"
+          },
+          {
+            "key": "ind_3d",
+            "folder": "Pertanyaan 3/Pilihan d"
+          }
+        ],
+        "answerType": "single_choice_with_evidence",
+        "field": "ind_3_pilihan",
+        "options": [
+          {
+            "key": "a",
+            "label": "Kurang dari 5 kali",
+            "score": 0.25,
+            "evidenceKey": "ind_3a",
+            "folder": "Pertanyaan 3/Pilihan a"
+          },
+          {
+            "key": "b",
+            "label": "6 sampai dengan 11 kali",
+            "score": 0.5,
+            "evidenceKey": "ind_3b",
+            "folder": "Pertanyaan 3/Pilihan b"
+          },
+          {
+            "key": "c",
+            "label": "12 sampai dengan 35 kali",
+            "score": 0.75,
+            "evidenceKey": "ind_3c",
+            "folder": "Pertanyaan 3/Pilihan c"
+          },
+          {
+            "key": "d",
+            "label": "36 sampai dengan 48 kali",
+            "score": 1.0,
+            "evidenceKey": "ind_3d",
+            "folder": "Pertanyaan 3/Pilihan d"
+          }
+        ]
+      },
+      {
+        "key": "ind_4",
+        "number": 4,
+        "label": "Jumlah koordinasi dengan Perangkat Daerah/Kepolisian Negara terkait penerapan/penegakan perundang-undangan",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_4a",
+            "folder": "Pertanyaan 4/Pertanyaan 4.a"
+          },
+          {
+            "key": "ind_4b",
+            "folder": "Pertanyaan 4/Pertanyaan 4.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_5",
+        "number": 5,
+        "label": "Peningkatan Efektifitas Kegiatan Pemerintahan di Tingkat Kecamatan: Pertemuan rutin antara camat dan aparatur kecamatan",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_5",
+            "folder": "Pertanyaan 5"
+          }
+        ]
+      },
+      {
+        "key": "ind_6",
+        "number": 6,
+        "label": "Persentase permasalahan bidang trantib yang diselesaikan Camat Tahun N: Permasalahan Bidang Trantib yang diselesaikan pada Tahun 2025",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_6",
+            "folder": "Pertanyaan 6"
+          }
+        ]
+      },
+      {
+        "key": "ind_7",
+        "number": 7,
+        "label": "Koordinasi Upaya Penyelenggaraan ketenteraman dan Ketertiban Umum",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_7a",
+            "folder": "Pertanyaan 7/Pertanyaan 7.a"
+          },
+          {
+            "key": "ind_7b",
+            "folder": "Pertanyaan 7/Pertanyaan 7.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_8",
+        "number": 8,
+        "label": "Koordinasi/Sinergi perencanaan dan Pelaksanaan Kegiatan Pemerintahan Dengan Perangkat Daerah dan Instansi Vertikal Terkait:",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_8a",
+            "folder": "Pertanyaan 8/Pertanyaan 8.a"
+          },
+          {
+            "key": "ind_8b",
+            "folder": "Pertanyaan 8/Pertanyaan 8.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_9",
+        "number": 9,
+        "label": "Fasilitasi Percepatan Pencapaian Standar Pelayanan Minimal di Wilayah Kecamatan:",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_9a",
+            "folder": "Pertanyaan 9/Pertanyaan 9.a"
+          },
+          {
+            "key": "ind_9b",
+            "folder": "Pertanyaan 9/Pertanyaan 9.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_10",
+        "number": 10,
+        "label": "Fasilitasi Kecamatan dalam rangka penanganan kebencanaan",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_10a",
+            "folder": "Pertanyaan 10/Pertanyaan 10.a"
+          },
+          {
+            "key": "ind_10b",
+            "folder": "Pertanyaan 10/Pertanyaan 10.b"
+          },
+          {
+            "key": "ind_10c",
+            "folder": "Pertanyaan 10/Pertanyaan 10.c"
+          }
+        ]
+      },
+      {
+        "key": "ind_11",
+        "number": 11,
+        "label": "Peningkatan Efektifitas Pelaksanaan Pelayanan Kepada Masyarakat di Wilayah Kecamatan.",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_11a",
+            "folder": "Pertanyaan 11/Pertanyaan 11.a"
+          },
+          {
+            "key": "ind_11b",
+            "folder": "Pertanyaan 11/Pertanyaan 11.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_12",
+        "number": 12,
+        "label": "Harmonisasi Hubungan Dengan Tokoh Agama dan Tokoh Masyarakat",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_12a",
+            "folder": "Pertanyaan 12/Pertanyaan 12.a"
+          },
+          {
+            "key": "ind_12b",
+            "folder": "Pertanyaan 12/Pertanyaan 12.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_13",
+        "number": 13,
+        "label": "Koordinasi Pemeliharaan Prasarana dan Sarana Pelayanan Umum",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_13a",
+            "folder": "Pertanyaan 13/Pertanyaan 13.a"
+          },
+          {
+            "key": "ind_13b",
+            "folder": "Pertanyaan 13/Pertanyaan 13.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_14",
+        "number": 14,
+        "label": "Persentase sarana prasarana, fasilitas Umum, fasilitas sosial di wilayah Kecamatan yang diperbaiki :",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.1,
+          0.2
+        ],
+        "scoreOptions": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_14a",
+            "folder": "Pertanyaan 14/Pertanyaan 14.a"
+          },
+          {
+            "key": "ind_14b",
+            "folder": "Pertanyaan 14/Pertanyaan 14.b"
+          },
+          {
+            "key": "ind_14c",
+            "folder": "Pertanyaan 14/Pertanyaan 14.c"
+          }
+        ]
+      },
+      {
+        "key": "ind_15",
+        "number": 15,
+        "label": "Pemberdayaan Masyarakat Desa dan Kelurahan Koordinasi Kegiatan Pemberdayaan Desa",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.1,
+          0.2
+        ],
+        "scoreOptions": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_15a",
+            "folder": "Pertanyaan 15/Pertanyaan 15.a"
+          },
+          {
+            "key": "ind_15b",
+            "folder": "Pertanyaan 15/Pertanyaan 15.b"
+          },
+          {
+            "key": "ind_15c",
+            "folder": "Pertanyaan 15/Pertanyaan 15.c"
+          },
+          {
+            "key": "ind_15d",
+            "folder": "Pertanyaan 15/Pertanyaan 15.d"
+          }
+        ]
+      },
+      {
+        "key": "ind_16",
+        "number": 16,
+        "label": "Fasilitasi, Rekomendasi dan Koordinasi Pembinaan dan Pengawasan Pemerintahan Desa:",
+        "maxScore": 2.0,
+        "rubricValues": [
+          0.25,
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0,
+          1.25,
+          1.5,
+          1.75,
+          2.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_16a1",
+            "folder": "Pertanyaan 16/Pertanyaan 16.a.1"
+          },
+          {
+            "key": "ind_16a2",
+            "folder": "Pertanyaan 16/Pertanyaan 16.a.2"
+          },
+          {
+            "key": "ind_16a3",
+            "folder": "Pertanyaan 16/Pertanyaan 16.a.3"
+          },
+          {
+            "key": "ind_16b1",
+            "folder": "Pertanyaan 16/Pertanyaan 16.b.1"
+          },
+          {
+            "key": "ind_16b2",
+            "folder": "Pertanyaan 16/Pertanyaan 16.b.2"
+          },
+          {
+            "key": "ind_16b3",
+            "folder": "Pertanyaan 16/Pertanyaan 16.b.3"
+          }
+        ]
+      },
+      {
+        "key": "ind_17",
+        "number": 17,
+        "label": "Fasilitasi Administrasi Tata Pemerintahan Desa: Jumlah desa yang memiliki profil desa dan dimutakhirkan secara berkala",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_17",
+            "folder": "Pertanyaan 17"
+          }
+        ]
+      },
+      {
+        "key": "ind_18",
+        "number": 18,
+        "label": "Fasilitasi Pengelolaan Keuangan Desa dan pendayagunaan Aset Desa",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_18a",
+            "folder": "Pertanyaan 18/Pertanyaan 18.a"
+          },
+          {
+            "key": "ind_18b",
+            "folder": "Pertanyaan 18/Pertanyaan 18.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_19",
+        "number": 19,
+        "label": "Fasilitasi penerapan dan Penegakan Peraturan Perundang Undangan dan Peraturan Daerah",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_19a",
+            "folder": "Pertanyaan 19/Pertanyaan 19.a"
+          },
+          {
+            "key": "ind_19b",
+            "folder": "Pertanyaan 19/Pertanyaan 19.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_20",
+        "number": 20,
+        "label": "Fasilitasi Pelaksanaan Tugas Kepala Desa dan Perangkat Desa:",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.1
+        ],
+        "scoreOptions": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_20a",
+            "folder": "Pertanyaan 20/Pertanyaan 20.a"
+          },
+          {
+            "key": "ind_20b",
+            "folder": "Pertanyaan 20/Pertanyaan 20.b"
+          },
+          {
+            "key": "ind_20c",
+            "folder": "Pertanyaan 20/Pertanyaan 20.c"
+          },
+          {
+            "key": "ind_20d",
+            "folder": "Pertanyaan 20/Pertanyaan 20.d"
+          },
+          {
+            "key": "ind_20e",
+            "folder": "Pertanyaan 20/Pertanyaan 20.e"
+          }
+        ]
+      },
+      {
+        "key": "ind_21",
+        "number": 21,
+        "label": "Fasilitasi Penetapan Lokasi Pembangunan Kawasan Perdesaan: Pertemuan koordinasi desa, kecamatan dan perangkat daerah dalam penetapan Lokasi pembangunan Kawasan perdesaan",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_21",
+            "folder": "Pertanyaan 21"
+          }
+        ]
+      },
+      {
+        "key": "ind_22",
+        "number": 22,
+        "label": "Fasilitasi Penyelenggaraan Ketenteraman dan Ketertiban Umum Sosialisasi dan bimbingan teknis kepada pemerintah desa hal penyelenggaraan ketenteraman dan ketertiban umum",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_22",
+            "folder": "Pertanyaan 22"
+          }
+        ]
+      },
+      {
+        "key": "ind_23",
+        "number": 23,
+        "label": "Fasilitasi Pelaksanaan Tugas, Fungsi, dan Kewajiban Lembaga Kemasyarakatan",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_23a",
+            "folder": "Pertanyaan 23/Pertanyaan 23.a"
+          },
+          {
+            "key": "ind_23b",
+            "folder": "Pertanyaan 23/Pertanyaan 23.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_24",
+        "number": 24,
+        "label": "Fasilitasi Penyusunan Perencanaan Pembangunan Partisipatif",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_24a",
+            "folder": "Pertanyaan 24/Pertanyaan 24.a"
+          },
+          {
+            "key": "ind_24b",
+            "folder": "Pertanyaan 24/Pertanyaan 24.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_25",
+        "number": 25,
+        "label": "Fasilitasi Kerja Sama Antardesa dan Kerja Sama Desa Dengan Pihak Ketiga",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_25a",
+            "folder": "Pertanyaan 25/Pertanyaan 25.a"
+          },
+          {
+            "key": "ind_25b",
+            "folder": "Pertanyaan 25/Pertanyaan 25.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_26",
+        "number": 26,
+        "label": "Fasilitasi penyusunan program dan pelaksanaan pemberdayaan masyarakat desa",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.1,
+          0.3
+        ],
+        "scoreOptions": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_26a",
+            "folder": "Pertanyaan 26/Pertanyaan 26.a"
+          },
+          {
+            "key": "ind_26b",
+            "folder": "Pertanyaan 26/Pertanyaan 26.b"
+          },
+          {
+            "key": "ind_26c",
+            "folder": "Pertanyaan 26/Pertanyaan 26.c"
+          },
+          {
+            "key": "ind_26d",
+            "folder": "Pertanyaan 26/Pertanyaan 26.d"
+          },
+          {
+            "key": "ind_26e",
+            "folder": "Pertanyaan 26/Pertanyaan 26.e"
+          },
+          {
+            "key": "ind_26f",
+            "folder": "Pertanyaan 26/Pertanyaan 26.f"
+          }
+        ]
+      },
+      {
+        "key": "ind_27",
+        "number": 27,
+        "label": "Jumlah koordinasi dan sinkronisasi perencanaan dengan perangkat daerah atau pemerintah desa",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_27a",
+            "folder": "Pertanyaan 27/Pilihan a"
+          },
+          {
+            "key": "ind_27b",
+            "folder": "Pertanyaan 27/Pilihan b"
+          },
+          {
+            "key": "ind_27c",
+            "folder": "Pertanyaan 27/Pilihan c"
+          },
+          {
+            "key": "ind_27d",
+            "folder": "Pertanyaan 27/Pilihan d"
+          }
+        ],
+        "answerType": "single_choice_with_evidence",
+        "field": "ind_27_pilihan",
+        "options": [
+          {
+            "key": "a",
+            "label": "Tidak Pernah",
+            "score": 0,
+            "evidenceKey": "ind_27a",
+            "folder": "Pertanyaan 27/Pilihan a"
+          },
+          {
+            "key": "b",
+            "label": "1 s.d 4 kali",
+            "score": 0.25,
+            "evidenceKey": "ind_27b",
+            "folder": "Pertanyaan 27/Pilihan b"
+          },
+          {
+            "key": "c",
+            "label": "5 s.d 8 kali",
+            "score": 0.75,
+            "evidenceKey": "ind_27c",
+            "folder": "Pertanyaan 27/Pilihan c"
+          },
+          {
+            "key": "d",
+            "label": "≥ 9 kali",
+            "score": 1,
+            "evidenceKey": "ind_27d",
+            "folder": "Pertanyaan 27/Pilihan d"
+          }
+        ]
+      },
+      {
+        "key": "ind_28",
+        "number": 28,
+        "label": "Persentase Desa/ Kelurahan yang telah menetapkan Batas Desa menggunakan koordinat SIG dan Peta Batas Desa sesuai Peraturan Menteri Dalam Negeri Nomor 45 Tahun 2016",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_28a",
+            "folder": "Pertanyaan 28/Pertanyaan 28.a"
+          },
+          {
+            "key": "ind_28b",
+            "folder": "Pertanyaan 28/Pertanyaan 28.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_29",
+        "number": 29,
+        "label": "Persentase Desa/Kelurahan yang melaksanakan updating Prodeskel selama 2 tahun berturut-turut",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_29a",
+            "folder": "Pertanyaan 29/Pertanyaan 29.a"
+          },
+          {
+            "key": "ind_29b",
+            "folder": "Pertanyaan 29/Pertanyaan 29.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_30",
+        "number": 30,
+        "label": "Persentase desa atau kelurahan dengan klasifikasi Swadaya, Swakarsa, dan Swasembada",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.5,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_30a",
+            "folder": "Pertanyaan 30/Pertanyaan 30.a"
+          },
+          {
+            "key": "ind_30b",
+            "folder": "Pertanyaan 30/Pertanyaan 30.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_31",
+        "number": 31,
+        "label": "Persentase Desa yang memiliki RPJMDesa/RKPDesa Peraturan Menteri Dalam Negeri Nomor 114/2014 atau Renstra bagi Kelurahan",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_31a",
+            "folder": "Pertanyaan 31/Pertanyaan 31.a"
+          },
+          {
+            "key": "ind_31b",
+            "folder": "Pertanyaan 31/Pertanyaan 31.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_32",
+        "number": 32,
+        "label": "Persentase Desa yang menetapkan APBDesa tepat waktu dan sesuai Permendagri No. 20/2018 atau renja bagi kelurahan:",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_32a",
+            "folder": "Pertanyaan 32/Pertanyaan 32.a"
+          },
+          {
+            "key": "ind_32b",
+            "folder": "Pertanyaan 32/Pertanyaan 32.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_33",
+        "number": 33,
+        "label": "Persentase desa yang memiliki Badan Usaha Milik Desa (BUMDes) dan BUEK (Badan Usaha Ekonomi Kelurahan)/sejenis bagi kelurahan:",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.1,
+          0.2,
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_33a",
+            "folder": "Pertanyaan 33/Pertanyaan 33.a"
+          },
+          {
+            "key": "ind_33b",
+            "folder": "Pertanyaan 33/Pertanyaan 33.b"
+          },
+          {
+            "key": "ind_33c",
+            "folder": "Pertanyaan 33/Pertanyaan 33.c"
+          },
+          {
+            "key": "ind_33d",
+            "folder": "Pertanyaan 33/Pertanyaan 33.d"
+          },
+          {
+            "key": "ind_33e",
+            "folder": "Pertanyaan 33/Pertanyaan 33.e"
+          },
+          {
+            "key": "ind_33f",
+            "folder": "Pertanyaan 33/Pertanyaan 33.f"
+          }
+        ]
+      },
+      {
+        "key": "ind_34",
+        "number": 34,
+        "label": "Persentase Desa yang telah menggunakan SISKEUDES atau aplikasi sejenis (Kelurahan)",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_34a",
+            "folder": "Pertanyaan 34/Pertanyaan 34.a"
+          },
+          {
+            "key": "ind_34b",
+            "folder": "Pertanyaan 34/Pertanyaan 34.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_35",
+        "number": 35,
+        "label": "Persentase Desa/Kelurahan yang memiliki laman Website dan medsos lainnya",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_35a",
+            "folder": "Pertanyaan 35/Pertanyaan 35.a"
+          },
+          {
+            "key": "ind_35b",
+            "folder": "Pertanyaan 35/Pertanyaan 35.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_36",
+        "number": 36,
+        "label": "Persentase Desa/Kelurahan yang mengembangkan kapasitas aparaturnya",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_36a",
+            "folder": "Pertanyaan 36/Pertanyaan 36.a"
+          },
+          {
+            "key": "ind_36b",
+            "folder": "Pertanyaan 36/Pertanyaan 36.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_37",
+        "number": 37,
+        "label": "Persentase Desa/Kelurahan yang melaksanakan evaluasi diri sesuai Peraturan Menteri Dalam Negeri Nomor 81 Tahun 2015:",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_37a",
+            "folder": "Pertanyaan 37/Pertanyaan 37.a"
+          },
+          {
+            "key": "ind_37b",
+            "folder": "Pertanyaan 37/Pertanyaan 37.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_38",
+        "number": 38,
+        "label": "Persentase Desa dengan kategori sesuai Permendesa dan PDT nomor 11/2019",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_38a",
+            "folder": "Pertanyaan 38/Pertanyaan 38.a"
+          },
+          {
+            "key": "ind_38b",
+            "folder": "Pertanyaan 38/Pertanyaan 38.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_39",
+        "number": 39,
+        "label": "Persentase Desa/Kelurahan yang memiliki Posyandu strata Purnama dan Mandiri/Multifungsi",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_39a",
+            "folder": "Pertanyaan 39/Pertanyaan 39.a"
+          },
+          {
+            "key": "ind_39b",
+            "folder": "Pertanyaan 39/Pertanyaan 39.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_40",
+        "number": 40,
+        "label": "Persentase Desa/Kelurahan yang melaksanakan program Padat Karya Tunai Desa/Kelurahan atau sejenis",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_40a",
+            "folder": "Pertanyaan 40/Pertanyaan 40.a"
+          },
+          {
+            "key": "ind_40b",
+            "folder": "Pertanyaan 40/Pertanyaan 40.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_41",
+        "number": 41,
+        "label": "Nilai Sistem Akuntabilitas Kinerja Instansi Pemerintah (SAKIP) Perangkat Daerah",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_41a",
+            "folder": "Pertanyaan 41/Pilihan a"
+          },
+          {
+            "key": "ind_41b",
+            "folder": "Pertanyaan 41/Pilihan b"
+          },
+          {
+            "key": "ind_41c",
+            "folder": "Pertanyaan 41/Pilihan c"
+          },
+          {
+            "key": "ind_41d",
+            "folder": "Pertanyaan 41/Pilihan d"
+          }
+        ],
+        "answerType": "single_choice_with_evidence",
+        "field": "ind_41_pilihan",
+        "options": [
+          {
+            "key": "a",
+            "label": "A - AA",
+            "score": 1,
+            "evidenceKey": "ind_41a",
+            "folder": "Pertanyaan 41/Pilihan a"
+          },
+          {
+            "key": "b",
+            "label": "B - BB",
+            "score": 0.75,
+            "evidenceKey": "ind_41b",
+            "folder": "Pertanyaan 41/Pilihan b"
+          },
+          {
+            "key": "c",
+            "label": "C - CC",
+            "score": 0.5,
+            "evidenceKey": "ind_41c",
+            "folder": "Pertanyaan 41/Pilihan c"
+          },
+          {
+            "key": "d",
+            "label": "D - DD",
+            "score": 0.25,
+            "evidenceKey": "ind_41d",
+            "folder": "Pertanyaan 41/Pilihan d"
+          }
+        ]
+      },
+      {
+        "key": "ind_42",
+        "number": 42,
+        "label": "Penyusunan laporan inventarisasi aset daerah",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_42",
+            "folder": "Pertanyaan 42"
+          }
+        ]
+      },
+      {
+        "key": "ind_43",
+        "number": 43,
+        "label": "Gambaran Umum Kerjasama",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.1
+        ],
+        "scoreOptions": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_43a",
+            "folder": "Pertanyaan 43/Pertanyaan 43.a"
+          },
+          {
+            "key": "ind_43b",
+            "folder": "Pertanyaan 43/Pertanyaan 43.b"
+          },
+          {
+            "key": "ind_43c",
+            "folder": "Pertanyaan 43/Pertanyaan 43.c"
+          },
+          {
+            "key": "ind_43d",
+            "folder": "Pertanyaan 43/Pertanyaan 43.d"
+          },
+          {
+            "key": "ind_43e",
+            "folder": "Pertanyaan 43/Pertanyaan 43.e"
+          }
+        ]
+      }
+    ]
+  },
+  "C": {
+    "code": "C",
+    "name": "Pengelolaan Anggaran Kecamatan",
+    "maxScore": 5,
+    "questions": [
+      {
+        "key": "ind_1",
+        "number": 1,
+        "label": "Dokumen perencanaan dan Anggaran Kecamatan",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_1a",
+            "folder": "Pertanyaan 1/Pertanyaan 1.a"
+          },
+          {
+            "key": "ind_1b",
+            "folder": "Pertanyaan 1/Pertanyaan 1.b"
+          },
+          {
+            "key": "ind_1c",
+            "folder": "Pertanyaan 1/Pertanyaan 1.c"
+          },
+          {
+            "key": "ind_1d",
+            "folder": "Pertanyaan 1/Pertanyaan 1.d"
+          }
+        ]
+      },
+      {
+        "key": "ind_2",
+        "number": 2,
+        "label": "Kesesuaian nama dan jumlah program yang terdapat dalam renja",
+        "maxScore": 1.0,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_2a",
+            "folder": "Pertanyaan 2/Pertanyaan 2.a"
+          },
+          {
+            "key": "ind_2b",
+            "folder": "Pertanyaan 2/Pertanyaan 2.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_3",
+        "number": 3,
+        "label": "Persentase anggaran per kegiatan terhadap seluruh anggaran Kecamatan",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.08,
+          0.1
+        ],
+        "scoreOptions": [
+          0.0,
+          0.08,
+          0.1,
+          0.16,
+          0.18,
+          0.24,
+          0.26,
+          0.32,
+          0.34,
+          0.4,
+          0.42,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_3",
+            "folder": "Pertanyaan 3"
+          }
+        ]
+      },
+      {
+        "key": "ind_4",
+        "number": 4,
+        "label": "Dalam pelaksanaan kegiatan di Kecamatan, kegiatan manakah pada point 3 yang dijadikan prioritas? Sebutkan!",
+        "maxScore": 0.5,
+        "rubricValues": [
+          0.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.5
+        ],
+        "evidence": [
+          {
+            "key": "ind_4",
+            "folder": "Pertanyaan 4"
+          }
+        ]
+      },
+      {
+        "key": "ind_5",
+        "number": 5,
+        "label": "Berikan bobot nilai terhadap pelaksanaan kegiatan di Kecamatan, bidang :",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_5",
+            "folder": "Pertanyaan 5"
+          }
+        ]
+      },
+      {
+        "key": "ind_6",
+        "number": 6,
+        "label": "Persentase Realisasi Anggaran Kecamatan",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_6",
+            "folder": "Pertanyaan 6"
+          }
+        ]
+      }
+    ]
+  },
+  "D": {
+    "code": "D",
+    "name": "Inovasi Kecamatan dan Upaya yang Dilakukan Kecamatan",
+    "maxScore": 20,
+    "questions": [
+      {
+        "key": "ind_1",
+        "number": 1,
+        "label": "Jumlah Sistem Informasi (SI) yang ada di kecamatan",
+        "maxScore": 5.0,
+        "rubricValues": [
+          2.0,
+          3.0
+        ],
+        "scoreOptions": [
+          0.0,
+          2.0,
+          3.0,
+          5.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_1a",
+            "folder": "Pertanyaan 1/Pertanyaan 1.a"
+          },
+          {
+            "key": "ind_1b",
+            "folder": "Pertanyaan 1/Pertanyaan 1.b"
+          }
+        ]
+      },
+      {
+        "key": "ind_2",
+        "number": 2,
+        "label": "Jumlah inovasi yang dibuat oleh Camat (sebutkan)",
+        "maxScore": 7.0,
+        "rubricValues": [
+          3.0,
+          4.0
+        ],
+        "scoreOptions": [
+          0.0,
+          3.0,
+          4.0,
+          7.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_2",
+            "folder": "Pertanyaan 2"
+          }
+        ]
+      },
+      {
+        "key": "ind_3",
+        "number": 3,
+        "label": "Jumlah Keputusan (SK) Camat Tahun 2025",
+        "maxScore": 3.0,
+        "rubricValues": [
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_3a",
+            "folder": "Pertanyaan 3/Pilihan a"
+          },
+          {
+            "key": "ind_3b",
+            "folder": "Pertanyaan 3/Pilihan b"
+          },
+          {
+            "key": "ind_3c",
+            "folder": "Pertanyaan 3/Pilihan c"
+          },
+          {
+            "key": "ind_3d",
+            "folder": "Pertanyaan 3/Pilihan d"
+          }
+        ],
+        "answerType": "single_choice_with_evidence",
+        "field": "ind_3_pilihan",
+        "options": [
+          {
+            "key": "a",
+            "label": "1 - 5 SK Camat",
+            "score": 1.5,
+            "evidenceKey": "ind_3a",
+            "folder": "Pertanyaan 3/Pilihan a"
+          },
+          {
+            "key": "b",
+            "label": "6 - 10 SK Camat",
+            "score": 2,
+            "evidenceKey": "ind_3b",
+            "folder": "Pertanyaan 3/Pilihan b"
+          },
+          {
+            "key": "c",
+            "label": "11 - 15 SK Camat",
+            "score": 2.5,
+            "evidenceKey": "ind_3c",
+            "folder": "Pertanyaan 3/Pilihan c"
+          },
+          {
+            "key": "d",
+            "label": "> 15 SK Camat",
+            "score": 3,
+            "evidenceKey": "ind_3d",
+            "folder": "Pertanyaan 3/Pilihan d"
+          }
+        ]
+      },
+      {
+        "key": "ind_4",
+        "number": 4,
+        "label": "a. Jumlah prestasi kecamatan yang diraih",
+        "maxScore": 5.0,
+        "rubricValues": [
+          0.75,
+          1.0,
+          1.5
+        ],
+        "scoreOptions": [
+          0.0,
+          0.75,
+          1.0,
+          1.5,
+          1.75,
+          2.0,
+          2.25,
+          2.5,
+          2.75,
+          3.0,
+          3.25,
+          3.5,
+          4.0,
+          4.25,
+          5.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_4a",
+            "folder": "Pertanyaan 4/Pertanyaan 4.a"
+          },
+          {
+            "key": "ind_4b",
+            "folder": "Pertanyaan 4/Pertanyaan 4.b"
+          }
+        ]
+      }
+    ]
+  },
+  "E": {
+    "code": "E",
+    "name": "Kompetensi Sumber Daya Manusia Kecamatan",
+    "maxScore": 5,
+    "questions": [
+      {
+        "key": "ind_1",
+        "number": 1,
+        "label": "Kualifikasi pendidikan aparatur Kecamatan :",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_1",
+            "folder": "Pertanyaan 1"
+          }
+        ]
+      },
+      {
+        "key": "ind_2",
+        "number": 2,
+        "label": "Jumlah pejabat yang terdapat di Kecamatan",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_2",
+            "folder": "Pertanyaan 2"
+          }
+        ]
+      },
+      {
+        "key": "ind_3",
+        "number": 3,
+        "label": "Jumlah pejabat yang mengikuti Diklat PIM",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_3",
+            "folder": "Pertanyaan 3"
+          }
+        ]
+      },
+      {
+        "key": "ind_4",
+        "number": 4,
+        "label": "Jumlah pegawai yang telah mengikuti pendidikan dan pelatihan (Diklat Teknis)",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_4",
+            "folder": "Pertanyaan 4"
+          }
+        ]
+      },
+      {
+        "key": "ind_5",
+        "number": 5,
+        "label": "Apakah Kecamatan melaksanakan kegiatan/ sosialisasi terkait upaya Peningkatan penerapan Nilai Dasar ASN BerAkhlak",
+        "maxScore": 1.0,
+        "rubricValues": [
+          1.0
+        ],
+        "scoreOptions": [
+          0.0,
+          1.0
+        ],
+        "evidence": [
+          {
+            "key": "ind_5",
+            "folder": "Pertanyaan 5"
+          }
+        ]
+      }
+    ]
+  },
+  "F": {
+    "code": "F",
+    "name": "Keberadaan Data Dukung Lainnya",
+    "maxScore": 10,
+    "questions": [
+      {
+        "key": "ind_1",
+        "number": 1,
+        "label": "Tersedianya data jumlah lembaga PAUD, jumlah peserta didik PAUD dan jumlah pendidik di Tingkat Kelurahan/Desa",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_1",
+            "folder": "Pertanyaan 1"
+          }
+        ]
+      },
+      {
+        "key": "ind_2",
+        "number": 2,
+        "label": "Tersedianya data jumlah lembaga TK/RA, jumlah peserta didik dan pendidik ditingkat Kelurahan/Desa",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_2",
+            "folder": "Pertanyaan 2"
+          }
+        ]
+      },
+      {
+        "key": "ind_3",
+        "number": 3,
+        "label": "Tersedianya data jumlah lembaga SD/MI, jumlah peserta didik dan pendidik di tingkat Kelurahan/Desa",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_3",
+            "folder": "Pertanyaan 3"
+          }
+        ]
+      },
+      {
+        "key": "ind_4",
+        "number": 4,
+        "label": "Tersedianya data jumlah lembaga SMP/ MTs, jumlah peserta didik dan pendidik di tingkat Kelurahan/ Desa",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_4",
+            "folder": "Pertanyaan 4"
+          }
+        ]
+      },
+      {
+        "key": "ind_5",
+        "number": 5,
+        "label": "Tersedianya data jumlah Lembaga SMA/MA/SMK, jumlah peserta didik dan pendidik di Tingkat Kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_5",
+            "folder": "Pertanyaan 5"
+          }
+        ]
+      },
+      {
+        "key": "ind_6",
+        "number": 6,
+        "label": "Tersedianya data jumlah Lembaga Pendidikan Kesetaraan (paket A, B dan C), jumlah peserta didik dan pendidik di Tingkat Kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_6",
+            "folder": "Pertanyaan 6"
+          }
+        ]
+      },
+      {
+        "key": "ind_7",
+        "number": 7,
+        "label": "Tersedianya data jumlah penduduk buta aksara latin dalam kelompok umur 15 tahun ke atas tingkat Desa/Kelurahan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_7",
+            "folder": "Pertanyaan 7"
+          }
+        ]
+      },
+      {
+        "key": "ind_8",
+        "number": 8,
+        "label": "Tersedianya data pendukung pendidikan lainya seperti data peserta didik di pendidikan khusus/pendidikan layanan khusus (SLB) di wilayah Kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_8",
+            "folder": "Pertanyaan 8"
+          }
+        ]
+      },
+      {
+        "key": "ind_9",
+        "number": 9,
+        "label": "Tersedianya datajenis budaya aslidaerah/setempat yang dilestarikan keberadaanya ditingkat Desa/ Kelurahan. Apakah ada kelompok adat yang masih dilestarikan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_9",
+            "folder": "Pertanyaan 9"
+          }
+        ]
+      },
+      {
+        "key": "ind_10",
+        "number": 10,
+        "label": "Tersedianya data jumlah posyandu",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_10",
+            "folder": "Pertanyaan 10"
+          }
+        ]
+      },
+      {
+        "key": "ind_11",
+        "number": 11,
+        "label": "Tersedianya data Jumlah puskesmas pembantu",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_11",
+            "folder": "Pertanyaan 11"
+          }
+        ]
+      },
+      {
+        "key": "ind_12",
+        "number": 12,
+        "label": "Tersedianya data kunjungan ibu hamil",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_12",
+            "folder": "Pertanyaan 12"
+          }
+        ]
+      },
+      {
+        "key": "ind_13",
+        "number": 13,
+        "label": "Tersedianya bidan/ nakes yang memiliki kompetensi",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_13",
+            "folder": "Pertanyaan 13"
+          }
+        ]
+      },
+      {
+        "key": "ind_14",
+        "number": 14,
+        "label": "Tersedianya data cakupan rawat jalan dipuskesmas/pustu",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_14",
+            "folder": "Pertanyaan 14"
+          }
+        ]
+      },
+      {
+        "key": "ind_15",
+        "number": 15,
+        "label": "Tersediannya data pelayanan penyakit tidak menular di wilayah kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_15",
+            "folder": "Pertanyaan 15"
+          }
+        ]
+      },
+      {
+        "key": "ind_16",
+        "number": 16,
+        "label": "Tersedianya data Angka Harapan Hidup (AHH)",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_16",
+            "folder": "Pertanyaan 16"
+          }
+        ]
+      },
+      {
+        "key": "ind_17",
+        "number": 17,
+        "label": "Tersedianya data keluarga pengguna air bersih",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_17",
+            "folder": "Pertanyaan 17"
+          }
+        ]
+      },
+      {
+        "key": "ind_18",
+        "number": 18,
+        "label": "Tersedianya data rawan penyakit",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_18",
+            "folder": "Pertanyaan 18"
+          }
+        ]
+      },
+      {
+        "key": "ind_19",
+        "number": 19,
+        "label": "Tersedianya papan informasi tentang perilaku hidup bersih dan sehat",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_19",
+            "folder": "Pertanyaan 19"
+          }
+        ]
+      },
+      {
+        "key": "ind_20",
+        "number": 20,
+        "label": "Tersedianyanya data jumlah UMKM dan UMKM Perempuan di Kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_20",
+            "folder": "Pertanyaan 20"
+          }
+        ]
+      },
+      {
+        "key": "ind_21",
+        "number": 21,
+        "label": "Tersedianya data jumlah UMKM dan UMKM Perempuan yang telah memiliki ijin (NIB)",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_21",
+            "folder": "Pertanyaan 21"
+          }
+        ]
+      },
+      {
+        "key": "ind_22",
+        "number": 22,
+        "label": "Tersedianya data jumlah UMKM dan UMKM perempuan yang telah memiliki ijin (PIRT)",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_22",
+            "folder": "Pertanyaan 22"
+          }
+        ]
+      },
+      {
+        "key": "ind_23",
+        "number": 23,
+        "label": "Tersedianya data jumlah UMKM dan UMKM perempuan yang telah yang telah memiliki ijin (HaKI)",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_23",
+            "folder": "Pertanyaan 23"
+          }
+        ]
+      },
+      {
+        "key": "ind_24",
+        "number": 24,
+        "label": "Tersedianya data jumlah UMKM dan UMKM perempuan yang telah memiliki ijin (Sertifikat Halal)",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_24",
+            "folder": "Pertanyaan 24"
+          }
+        ]
+      },
+      {
+        "key": "ind_25",
+        "number": 25,
+        "label": "Tersedianya data jumlah UMKM dan UMKM perempuan yang telah memiliki ijin (SNI)",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_25",
+            "folder": "Pertanyaan 25"
+          }
+        ]
+      },
+      {
+        "key": "ind_26",
+        "number": 26,
+        "label": "Tersedianya data jumlah UMKM dan UMKM perempuan yang telah menggunakan pemasaran digital (digital marketplace)",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_26",
+            "folder": "Pertanyaan 26"
+          }
+        ]
+      },
+      {
+        "key": "ind_27",
+        "number": 27,
+        "label": "Tersedianya data jumlah pelaku UMKM yang menerima penyaluran kredit dari bank (Bank UMKM) dan nonBank",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_27",
+            "folder": "Pertanyaan 27"
+          }
+        ]
+      },
+      {
+        "key": "ind_28",
+        "number": 28,
+        "label": "Tersedianya data jumlah pasar modern dan tradisional di kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_28",
+            "folder": "Pertanyaan 28"
+          }
+        ]
+      },
+      {
+        "key": "ind_29",
+        "number": 29,
+        "label": "Tersedianya data jumlah bank pemerintahan/non pemerintah",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_29",
+            "folder": "Pertanyaan 29"
+          }
+        ]
+      },
+      {
+        "key": "ind_30",
+        "number": 30,
+        "label": "Tersedianya data jumlah koperasi sampai dengan Tahun penilaian",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_30",
+            "folder": "Pertanyaan 30"
+          }
+        ]
+      },
+      {
+        "key": "ind_31",
+        "number": 31,
+        "label": "Tersedianya SK/SP Tim Desa Siaga Tingkat Kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_31",
+            "folder": "Pertanyaan 31"
+          }
+        ]
+      },
+      {
+        "key": "ind_32",
+        "number": 32,
+        "label": "Tersedianya data masyarakat miskin",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_32",
+            "folder": "Pertanyaan 32"
+          }
+        ]
+      },
+      {
+        "key": "ind_33",
+        "number": 33,
+        "label": "Tersedianya data keluarga rawan pangan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_33",
+            "folder": "Pertanyaan 33"
+          }
+        ]
+      },
+      {
+        "key": "ind_34",
+        "number": 34,
+        "label": "Tersedianya data pengangguran",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_34",
+            "folder": "Pertanyaan 34"
+          }
+        ]
+      },
+      {
+        "key": "ind_35",
+        "number": 35,
+        "label": "Tersedianya data lansia dan penyandang cacat",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_35",
+            "folder": "Pertanyaan 35"
+          }
+        ]
+      },
+      {
+        "key": "ind_36",
+        "number": 36,
+        "label": "Tersedianya data penanganan Stunting di Kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_36",
+            "folder": "Pertanyaan 36"
+          }
+        ]
+      },
+      {
+        "key": "ind_37",
+        "number": 37,
+        "label": "Jumlah produk hukum yang dikeluarkan oleh Kelurahan/ Desa/ Kecamatan Tahun penilaian",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_37",
+            "folder": "Pertanyaan 37"
+          }
+        ]
+      },
+      {
+        "key": "ind_38",
+        "number": 38,
+        "label": "Tersedianya jadwal pembinaan penyusunan produk hukum bagi aparat Desa/Kelurahan yang diselenggarakan di Kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_38",
+            "folder": "Pertanyaan 38"
+          }
+        ]
+      },
+      {
+        "key": "ind_39",
+        "number": 39,
+        "label": "Tersedianya daftar aparat petugas penyidik PNS",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_39",
+            "folder": "Pertanyaan 39"
+          }
+        ]
+      },
+      {
+        "key": "ind_40",
+        "number": 40,
+        "label": "Keberadaan PKK Kecamatan",
+        "maxScore": 0.25,
+        "rubricValues": [
+          0.25
+        ],
+        "scoreOptions": [
+          0.0,
+          0.25
+        ],
+        "evidence": [
+          {
+            "key": "ind_40",
+            "folder": "Pertanyaan 40"
+          }
+        ]
+      }
+    ]
+  }
+}

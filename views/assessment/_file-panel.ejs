@@ -1,0 +1,109 @@
+<%
+  const currentStatus = data && data.upload_status ? data.upload_status : 'Belum';
+  const statusLabel = currentStatus === 'Sudah' ? 'Selesai' : currentStatus;
+  const statusColor = currentStatus === 'Sudah' ? '#155724'
+    : currentStatus === 'Draft' ? '#856404'
+    : currentStatus === 'Belum Lengkap' ? '#721c24' : '#495057';
+  const statusBackground = currentStatus === 'Sudah' ? '#d4edda'
+    : currentStatus === 'Draft' ? '#fff3cd'
+    : currentStatus === 'Belum Lengkap' ? '#f8d7da' : '#e9ecef';
+  const safeCsrfToken = (typeof csrfToken !== 'undefined' && csrfToken) ? String(csrfToken) : '';
+  const safeEvaluationLocked = (typeof evaluationLocked !== 'undefined') ? Boolean(evaluationLocked) : false;
+  const reviewInfo = (typeof evaluationReview !== 'undefined' && evaluationReview)
+    ? evaluationReview
+    : { status: 'Belum Dinilai', notes: '' };
+  const reviewColor = reviewInfo.status === 'Terverifikasi' ? '#166534'
+    : reviewInfo.status === 'Perlu Perbaikan' ? '#922b3e' : '#7c5700';
+  const reviewBackground = reviewInfo.status === 'Terverifikasi' ? '#d7f2df'
+    : reviewInfo.status === 'Perlu Perbaikan' ? '#f9d9df' : '#fff1c7';
+  const evidenceParts = key => {
+    const match = String(key || '').toLowerCase().match(/^ind_(\d+)([a-z]?)(\d*)$/);
+    if (!match) return [Number.MAX_SAFE_INTEGER, 99, Number.MAX_SAFE_INTEGER];
+    return [
+      Number(match[1]),
+      match[2] ? match[2].charCodeAt(0) - 96 : 0,
+      match[3] ? Number(match[3]) : 0
+    ];
+  };
+  const evidenceLabel = key => {
+    const match = String(key || '').toLowerCase().match(/^ind_(\d+)([a-z]?)(\d*)$/);
+    if (!match) return String(key || 'Bukti');
+    const suffix = match[2] ? `.${match[2]}${match[3] || ''}` : '';
+    return `Indikator ${Number(match[1])}${suffix}`;
+  };
+  const sortedUploadedFiles = [...(uploadedFiles || [])].sort((first, second) => {
+    const firstParts = evidenceParts(first.indicatorKey);
+    const secondParts = evidenceParts(second.indicatorKey);
+    for (let index = 0; index < firstParts.length; index += 1) {
+      if (firstParts[index] !== secondParts[index]) return firstParts[index] - secondParts[index];
+    }
+    return String(first.fileName || '').localeCompare(String(second.fileName || ''), 'id');
+  });
+%>
+
+<div style="background:<%= statusBackground %>; color:<%= statusColor %>; padding:14px 18px; border-radius:8px; margin-bottom:16px; border-left:4px solid <%= statusColor %>;">
+  <strong>Status formulir:</strong> <%= statusLabel %>
+  <% if (saved && saveResult) { %>
+    <div style="margin-top:6px; font-size:13px;">
+      Data berhasil disimpan.
+      <% if (saveResult.status === 'Belum Lengkap') { %>
+        Masih ada <strong><%= saveResult.missingData %></strong> field data dan
+        <strong><%= saveResult.missingFiles %></strong> unsur bukti yang belum lengkap.
+      <% } %>
+    </div>
+  <% } %>
+</div>
+
+<div style="background:<%= reviewBackground %>; color:<%= reviewColor %>; padding:14px 18px; border-radius:8px; margin-bottom:16px; border-left:4px solid <%= reviewColor %>;">
+  <strong>Status evaluasi:</strong> <%= reviewInfo.status %>
+  <% if (reviewInfo.notes) { %><div style="margin-top:6px;font-size:13px;"><strong>Catatan evaluator:</strong> <%= reviewInfo.notes %></div><% } %>
+  <% if (safeEvaluationLocked) { %><div style="margin-top:6px;font-size:13px;"><strong>Hasil telah difinalkan.</strong> Isian dan bukti dikunci sampai administrator membuka kembali evaluasi.</div><% } %>
+</div>
+
+<div class="uploaded-files" style="background:#eef5ff; padding:18px; border-radius:10px; margin-bottom:20px; border-left:4px solid #4472c4;">
+  <h3 style="color:#244062; margin-bottom:12px;">📎 Bukti yang Tersimpan</h3>
+  <% if (sortedUploadedFiles.length > 0) { %>
+    <ul style="list-style:none; padding:0; margin:0;">
+      <% sortedUploadedFiles.forEach(file => { %>
+        <li style="padding:10px; background:white; margin-bottom:7px; border-radius:6px; display:flex; gap:12px; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+          <span>
+            <strong><%= evidenceLabel(file.indicatorKey) %></strong> —
+            <%= file.fileName %>
+            <% if (file.legacy) { %><small style="color:#6c757d;">(arsip lama)</small><% } %>
+            <% if (file.unmappedSubindicator) { %><small style="display:block;color:#9a6700;margin-top:3px;">Bukti lama masih berada pada indikator utama dan belum dihitung sebagai bukti subindikator.</small><% } %>
+          </span>
+          <span style="display:flex; gap:8px; align-items:center;">
+            <a href="<%= file.url %>" class="btn btn-secondary" style="padding:6px 10px; font-size:12px;">Unduh</a>
+            <% if (!file.legacy && !safeEvaluationLocked) { %>
+              <form action="/assessment/files/<%= file.id %>/delete<%= safeCsrfToken ? '?_csrf=' + encodeURIComponent(safeCsrfToken) : '' %>" method="POST" onsubmit="return confirm('Hapus file ini?');" style="display:inline;">
+                <% if (safeCsrfToken) { %><input type="hidden" name="_csrf" value="<%= safeCsrfToken %>"><% } %>
+                <button type="submit" class="btn" style="padding:6px 10px; font-size:12px; background:#dc3545; color:white;">Hapus</button>
+              </form>
+            <% } %>
+          </span>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p style="margin:0; color:#495057;">Belum ada bukti yang tersimpan.</p>
+  <% } %>
+
+  <% if (missingEvidenceKeys && missingEvidenceKeys.length > 0) { %>
+    <p style="margin-top:12px; color:#721c24; font-size:13px;">
+      Bukti belum tersedia untuk <strong><%= missingEvidenceKeys.length %></strong> unsur indikator atau subindikator.
+    </p>
+  <% } %>
+</div>
+
+<% if (safeEvaluationLocked) { %>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('form').forEach(function (form) {
+      if (form.action && form.action.includes('/logout')) return;
+      form.querySelectorAll('input, select, textarea, button').forEach(function (control) {
+        control.disabled = true;
+      });
+    });
+  });
+</script>
+<% } %>

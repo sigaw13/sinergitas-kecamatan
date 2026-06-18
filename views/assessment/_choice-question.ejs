@@ -1,0 +1,21 @@
+<div class="choice-options" data-choice-group="<%= question.field %>">
+  <% (question.options || []).forEach(option => { %>
+    <div class="choice-option <%= selectedChoice === option.key ? 'is-selected' : '' %>" data-choice-option="<%= option.key %>">
+      <label class="choice-option-head">
+        <input type="radio" name="<%= question.field %>" value="<%= option.key %>" <%= selectedChoice === option.key ? 'checked' : '' %>>
+        <span>
+          <span class="choice-option-label"><%= option.key %>. <%= option.label %></span>
+          <span class="choice-option-score">Nilai <%= Number(option.score).toFixed(2).replace('.', ',') %></span>
+        </span>
+      </label>
+      <%- include('_question-evidence', {
+        question,
+        evidenceItems: evidenceFor(Number(question.number), option.evidenceKey),
+        uploadedFiles,
+        evaluationLocked,
+        compact: true,
+        showTitle: false
+      }) %>
+    </div>
+  <% }) %>
+</div>

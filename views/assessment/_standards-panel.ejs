@@ -1,0 +1,39 @@
+<%
+  const activeStandard = typeof standard !== 'undefined' ? standard : null;
+  const labelKey = key => String(key || '')
+    .replace(/^ind_/, '')
+    .replace(/^(\d+)([a-z])$/, '$1.$2');
+  const formatWeight = value => Number(value || 0).toLocaleString('id-ID', {
+    minimumFractionDigits: Number(value) % 1 === 0 ? 0 : 2,
+    maximumFractionDigits: 2
+  });
+%>
+<% if (activeStandard) { %>
+  <style>
+    .standard-panel{background:#fff;border:1px solid #dbe3f0;border-left:5px solid #1f7a5a;border-radius:10px;padding:14px 16px;margin:0 0 16px;box-shadow:0 2px 10px rgba(25,42,70,.05)}
+    .standard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .standard-head strong{color:#145c44;font-size:14px}
+    .standard-total{background:#dff5e9;color:#145c44;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}
+    .standard-rule{font-size:12px;color:#566174;line-height:1.55;margin-top:8px}
+    .standard-panel details{margin-top:10px}
+    .standard-panel summary{cursor:pointer;color:#4058b5;font-size:12px;font-weight:700}
+    .standard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px;margin-top:10px}
+    .standard-item{background:#f6f8fc;border:1px solid #e1e6ef;border-radius:7px;padding:8px;font-size:11px;color:#3f4a5d;display:flex;justify-content:space-between;gap:8px}
+    .standard-item b{color:#145c44}
+  </style>
+  <section class="standard-panel" aria-label="Standar nilai instrumen">
+    <div class="standard-head">
+      <strong>Standar nilai resmi Instrumen <%= activeStandard.code %></strong>
+      <span class="standard-total">Maksimum <%= formatWeight(activeStandard.maxScore) %></span>
+    </div>
+    <div class="standard-rule">Nilai otomatis mengikuti workbook 2026. Setiap bukti dukung aktif memberi nilai sebesar bobot indikator terkait. Indikator tanpa bukti aktif bernilai 0.</div>
+    <details>
+      <summary>Lihat bobot setiap data dukung</summary>
+      <div class="standard-grid">
+        <% Object.entries(activeStandard.evidenceWeights || {}).forEach(([key, value]) => { %>
+          <div class="standard-item"><span>Indikator <%= labelKey(key) %></span><b><%= formatWeight(value) %></b></div>
+        <% }) %>
+      </div>
+    </details>
+  </section>
+<% } %>

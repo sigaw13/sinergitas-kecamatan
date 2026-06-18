@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/database');
-const { ensureAuthenticated, isAdmin } = require('../middleware/auth');
+const { ensureAuthenticated, isAdmin, getAuthorizedKecamatanIds } = require('../middleware/auth');
 
 // GET - Halaman History Upload
-router.get('/', ensureAuthenticated, isAdmin, (req, res) => {
+router.get('/', ensureAuthenticated, isAdmin, async (req, res) => {
+  const authorizedIds = await getAuthorizedKecamatanIds(req);
+  const allowed = Array.isArray(authorizedIds) ? new Set(authorizedIds.map(Number)) : null;
   const query = `
     SELECT 
       k.id,
@@ -25,7 +27,7 @@ router.get('/', ensureAuthenticated, isAdmin, (req, res) => {
     LEFT JOIN aspect_d d ON k.id = d.kecamatan_id
     LEFT JOIN aspect_e e ON k.id = e.kecamatan_id
     LEFT JOIN aspect_f f ON k.id = f.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     ORDER BY k.id
   `;
   
@@ -36,17 +38,19 @@ router.get('/', ensureAuthenticated, isAdmin, (req, res) => {
     }
     
     res.render('history', {
-      kecamatans: rows,
+      kecamatans: rows.filter(row => !allowed || allowed.has(Number(row.id))),
       username: req.session.username
     });
   });
 });
 
 // GET - API untuk data grafik
-router.get('/api/chart-data', ensureAuthenticated, isAdmin, (req, res) => {
+router.get('/api/chart-data', ensureAuthenticated, isAdmin, async (req, res) => {
+  const authorizedIds = await getAuthorizedKecamatanIds(req);
+  const allowed = Array.isArray(authorizedIds) ? new Set(authorizedIds.map(Number)) : null;
   const query = `
     SELECT 
-      k.nama,
+      k.id, k.nama,
       COALESCE(a.total_score, 0) as score_a,
       COALESCE(b.total_score, 0) as score_b,
       COALESCE(c.total_score, 0) as score_c,
@@ -62,7 +66,7 @@ router.get('/api/chart-data', ensureAuthenticated, isAdmin, (req, res) => {
     LEFT JOIN aspect_d d ON k.id = d.kecamatan_id
     LEFT JOIN aspect_e e ON k.id = e.kecamatan_id
     LEFT JOIN aspect_f f ON k.id = f.kecamatan_id
-    WHERE k.username != 'admin'
+    WHERE k.role = 'kecamatan'
     ORDER BY total_score DESC
   `;
   
@@ -70,7 +74,7 @@ router.get('/api/chart-data', ensureAuthenticated, isAdmin, (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'Error fetching chart data' });
     }
-    res.json(rows);
+    res.json(rows.filter(row => !allowed || allowed.has(Number(row.id))));
   });
 });
 

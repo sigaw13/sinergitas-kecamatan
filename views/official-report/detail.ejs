@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasil Resmi <%= result.kecamatan %> - SIESELON</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f4f6fb;color:#273142;font-family:"Segoe UI",Arial,sans-serif}.nav{background:linear-gradient(135deg,#3559a8,#5f49a6);color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.nav a{color:#fff;text-decoration:none;background:rgba(255,255,255,.16);padding:8px 12px;border-radius:7px;margin-left:5px}.container{max-width:1050px;margin:24px auto;padding:0 16px}.card{background:#fff;border-radius:13px;box-shadow:0 3px 14px rgba(25,42,70,.08);padding:24px;margin-bottom:20px}.title{text-align:center;border-bottom:3px double #273142;padding-bottom:16px}.title h1{font-size:22px;margin:0 0 8px}.title h2{font-size:17px;margin:0}.identity{display:grid;grid-template-columns:190px 1fr;gap:7px 14px;margin-top:20px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.metric{padding:14px;border:1px solid #dce2ec;border-radius:9px;text-align:center}.metric span{display:block;font-size:12px;color:#687386}.metric strong{display:block;font-size:25px;color:#4058b5;margin-top:4px}table{border-collapse:collapse;width:100%;margin-top:15px}th,td{border:1px solid #cfd7e3;padding:9px;font-size:12px;text-align:center}th{background:#4058b5;color:#fff}td:nth-child(2){text-align:left}.status{font-weight:700;color:#17804b}.note{padding:12px;background:#eef3ff;border-left:4px solid #4058b5;border-radius:7px;font-size:12px;color:#4a5770;margin-top:15px}.footer{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:28px;font-size:12px}.footer div:last-child{text-align:right}@media(max-width:700px){.summary{grid-template-columns:1fr 1fr}.identity{grid-template-columns:1fr}.footer{grid-template-columns:1fr}}@media print{.nav{display:none}.container{max-width:none;margin:0;padding:0}.card{box-shadow:none;padding:10px}.summary{grid-template-columns:repeat(4,1fr)}th,td{font-size:10px;padding:6px}}
+  </style>
+</head>
+<body>
+  <nav class="nav"><strong>📄 Rincian Hasil Resmi</strong><div><a href="<%= isAdmin ? '/official-report' : '/dashboard' %>">Kembali</a><a href="javascript:window.print()">Cetak</a></div></nav>
+  <main class="container">
+    <section class="card">
+      <header class="title"><h1>HASIL RESMI PENILAIAN SINERGITAS KINERJA KECAMATAN</h1><h2>TINGKAT KABUPATEN SUMEDANG TAHUN 2026</h2></header>
+      <div class="identity">
+        <strong>Kecamatan</strong><span>: <%= result.kecamatan %></span>
+        <strong>Pengelola</strong><span>: <%= result.nama_pengelola || '-' %></span>
+        <strong>Email</strong><span>: <%= result.email || '-' %></span>
+        <strong>Status hasil</strong><span>: Final dan resmi</span>
+      </div>
+      <div class="summary">
+        <div class="metric"><span>Peringkat</span><strong><%= result.ranking %></strong></div>
+        <div class="metric"><span>Total Skor</span><strong><%= result.total_score %></strong><span>dari <%= result.max_score %></span></div>
+        <div class="metric"><span>Persentase</span><strong><%= result.percentage %>%</strong></div>
+        <div class="metric"><span>Kategori</span><strong style="font-size:18px"><%= result.category %></strong></div>
+      </div>
+      <table>
+        <thead><tr><th>No.</th><th>Instrumen</th><th>Skor</th><th>Skor Maksimum</th><th>Persentase</th><th>Status Verifikasi</th><th>Jumlah Berkas Bukti</th></tr></thead>
+        <tbody>
+          <% aspects.forEach((aspect,index) => { %>
+            <tr><td><%= index+1 %></td><td><strong>Instrumen <%= aspect.code %></strong> — <%= aspect.label %></td><td><%= aspect.score %></td><td><%= aspect.maxScore %></td><td><%= aspect.percentage %>%</td><td class="status"><%= aspect.reviewStatus %></td><td><%= aspect.evidenceCount %></td></tr>
+          <% }) %>
+          <tr><td colspan="2"><strong>TOTAL</strong></td><td><strong><%= result.total_score %></strong></td><td><strong><%= result.max_score %></strong></td><td><strong><%= result.percentage %>%</strong></td><td colspan="2"><strong><%= result.category %></strong></td></tr>
+        </tbody>
+      </table>
+      <div class="note"><strong>Keterangan:</strong> hasil ini merupakan snapshot skor Instrumen A–F pada saat finalisasi. Verifikasi administrator memastikan kelengkapan dan keabsahan data dukung, tetapi tidak menjadi unsur skor tambahan.</div>
+      <div class="footer"><div>Difinalkan pada:<br><strong><%= result.finalized_at ? new Date(result.finalized_at).toLocaleString('id-ID') : '-' %></strong></div><div>Difinalkan oleh:<br><strong><%= result.finalized_by_name || 'Administrator SIESELON' %></strong></div></div>
+    </section>
+  </main>
+</body>
+</html>

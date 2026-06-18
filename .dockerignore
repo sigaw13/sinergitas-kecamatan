@@ -1,0 +1,9 @@
+node_modules
+.env
+database/*.db
+database/*.db-*
+uploads
+backups
+.restore-pending
+workbook-pdf
+*.txt

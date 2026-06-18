@@ -154,13 +154,15 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>📊 Hasil Penilaian Sinergitas Kinerja</h1>
-      <p>Kecamatan <%= kecamatan %> - Tahun Anggaran 2025</p>
+      <h1>📊 Hasil Evaluasi Sinergitas Kinerja</h1>
+      <p>Kecamatan <%= kecamatan %> — Kegiatan Tahun 2026</p>
     </div>
 
     <% if (scoring && scoring.aspects) { %>
       <div class="total-score">
-        <h2>Total Skor Penilaian</h2>
+        <h2><%= finalEvaluation && finalEvaluation.status === 'Final' ? 'Skor Resmi Terverifikasi' : 'Skor Sementara' %></h2>
+        <p style="margin-bottom:12px;background:rgba(255,255,255,.18);padding:10px;border-radius:8px;">Perhitungan memakai standar nilai workbook 2026. Indikator memperoleh bobot ketika bukti dukung aktif tersedia.</p>
+        <% if (!(finalEvaluation && finalEvaluation.status === 'Final')) { %><p style="margin-bottom:12px;background:rgba(255,255,255,.18);padding:10px;border-radius:8px;">Skor ini belum menjadi hasil resmi karena evaluasi belum difinalkan oleh administrator.</p><% } %>
         <div class="score-value"><%= scoring.totalScore %></div>
         <div class="score-max">dari <%= scoring.maxScore %> poin</div>
         <div class="percentage">Persentase: <%= scoring.percentage %>%</div>
@@ -173,7 +175,7 @@
         <% ['A', 'B', 'C', 'D', 'E', 'F'].forEach(aspect => { %>
           <% if (scoring.aspects[aspect]) { %>
             <div class="aspect-card">
-              <h3>Aspek <%= aspect %> - <%= scoring.aspects[aspect].name %></h3>
+              <h3>Instrumen <%= aspect %> - <%= scoring.aspects[aspect].name %></h3>
               <div class="aspect-score">
                 <div class="value"><%= scoring.aspects[aspect].totalScore %></div>
                 <div class="max">/ <%= scoring.aspects[aspect].maxScore %></div>
@@ -195,7 +197,7 @@
 
     <div class="btn-group">
       <a href="/dashboard" class="btn btn-secondary">← Kembali ke Dashboard</a>
-      <a href="/assessment/scoring?kecamatan_id=<%= req.query.kecamatan_id %>" class="btn btn-primary" onclick="window.print()">🖨️ Cetak Hasil</a>
+      <a href="javascript:window.print()" class="btn btn-primary">🖨️ Cetak Hasil</a>
     </div>
   </div>
 </body>

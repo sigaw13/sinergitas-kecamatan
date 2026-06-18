@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluasi <%= evaluation.nama %> - SIESELON</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:#f4f6fb;color:#263247}.nav{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.nav a{color:#fff;text-decoration:none;background:rgba(255,255,255,.18);padding:8px 12px;border-radius:7px}.container{max-width:1700px;margin:22px auto;padding:0 16px}.card{background:#fff;border-radius:12px;box-shadow:0 3px 14px rgba(25,42,70,.08);padding:20px;margin-bottom:18px}.message{padding:12px 14px;border-radius:8px;margin-bottom:14px}.success{background:#d7f2df;color:#166534}.error{background:#f9d9df;color:#922b3e}.header-grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:13px}.metric{background:#f7f8fc;border-radius:10px;padding:15px;border:1px solid #e6e9f0}.metric strong{display:block;font-size:26px;color:#5267d2;margin-top:4px}.metric small{color:#6c7688}.instrument{background:#fff;border-radius:12px;box-shadow:0 3px 14px rgba(25,42,70,.08);margin-bottom:16px;border-left:5px solid #5d73df;overflow:hidden}.instrument summary{list-style:none;cursor:pointer;padding:17px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}.instrument summary::-webkit-details-marker{display:none}.summary-title{display:flex;align-items:center;gap:12px;min-width:0}.summary-title h2{font-size:17px;margin:0;line-height:1.35}.summary-title small{color:#687386}.progress-line{height:6px;background:#e5e9f2;border-radius:999px;overflow:hidden;margin-top:7px;max-width:520px}.progress-fill{height:100%;background:#5d73df;border-radius:999px}.summary-score{text-align:right;white-space:nowrap}.summary-score strong{font-size:22px;color:#5267d2}.instrument-body{border-top:1px solid #e5e8ef;padding:18px}.badge{display:inline-block;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700}.verified{background:#d7f2df;color:#166534}.revision{background:#f9d9df;color:#922b3e}.pending{background:#fff1c7;color:#7c5700}.final{background:#d7f2df;color:#166534}.not-final{background:#e8ebf2;color:#4d586b}.instrument-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;margin-bottom:14px}.mini{background:#f7f8fc;border:1px solid #e6e9f0;border-radius:8px;padding:10px;font-size:12px}.mini strong{display:block;font-size:17px;color:#4357bd;margin-top:3px}.hint{background:#eef1ff;border-left:4px solid #5d73df;padding:10px 12px;border-radius:7px;color:#4b5680;font-size:12px;line-height:1.5;margin-bottom:12px}.table-wrap{overflow:auto;border:1px solid #dfe4ec;border-radius:9px;max-height:670px}.score-table{width:100%;border-collapse:collapse;min-width:1450px}.score-table th,.score-table td{border:1px solid #e1e5ec;padding:9px;vertical-align:top;font-size:12px}.score-table th{background:#5d73df;color:#fff;position:sticky;top:0;z-index:2;text-align:center}.score-table td:nth-child(1),.score-table td:nth-child(5),.score-table td:nth-child(6),.score-table td:nth-child(7){text-align:center}.question-title{font-weight:700;line-height:1.45;color:#273142}.answer-list,.evidence-list{display:grid;gap:5px}.answer-item{background:#f7f8fc;border-radius:6px;padding:6px}.answer-item span{display:block;color:#6b7586;font-size:10px;margin-bottom:2px}.evidence-item{border-radius:7px;padding:7px;background:#fff3cd;color:#735500;border:1px solid #f3dda0}.evidence-item.done{background:#e0f3e5;color:#166534;border-color:#b7dfc1}.evidence-item strong{display:block;margin-bottom:3px}.evidence-item a{color:inherit;font-weight:700}.legacy-warning{margin-top:5px;background:#fde5e0;color:#8e2c1f;border-radius:6px;padding:6px}.standard-value{font-size:17px;font-weight:800;color:#3348aa}.rubric{font-size:10px;color:#6b7586;margin-top:5px;line-height:1.4}.system-score{font-size:17px;font-weight:800;color:#5362a9}.score-select,.item-note,select,textarea{width:100%;padding:8px;border:1px solid #cbd3df;border-radius:6px;font:inherit}.item-note{min-width:180px}.score-total-row td{background:#eef1ff;font-weight:800;font-size:14px;position:sticky;bottom:0}.review-box{display:grid;grid-template-columns:240px 1fr auto;gap:12px;align-items:end;margin-top:14px}.review-box label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}.review-box textarea{min-height:75px;resize:vertical}.btn{border:0;border-radius:7px;padding:10px 14px;background:#5d73df;color:#fff;text-decoration:none;cursor:pointer;font-weight:700;display:inline-block}.btn-secondary{background:#687386}.btn-danger{background:#c0392b}.btn-success{background:#23864b}.note{background:#fff8df;border-left:4px solid #d49a00;padding:10px;border-radius:7px;font-size:12px;margin-top:9px}.final-box{border-left:5px solid #23864b}.title-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.actions{display:flex;gap:10px;flex-wrap:wrap}.history{width:100%;border-collapse:collapse}.history th,.history td{padding:9px;border:1px solid #e0e4ec;font-size:12px;text-align:left}.history th{background:#5d73df;color:#fff}.muted{color:#6c7688}.saved-marker{display:inline-block;margin-top:4px;background:#d7f2df;color:#166534;padding:2px 6px;border-radius:999px;font-size:9px;font-weight:700}@media(max-width:1000px){.header-grid{grid-template-columns:repeat(2,1fr)}.instrument-metrics{grid-template-columns:repeat(2,1fr)}.review-box{grid-template-columns:1fr}.summary-score{display:none}}@media(max-width:620px){.header-grid{grid-template-columns:1fr}.instrument summary{align-items:flex-start}.summary-title{align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <nav class="nav"><strong>Verifikasi Penilaian — <%= evaluation.nama %></strong><div><a href="/evaluation">Daftar Verifikasi</a> <a href="/dashboard">Dashboard</a></div></nav>
+  <main class="container">
+    <% if (success) { %><div class="message success"><%= success %></div><% } %>
+    <% if (error) { %><div class="message error"><%= error %></div><% } %>
+
+    <section class="card">
+      <div class="header-grid">
+        <div class="metric">Kecamatan<strong><%= evaluation.nama %></strong><small>Pengelola <%= evaluation.nama_pengelola || '-' %></small></div>
+        <div class="metric">Progres Pengisian<strong><%= evaluation.progress.overall.percent %>%</strong><small><%= evaluation.progress.overall.completed %>/<%= evaluation.progress.overall.total %> unsur</small></div>
+        <div class="metric">Nilai Sistem Sementara<strong><%= Number(evaluation.scoring.totalScore || 0).toFixed(2) %></strong><small>dari <%= evaluation.scoring.maxScore %></small></div>
+        <div class="metric">Hasil Penilaian Admin<strong><%= Number(evaluation.reviewedScoring.totalScore || 0).toFixed(2) %></strong><small><%= evaluation.reviewedScoring.category %></small></div>
+      </div>
+    </section>
+
+    <% evaluation.progress.details.forEach((progress, instrumentIndex) => { const code = progress.instrument; const review = evaluation.reviewMap.get(code); const row = evaluation.rows[code.toLowerCase()] || {}; const score = evaluation.scoring.aspects[code]; const reviewedScore = evaluation.reviewedScoring.aspects[code]; const statusClass = review.status === 'Terverifikasi' ? 'verified' : (review.status === 'Perlu Perbaikan' ? 'revision' : 'pending'); const files = filesByInstrument.get(code) || []; const matrix = questionMatrices[code]; %>
+      <details class="instrument" <%= instrumentIndex === 0 ? 'open' : '' %>>
+        <summary>
+          <div class="summary-title">
+            <span class="badge <%= statusClass %>"><%= review.status %></span>
+            <div><h2>Instrumen <%= code %> — <%= score.name %></h2><small>Pencapaian <strong><%= progress.percent %>%</strong> · Status pengiriman <strong><%= row.upload_status || 'Belum' %></strong> · <%= matrix.totalQuestions %> pertanyaan · <%= matrix.evidenceTotal %> slot bukti resmi</small><div class="progress-line"><div class="progress-fill" style="width:<%= Math.max(0, Math.min(100, Number(progress.percent || 0))) %>%"></div></div></div>
+          </div>
+          <div class="summary-score"><strong><%= Number(reviewedScore.totalScore || 0).toFixed(2) %>/<%= reviewedScore.maxScore %></strong><div class="muted">hasil admin</div></div>
+        </summary>
+        <div class="instrument-body">
+          <div class="instrument-metrics">
+            <div class="mini">Pencapaian<strong><%= progress.percent %>%</strong></div>
+            <div class="mini">Isian<strong><%= progress.dataFilled %>/<%= progress.dataTotal %></strong></div>
+            <div class="mini">Bukti tersimpan<strong><%= files.length %></strong></div>
+            <div class="mini">Slot bukti resmi<strong><%= matrix.evidenceFilled %>/<%= matrix.evidenceTotal %></strong></div>
+            <div class="mini">Nilai sistem<strong><%= Number(matrix.automaticTotal || 0).toFixed(2) %>/<%= matrix.maxScore %></strong></div>
+            <div class="mini">Nilai admin<strong class="instrument-total-display"><%= Number(matrix.awardedTotal || 0).toFixed(2) %>/<%= matrix.maxScore %></strong></div>
+          </div>
+
+          <div class="hint">Setiap pertanyaan menampilkan jawaban kecamatan, seluruh slot bukti sesuai struktur folder resmi, standar nilai Excel, nilai sistem sementara, dan hasil penilaian administrator. Hasil administrator menjadi dasar nilai resmi setelah finalisasi.</div>
+          <p><a class="btn btn-secondary" href="/assessment/instrument-<%= code.toLowerCase() %>?kecamatan_id=<%= evaluation.id %>" target="_blank">Buka Instrumen dan Bukti</a></p>
+
+          <form method="POST" action="/evaluation/<%= evaluation.id %>/instrument/<%= code.toLowerCase() %>" class="instrument-form" data-max-score="<%= matrix.maxScore %>">
+            <div class="table-wrap">
+              <table class="score-table">
+                <thead><tr><th style="width:45px">No</th><th style="width:330px">Pertanyaan</th><th style="width:260px">Jawaban Kecamatan</th><th style="width:330px">Data Dukung</th><th style="width:105px">Standar Nilai</th><th style="width:105px">Nilai Sistem</th><th style="width:135px">Hasil Penilaian</th><th style="width:220px">Catatan Per Pertanyaan</th></tr></thead>
+                <tbody>
+                  <% matrix.questions.forEach(question => { const selectedValue = Number(question.awardedScore || 0); const optionValues = [...question.scoreOptions]; if (!optionValues.some(value => Math.abs(Number(value)-selectedValue)<0.001)) optionValues.push(selectedValue); optionValues.sort((a,b)=>a-b); %>
+                    <tr>
+                      <td><strong><%= question.number %></strong></td>
+                      <td><div class="question-title"><%= question.label %></div><small class="muted">Kunci <%= question.key %></small><% if(question.saved){ %><div class="saved-marker">NILAI TERSIMPAN</div><% } %></td>
+                      <td>
+                        <div class="answer-list">
+                          <% if(question.answers.length){ question.answers.forEach(answer => { %><div class="answer-item"><span><%= answer.label %></span><strong><%= answer.value %></strong></div><% }) } else { %><div class="answer-item"><strong>Belum ada data jawaban</strong></div><% } %>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="evidence-list">
+                          <% question.expectedEvidence.forEach(evidence => { %>
+                            <div class="evidence-item <%= evidence.complete ? 'done' : '' %>">
+                              <strong><%= evidence.folder.replaceAll('/', ' › ') %> · <%= evidence.complete ? 'Sudah' : 'Belum' %></strong>
+                              <% if(evidence.files.length){ evidence.files.forEach(file => { %><div><a href="<%= file.url %>" target="_blank"><%= file.original_name %></a></div><% }) } else { %><span>Belum ada file pada slot ini</span><% } %>
+                            </div>
+                          <% }) %>
+                          <% if(question.legacyFiles.length){ %><div class="legacy-warning"><strong>Bukti induk lama ditemukan</strong><br>File induk belum menggantikan kewajiban upload pada setiap subpertanyaan.</div><% } %>
+                        </div>
+                      </td>
+                      <td><div class="standard-value"><%= Number(question.maxScore).toFixed(2) %></div><div class="rubric"><% if(question.rubricValues.length){ %>Rubrik Excel <%= question.rubricValues.map(value => Number(value).toFixed(2)).join(' · ') %><% } else { %>Nilai maksimum pertanyaan<% } %></div></td>
+                      <td><div class="system-score"><%= Number(question.automaticScore || 0).toFixed(2) %></div><small class="muted">usulan sistem</small></td>
+                      <td>
+                        <select class="score-select" name="score_<%= question.key %>" data-score required>
+                          <% optionValues.forEach(value => { %><option value="<%= Number(value).toFixed(2) %>" <%= Math.abs(Number(value)-selectedValue)<0.001 ? 'selected' : '' %>><%= Number(value).toFixed(2) %></option><% }) %>
+                        </select>
+                      </td>
+                      <td><textarea class="item-note" name="item_note_<%= question.key %>" placeholder="Catatan verifikasi pertanyaan"><%= question.notes || '' %></textarea></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+                <tfoot><tr class="score-total-row"><td colspan="4">Jumlah Nilai Instrumen <%= code %></td><td><%= Number(matrix.maxScore).toFixed(2) %></td><td><%= Number(matrix.automaticTotal).toFixed(2) %></td><td><span class="instrument-total"><%= Number(matrix.awardedTotal).toFixed(2) %></span></td><td>Nilai tidak dapat melebihi maksimum instrumen</td></tr></tfoot>
+              </table>
+            </div>
+
+            <% if (review.notes) { %><div class="note"><strong>Catatan evaluator sebelumnya</strong><br><%= review.notes %></div><% } %>
+            <div class="review-box">
+              <div><label>Status verifikasi</label><select name="status" required><% ['Belum Dinilai','Perlu Perbaikan','Terverifikasi'].forEach(option => { %><option value="<%= option %>" <%= review.status===option?'selected':'' %>><%= option %></option><% }) %></select></div>
+              <div><label>Catatan evaluasi instrumen</label><textarea name="notes" placeholder="Tuliskan temuan atau arahan perbaikan. Catatan wajib apabila status Perlu Perbaikan."><%= review.notes %></textarea></div>
+              <button class="btn" type="submit">Simpan Nilai dan Verifikasi Instrumen <%= code %></button>
+            </div>
+          </form>
+        </div>
+      </details>
+    <% }) %>
+
+    <section class="card final-box">
+      <div class="title-row"><div><h2>Finalisasi Hasil Evaluasi</h2><p>Finalisasi memakai hasil penilaian administrator yang sudah disimpan pada setiap instrumen.</p></div><span class="badge <%= evaluation.finalStatus==='Final'?'final':'not-final' %>"><%= evaluation.finalStatus %></span></div>
+      <p><strong>Instrumen terverifikasi</strong> <%= evaluation.verifiedCount %>/6</p>
+      <% if (evaluation.finalResult && evaluation.finalResult.status === 'Final') { %>
+        <p>Skor resmi <strong><%= evaluation.finalResult.total_score %>/<%= evaluation.finalResult.max_score %></strong> (<%= evaluation.finalResult.percentage %>%) — <%= evaluation.finalResult.category %></p>
+        <p><a class="btn" href="/official-report/<%= evaluation.id %>" target="_blank">Buka Laporan Hasil Resmi</a></p>
+        <form method="POST" action="/evaluation/<%= evaluation.id %>/reopen" onsubmit="return confirm('Buka kembali hasil final? Hasil akan dikeluarkan sementara dari peringkat resmi.');"><textarea name="notes" placeholder="Alasan membuka kembali hasil evaluasi"></textarea><button class="btn btn-danger" type="submit">Buka Kembali Hasil</button></form>
+      <% } else { %>
+        <form method="POST" action="/evaluation/<%= evaluation.id %>/finalize" onsubmit="return confirm('Finalkan hasil evaluasi kecamatan ini?');"><textarea name="notes" placeholder="Catatan finalisasi"></textarea><button class="btn btn-success" type="submit">Finalkan Hasil Penilaian</button></form>
+      <% } %>
+    </section>
+
+    <section class="card">
+      <h2>Riwayat Evaluasi</h2>
+      <div class="table-wrap" style="max-height:420px"><table class="history"><thead><tr><th>Waktu</th><th>Instrumen</th><th>Tindakan</th><th>Perubahan Status</th><th>Catatan</th><th>Pelaksana</th></tr></thead><tbody>
+        <% history.forEach(item => { %><tr><td><%= item.created_at ? new Date(item.created_at).toLocaleString('id-ID') : '-' %></td><td><%= item.instrument || 'Keseluruhan' %></td><td><%= item.action %></td><td><%= item.previous_status || '-' %> → <%= item.new_status || '-' %></td><td><%= item.notes || '-' %></td><td><%= item.actor_name || '-' %></td></tr><% }) %>
+        <% if(!history.length){ %><tr><td colspan="6">Belum ada riwayat evaluasi.</td></tr><% } %>
+      </tbody></table></div>
+    </section>
+  </main>
+  <script>
+    document.querySelectorAll('.instrument-form').forEach(form => {
+      const totalNode = form.querySelector('.instrument-total');
+      const summaryNode = form.closest('.instrument').querySelector('.instrument-total-display');
+      const maxScore = Number(form.dataset.maxScore || 0);
+      const calculate = () => {
+        const raw = [...form.querySelectorAll('[data-score]')].reduce((sum, input) => sum + Number(input.value || 0), 0);
+        const total = Math.min(raw, maxScore);
+        if (totalNode) totalNode.textContent = total.toFixed(2);
+        if (summaryNode) summaryNode.textContent = `${total.toFixed(2)}/${maxScore}`;
+      };
+      form.querySelectorAll('[data-score]').forEach(input => input.addEventListener('change', calculate));
+      form.addEventListener('submit', event => {
+        const total = [...form.querySelectorAll('[data-score]')].reduce((sum, input) => sum + Number(input.value || 0), 0);
+        if (total > maxScore + 0.001) {
+          event.preventDefault();
+          alert(`Jumlah nilai ${total.toFixed(2)} melebihi maksimum instrumen ${maxScore.toFixed(2)}.`);
+        }
+      });
+      calculate();
+    });
+  </script>
+</body>
+</html>

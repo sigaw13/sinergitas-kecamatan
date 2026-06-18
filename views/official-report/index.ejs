@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan Hasil Resmi Penilaian Sinergitas</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f4f6fb;color:#273142;font-family:"Segoe UI",Arial,sans-serif}.nav{background:linear-gradient(135deg,#3559a8,#5f49a6);color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.nav a{color:#fff;text-decoration:none;background:rgba(255,255,255,.16);padding:8px 12px;border-radius:7px;margin-left:5px}.container{max-width:1500px;margin:25px auto;padding:0 16px}.card{background:#fff;border-radius:13px;box-shadow:0 3px 14px rgba(25,42,70,.08);padding:22px;margin-bottom:20px}.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}.metric{border-left:5px solid #5d73df}.metric span{display:block;color:#687386;font-size:13px}.metric strong{display:block;font-size:32px;color:#4058b5;margin-top:6px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:1250px}th,td{border:1px solid #dce2ec;padding:9px;text-align:center;font-size:12px}th{background:#4058b5;color:#fff}td:nth-child(3),td:nth-child(4){text-align:left}.btn{display:inline-block;text-decoration:none;padding:7px 10px;border-radius:6px;background:#4058b5;color:#fff}.muted{color:#687386;line-height:1.5}.note{padding:12px;background:#eef3ff;border-left:4px solid #4058b5;border-radius:7px;font-size:12px;color:#4a5770;margin-top:14px}@media print{.nav,.no-print{display:none}.container{max-width:none;margin:0;padding:0}.card{box-shadow:none;padding:8px}th,td{font-size:9px;padding:5px}}
+  </style>
+</head>
+<body>
+  <nav class="nav"><strong>📑 Laporan Hasil Resmi Penilaian Sinergitas Kinerja Kecamatan</strong><div><a href="/dashboard">Dashboard</a><a href="/ranking">Peringkat Resmi</a><a href="/export/official.csv">Ekspor CSV Resmi</a><a href="javascript:window.print()">Cetak</a></div></nav>
+  <main class="container">
+    <section class="card">
+      <h2>Rekapitulasi Hasil Resmi Tingkat Kabupaten Sumedang Tahun 2026</h2>
+      <p class="muted">Laporan ini hanya memuat kecamatan yang seluruh Instrumen A–F telah terverifikasi dan hasil penilaiannya telah difinalkan. Tidak ada unsur atau bobot tambahan di luar formulir penilaian.</p>
+    </section>
+    <section class="summary">
+      <article class="card metric"><span>Jumlah Kecamatan</span><strong><%= totalKecamatan %></strong></article>
+      <article class="card metric"><span>Sudah Difinalkan</span><strong><%= finalCount %></strong></article>
+      <article class="card metric"><span>Belum Difinalkan</span><strong><%= pendingCount %></strong></article>
+      <article class="card metric"><span>Rata-rata Skor Resmi</span><strong><%= averageScore %></strong><span>dari 100</span></article>
+      <article class="card metric"><span>Rata-rata Persentase</span><strong><%= averagePercentage %>%</strong></article>
+    </section>
+    <section class="card table-wrap">
+      <table>
+        <thead><tr><th>Peringkat</th><th>No.</th><th>Kecamatan</th><th>Pengelola</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>Total</th><th>Persentase</th><th>Kategori</th><th>Tanggal Finalisasi</th><th class="no-print">Rincian</th></tr></thead>
+        <tbody>
+          <% if (!rows.length) { %><tr><td colspan="15">Belum ada hasil penilaian yang difinalkan.</td></tr><% } %>
+          <% rows.forEach((item,index) => { %>
+            <tr>
+              <td><strong><%= item.ranking %></strong></td><td><%= index+1 %></td><td><strong><%= item.kecamatan %></strong></td><td><%= item.nama_pengelola || '-' %></td>
+              <% item.aspects.forEach(aspect => { %><td><%= aspect.score %></td><% }) %>
+              <td><strong><%= item.total_score %>/<%= item.max_score %></strong></td><td><%= item.percentage %>%</td><td><%= item.category %></td><td><%= item.finalized_at ? new Date(item.finalized_at).toLocaleString('id-ID') : '-' %></td>
+              <td class="no-print"><a class="btn" href="/official-report/<%= item.kecamatan_id %>">Buka</a></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <div class="note"><strong>Keterangan:</strong> skor resmi hanya berasal dari Instrumen A–F dengan skor maksimum keseluruhan 100. Status verifikasi, catatan evaluator, dan finalisasi tidak menambah atau mengurangi skor.</div>
+    </section>
+  </main>
+</body>
+</html>

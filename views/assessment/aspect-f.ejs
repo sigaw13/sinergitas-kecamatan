@@ -3,267 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instrumen F - Data Dukung Lainnya</title>
+  <title>Instrumen F — Keberadaan Data Dukung Lainnya</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; padding: 20px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; text-align: center; }
-    .header h1 { font-size: 24px; margin-bottom: 8px; }
-    .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
-    
-    .category-group { margin-bottom: 30px; border: 1px solid #e9ecef; border-radius: 8px; overflow: hidden; }
-    .category-header { background: #667eea; color: white; padding: 12px 20px; font-size: 16px; font-weight: bold; }
-    
-    .indicator-row { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid #f0f0f0; background: white; }
-    .indicator-row:last-child { border-bottom: none; }
-    .indicator-row:nth-child(even) { background: #f8f9fa; }
-    
-    .ind-label { flex: 1; font-size: 13px; color: #333; }
-    .ind-select { width: 120px; margin-right: 15px; }
-    .ind-file { width: 250px; }
-    
-    select { width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; }
-    input[type="file"] { width: 100%; font-size: 11px; }
-    
-    .btn-group { display: flex; gap: 15px; margin-top: 30px; justify-content: center; }
-    .btn { padding: 12px 30px; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.2s; }
-    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .btn-secondary { background: #6c757d; color: white; }
-    .btn:hover { transform: translateY(-2px); }
-    
-    .sub-indicator { margin-left: 20px; font-size: 12px; color: #666; font-style: italic; margin-top: 5px; }
+    *{box-sizing:border-box;margin:0;padding:0}body{font-family:"Segoe UI",Tahoma,sans-serif;background:#f4f6fb;padding:18px;color:#273142}.container{max-width:1240px;margin:auto}.header{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff;padding:24px;border-radius:12px;text-align:center;margin-bottom:18px}.header h1{font-size:23px;margin-bottom:7px}.form{background:#fff;padding:22px;border-radius:12px;box-shadow:0 3px 14px rgba(25,42,70,.08)}.category{margin-bottom:22px}.category-title{background:#3949ab;color:#fff;padding:11px 14px;border-radius:8px 8px 0 0;font-weight:700}.indicator{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(280px,390px);gap:12px;align-items:start;padding:14px;border:1px solid #dfe3ec;border-top:0;background:#fafbfe}.indicator:last-child{border-radius:0 0 8px 8px}.question{font-size:13px;line-height:1.5}.question strong{display:block;margin-bottom:5px}.evidence-text{font-size:11px;color:#606b80;background:#eef1ff;border-radius:6px;padding:8px;line-height:1.45;margin-top:7px}.answer select{width:100%;padding:9px;border:1px solid #cfd5df;border-radius:6px}.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}.btn{border:0;border-radius:7px;padding:11px 20px;font-weight:700;text-decoration:none;cursor:pointer}.primary{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff}.draft{background:#f0b90b;color:#222}.secondary{background:#667085;color:#fff}@media(max-width:900px){.indicator{grid-template-columns:1fr}.answer{max-width:240px}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>📊 Instrumen F - Data Dukung Lainnya</h1>
-      <p>Kecamatan <%= kecamatan %> | Total 40 Indikator</p>
-    </div>
-      <!-- Tampilkan file yang sudah diupload -->
-<% if (data && data.upload_status === 'Sudah') { %>
-  <div class="uploaded-files" style="background: #d4edda; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #28a745;">
-    <h3 style="color: #155724; margin-bottom: 15px;">📎 File yang Sudah Diupload</h3>
-    <div id="fileList" style="color: #155724;">
-      <p>Memuat daftar file...</p>
-    </div>
+<div class="container">
+  <header class="header">
+    <h1>Instrumen F — Keberadaan Data Dukung Lainnya</h1>
+    <p>Kecamatan <%= kecamatan %> · 40 indikator</p>
+  </header>
+
+  <%- include('_progress-summary', { progress }) %>
+  <%- include('_standards-panel', { standard }) %>
+  <%- include('_file-panel', { instrument:'f', data, uploadedFiles, missingEvidenceKeys, saved, saveResult, kecamatan_id, isAdmin }) %>
+
+  <%
+    const indicators = [
+      {n:1,g:'Pendidikan',q:'Tersedianya data jumlah lembaga Pendidikan Anak Usia Dini (PAUD), jumlah peserta didik Pendidikan Anak Usia Dini (PAUD), dan jumlah pendidik pada tingkat kelurahan atau desa.',e:'Rekapitulasi lembaga, peserta didik, dan pendidik Pendidikan Anak Usia Dini (PAUD) yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:2,g:'Pendidikan',q:'Tersedianya data jumlah lembaga Taman Kanak-Kanak (TK) atau Raudatul Athfal (RA), jumlah peserta didik, dan jumlah pendidik pada tingkat kelurahan atau desa.',e:'Rekapitulasi lembaga, peserta didik, dan pendidik Taman Kanak-Kanak (TK) atau Raudatul Athfal (RA) yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:3,g:'Pendidikan',q:'Tersedianya data jumlah lembaga Sekolah Dasar (SD) atau Madrasah Ibtidaiyah (MI), jumlah peserta didik, dan jumlah pendidik pada tingkat kelurahan atau desa.',e:'Rekapitulasi lembaga, peserta didik, dan pendidik Sekolah Dasar (SD) atau Madrasah Ibtidaiyah (MI) yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:4,g:'Pendidikan',q:'Tersedianya data jumlah lembaga Sekolah Menengah Pertama (SMP) atau Madrasah Tsanawiyah (MTs), jumlah peserta didik, dan jumlah pendidik pada tingkat kelurahan atau desa.',e:'Rekapitulasi lembaga, peserta didik, dan pendidik Sekolah Menengah Pertama (SMP) atau Madrasah Tsanawiyah (MTs) yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:5,g:'Pendidikan',q:'Tersedianya data jumlah lembaga Sekolah Menengah Atas (SMA), Madrasah Aliyah (MA), atau Sekolah Menengah Kejuruan (SMK), jumlah peserta didik, dan jumlah pendidik pada tingkat kecamatan.',e:'Rekapitulasi lembaga, peserta didik, dan pendidik Sekolah Menengah Atas (SMA), Madrasah Aliyah (MA), atau Sekolah Menengah Kejuruan (SMK) yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:6,g:'Pendidikan',q:'Tersedianya data jumlah lembaga pendidikan kesetaraan Paket A, Paket B, dan Paket C, jumlah peserta didik, dan jumlah pendidik pada tingkat kecamatan.',e:'Rekapitulasi lembaga, peserta didik, dan pendidik pendidikan kesetaraan yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:7,g:'Pendidikan',q:'Tersedianya data jumlah penduduk buta aksara latin dalam kelompok umur 15 tahun ke atas pada tingkat desa atau kelurahan.',e:'Rekapitulasi penduduk buta aksara latin umur 15 tahun ke atas yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:8,g:'Pendidikan',q:'Tersedianya data pendukung pendidikan lainnya, termasuk data peserta didik pada pendidikan khusus atau pendidikan layanan khusus di Sekolah Luar Biasa (SLB) dalam wilayah kecamatan.',e:'Rekapitulasi peserta didik pendidikan khusus atau pendidikan layanan khusus yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:9,g:'Kebudayaan',q:'Tersedianya data jenis budaya asli daerah atau setempat yang dilestarikan pada tingkat desa atau kelurahan, termasuk keberadaan kelompok adat yang masih dilestarikan.',e:'Rekapitulasi jenis budaya asli daerah atau setempat dan kelompok adat yang dilestarikan, ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:10,g:'Kesehatan dan Gizi',q:'Tersedianya data jumlah Pos Pelayanan Terpadu (Posyandu).',e:'Rekapitulasi Pos Pelayanan Terpadu (Posyandu) yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:11,g:'Kesehatan dan Gizi',q:'Tersedianya data jumlah Pusat Kesehatan Masyarakat Pembantu (Puskesmas Pembantu).',e:'Rekapitulasi Pusat Kesehatan Masyarakat Pembantu yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:12,g:'Kesehatan dan Gizi',q:'Tersedianya data kunjungan ibu hamil.',e:'Rekapitulasi kunjungan ibu hamil yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:13,g:'Kesehatan dan Gizi',q:'Tersedianya data bidan atau tenaga kesehatan yang memiliki kompetensi.',e:'Rekapitulasi bidan atau tenaga kesehatan yang memiliki kompetensi, ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:14,g:'Kesehatan dan Gizi',q:'Tersedianya data cakupan rawat jalan pada Pusat Kesehatan Masyarakat (Puskesmas) atau Pusat Kesehatan Masyarakat Pembantu (Pustu).',e:'Rekapitulasi cakupan rawat jalan yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:15,g:'Kesehatan dan Gizi',q:'Tersedianya data pelayanan penyakit tidak menular di wilayah kecamatan.',e:'Rekapitulasi pelayanan penyakit tidak menular yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:16,g:'Kesehatan dan Gizi',q:'Tersedianya data Angka Harapan Hidup (AHH).',e:'Data Angka Harapan Hidup (AHH) yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:17,g:'Kesehatan dan Gizi',q:'Tersedianya data keluarga pengguna air bersih.',e:'Data keluarga pengguna air bersih yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:18,g:'Kesehatan dan Gizi',q:'Tersedianya data wilayah atau kelompok masyarakat yang rawan penyakit.',e:'Data rawan penyakit yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:19,g:'Kesehatan dan Gizi',q:'Tersedianya papan informasi tentang Perilaku Hidup Bersih dan Sehat (PHBS).',e:'Foto papan informasi tentang Perilaku Hidup Bersih dan Sehat (PHBS).'},
+      {n:20,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah Usaha Mikro, Kecil, dan Menengah (UMKM), termasuk Usaha Mikro, Kecil, dan Menengah (UMKM) yang dikelola perempuan di kecamatan.',e:'Rekapitulasi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM), termasuk pelaku perempuan, yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:21,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah Usaha Mikro, Kecil, dan Menengah (UMKM), termasuk yang dikelola perempuan, yang telah memiliki Nomor Induk Berusaha (NIB).',e:'Rekapitulasi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) yang memiliki Nomor Induk Berusaha (NIB), ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:22,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah Usaha Mikro, Kecil, dan Menengah (UMKM), termasuk yang dikelola perempuan, yang telah memiliki izin Pangan Industri Rumah Tangga (PIRT).',e:'Rekapitulasi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) yang memiliki izin Pangan Industri Rumah Tangga (PIRT), ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:23,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah Usaha Mikro, Kecil, dan Menengah (UMKM), termasuk yang dikelola perempuan, yang telah memiliki Hak Kekayaan Intelektual (HaKI).',e:'Rekapitulasi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) yang memiliki Hak Kekayaan Intelektual (HaKI), ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:24,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah Usaha Mikro, Kecil, dan Menengah (UMKM), termasuk yang dikelola perempuan, yang telah memiliki sertifikat halal.',e:'Rekapitulasi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) yang mempunyai sertifikat halal, ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:25,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah Usaha Mikro, Kecil, dan Menengah (UMKM), termasuk yang dikelola perempuan, yang telah memiliki Standar Nasional Indonesia (SNI).',e:'Rekapitulasi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) yang memiliki Standar Nasional Indonesia (SNI), ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:26,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah Usaha Mikro, Kecil, dan Menengah (UMKM), termasuk yang dikelola perempuan, yang telah menggunakan pemasaran digital atau pasar digital.',e:'Rekapitulasi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) yang menggunakan pemasaran digital, ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:27,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) yang menerima penyaluran kredit dari bank atau lembaga keuangan nonbank.',e:'Rekapitulasi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) yang menerima penyaluran kredit dari bank atau lembaga keuangan nonbank, ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:28,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah pasar modern dan pasar tradisional di kecamatan.',e:'Rekapitulasi pasar modern dan pasar tradisional per desa atau kelurahan yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:29,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah bank pemerintah dan bank nonpemerintah di wilayah kecamatan.',e:'Rekapitulasi bank pemerintah dan bank nonpemerintah di wilayah kecamatan yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:30,g:'Ekonomi dan Usaha',q:'Tersedianya data jumlah koperasi sampai dengan tahun penilaian.',e:'Rekapitulasi koperasi per desa atau kelurahan sampai dengan tahun penilaian, ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:31,g:'Sosial dan Kependudukan',q:'Tersedianya Surat Keputusan atau Surat Penetapan (SK/SP) Tim Desa Siaga tingkat kecamatan.',e:'Fotokopi Surat Keputusan atau Surat Penetapan (SK/SP) Tim Desa Siaga tingkat kecamatan.'},
+      {n:32,g:'Sosial dan Kependudukan',q:'Tersedianya data masyarakat miskin.',e:'Rekapitulasi masyarakat miskin di wilayah kecamatan sampai dengan tahun penilaian yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:33,g:'Sosial dan Kependudukan',q:'Tersedianya data keluarga rawan pangan.',e:'Rekapitulasi keluarga rawan pangan sampai dengan tahun penilaian.'},
+      {n:34,g:'Sosial dan Kependudukan',q:'Tersedianya data pengangguran.',e:'Rekapitulasi pengangguran sampai dengan tahun penilaian yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:35,g:'Sosial dan Kependudukan',q:'Tersedianya data lanjut usia dan penyandang disabilitas.',e:'Rekapitulasi lanjut usia dan penyandang disabilitas sampai dengan tahun penilaian yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:36,g:'Kesehatan dan Gizi',q:'Tersedianya data penanganan stunting di kecamatan untuk remaja putri, ibu hamil, dan balita.',e:'Rekapitulasi data dan laporan penanganan stunting sampai dengan tahun penilaian yang ditandatangani Camat atau Kepala Unit Pelaksana Teknis (UPT) wilayah dan dibubuhi stempel basah.'},
+      {n:37,g:'Hukum dan Pemerintahan',q:'Tersedianya data jumlah produk hukum yang dikeluarkan oleh kelurahan, desa, atau kecamatan pada tahun penilaian.',e:'Fotokopi halaman depan dan halaman yang ditandatangani dari produk hukum.'},
+      {n:38,g:'Hukum dan Pemerintahan',q:'Tersedianya jadwal pembinaan penyusunan produk hukum bagi aparatur desa atau kelurahan yang diselenggarakan di kecamatan.',e:'Fotokopi jadwal pembinaan penyusunan rancangan produk hukum bagi aparatur desa atau kelurahan pada tahun sebelumnya.'},
+      {n:39,g:'Hukum dan Pemerintahan',q:'Tersedianya daftar aparatur yang bertugas sebagai Penyidik Pegawai Negeri Sipil (PPNS).',e:'Rekapitulasi data Penyidik Pegawai Negeri Sipil (PPNS).'},
+      {n:40,g:'Kelembagaan Masyarakat',q:'Keberadaan Tim Penggerak Pemberdayaan dan Kesejahteraan Keluarga (PKK) Kecamatan.',e:'Keputusan Kepala Daerah tentang pembentukan Tim Penggerak Pemberdayaan dan Kesejahteraan Keluarga (PKK) Kecamatan dan laporan tahunan Pemberdayaan dan Kesejahteraan Keluarga (PKK).'}
+    ];
+    const groups = [...new Set(indicators.map(item => item.g))];
+  %>
+
+  <div class="form">
+    <form action="/assessment/instrument-f<%= kecamatan_id ? '?kecamatan_id='+kecamatan_id : '' %>" method="POST" enctype="multipart/form-data">
+      <% groups.forEach(group => { %>
+        <section class="category">
+          <div class="category-title"><%= group %></div>
+          <% indicators.filter(item => item.g === group).forEach(item => { %>
+            <div class="indicator">
+              <div class="question">
+                <strong><%= item.n %>. <%= item.q %></strong>
+                <div class="evidence-text"><strong>Bentuk data dukung:</strong> <%= item.e %></div>
+              </div>
+              <div class="answer">
+                <select name="ind_<%= item.n %>_status">
+                  <option value="">Pilih...</option>
+                  <option value="ada" <%= data && data['ind_'+item.n+'_status']==='ada'?'selected':'' %>>Ada</option>
+                  <option value="tidak" <%= data && data['ind_'+item.n+'_status']==='tidak'?'selected':'' %>>Tidak</option>
+                </select>
+              </div>
+              <div><%- include('_single-evidence-input', { instrument:'f', indicator:item.n, label:'Bukti indikator '+item.n, uploadedFiles, compact:true }) %></div>
+            </div>
+          <% }) %>
+        </section>
+      <% }) %>
+
+      <div class="btns">
+        <button class="btn draft" name="save_action" value="draft">Simpan Draft</button>
+        <button class="btn primary" name="save_action" value="final">Kirim Final</button>
+        <a class="btn secondary" href="/dashboard">Kembali</a>
+      </div>
+    </form>
   </div>
-
-  <script>
-    // Load file list
-    const kecamatanId = '<%= typeof kecamatan_id !== "undefined" ? kecamatan_id : "" %>';
-
-fetch('/assessment/files/f?kecamatan_id=' + encodeURIComponent(kecamatanId))
-      .then(res => res.json())
-      .then(data => {
-        const fileList = document.getElementById('fileList');
-        if (data.files && data.files.length > 0) {
-          let html = '<ul style="list-style: none; padding: 0;">';
-          data.files.forEach(file => {
-            html += `
-              <li style="padding: 8px; background: white; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
-                <span>📄 ${file.fieldName.replace('ind_', 'Indikator ').replace('_file', '')}: <strong>${file.fileName}</strong></span>
-                <a href="${file.url}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">👁️ Lihat</a>
-              </li>
-            `;
-          });
-          html += '</ul>';
-          fileList.innerHTML = html;
-        } else {
-          fileList.innerHTML = '<p>Belum ada file yang diupload</p>';
-        }
-      })
-      .catch(err => {
-        document.getElementById('fileList').innerHTML = '<p>Error memuat file</p>';
-      });
-  </script>
-<% } %>
-    <div class="form-container">
-      <form action="/assessment/aspect-f<%= kecamatan_id ? '?kecamatan_id=' + kecamatan_id : '' %>" method="POST" enctype="multipart/form-data">
-        
-        <!-- KELOMPOK 1: PENDIDIKAN (1-8) -->
-        <div class="category-group">
-          <div class="category-header">📚 Data Pendidikan (Indikator 1-8)</div>
-          <% for(let i=1; i<=8; i++) { %>
-            <div class="indicator-row">
-              <div class="ind-label">
-                <% if(i===1) { %>1. Data PAUD (Lembaga, Peserta, Pendidik)<% } %>
-                <% if(i===2) { %>2. Data TK/RA<% } %>
-                <% if(i===3) { %>3. Data SD/MI<% } %>
-                <% if(i===4) { %>4. Data SMP/MTs<% } %>
-                <% if(i===5) { %>5. Data SMA/MA/SMK<% } %>
-                <% if(i===6) { %>6. Data Pendidikan Kesetaraan (Paket A,B,C)<% } %>
-                <% if(i===7) { %>7. Data Penduduk Buta Aksara (Umur 15+)<% } %>
-                <% if(i===8) { %>8. Data Pendidikan Khusus/Layanan Khusus (SLB)<% } %>
-              </div>
-              <div class="ind-select">
-                <select name="ind_<%= i %>_status" required>
-                  <option value="">Pilih...</option>
-                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
-                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
-                </select>
-              </div>
-              <div class="ind-file">
-                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
-              </div>
-            </div>
-          <% } %>
-        </div>
-
-        <!-- KELOMPOK 2: KESEHATAN & GIZI (9-19, 36) -->
-        <div class="category-group">
-          <div class="category-header">🏥 Data Kesehatan & Gizi (Indikator 9-19, 36)</div>
-          <% for(let i=9; i<=19; i++) { %>
-            <div class="indicator-row">
-              <div class="ind-label">
-                <% if(i===9) { %>9. Data Budaya Asli Daerah/Kelompok Adat<% } %>
-                <% if(i===10) { %>10. Data Jumlah Posyandu<% } %>
-                <% if(i===11) { %>11. Data Puskesmas Pembantu<% } %>
-                <% if(i===12) { %>12. Data Kunjungan Ibu Hamil<% } %>
-                <% if(i===13) { %>13. Data Bidan/Nakes Berkompetensi<% } %>
-                <% if(i===14) { %>14. Data Cakupan Rawat Jalan<% } %>
-                <% if(i===15) { %>15. Data Pelayanan Penyakit Tidak Menular<% } %>
-                <% if(i===16) { %>16. Data Angka Harapan Hidup (AHH)<% } %>
-                <% if(i===17) { %>17. Data Keluarga Pengguna Air Bersih<% } %>
-                <% if(i===18) { %>18. Data Rawan Penyakit<% } %>
-                <% if(i===19) { %>19. Papan Informasi PHBS<% } %>
-              </div>
-              <div class="ind-select">
-                <select name="ind_<%= i %>_status" required>
-                  <option value="">Pilih...</option>
-                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
-                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
-                </select>
-              </div>
-              <div class="ind-file">
-                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
-              </div>
-            </div>
-          <% } %>
-          
-          <!-- Indikator 36 (Stunting) -->
-          <div class="indicator-row" style="background: #fff3cd;">
-            <div class="ind-label">
-              <strong>36. Data Penanganan Stunting</strong>
-              <div class="sub-indicator">36.1 Remaja Putri | 36.2 Ibu Hamil | 36.3 Balita</div>
-            </div>
-            <div class="ind-select">
-              <select name="ind_36_status" required>
-                <option value="">Pilih...</option>
-                <option value="ada" <%= data && data.ind_36_status === 'ada' ? 'selected' : '' %>>Ada</option>
-                <option value="tidak" <%= data && data.ind_36_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-              </select>
-            </div>
-            <div class="ind-file">
-              <input type="file" name="ind_36_file" accept=".pdf,.xlsx,.jpg,.png">
-            </div>
-          </div>
-        </div>
-
-        <!-- KELOMPOK 3: EKONOMI & UMKM (20-30) -->
-        <div class="category-group">
-          <div class="category-header">💼 Data Ekonomi & UMKM (Indikator 20-30)</div>
-          <% for(let i=20; i<=30; i++) { %>
-            <div class="indicator-row">
-              <div class="ind-label">
-                <% if(i===20) { %>20. Data Jumlah UMKM & UMKM Perempuan<% } %>
-                <% if(i===21) { %>21. UMKM Memiliki NIB<% } %>
-                <% if(i===22) { %>22. UMKM Memiliki PIRT<% } %>
-                <% if(i===23) { %>23. UMKM Memiliki HaKI<% } %>
-                <% if(i===24) { %>24. UMKM Memiliki Sertifikat Halal<% } %>
-                <% if(i===25) { %>25. UMKM Memiliki SNI<% } %>
-                <% if(i===26) { %>26. UMKM Menggunakan Pemasaran Digital<% } %>
-                <% if(i===27) { %>27. Pelaku UMKM Menerima Kredit Bank/NonBank<% } %>
-                <% if(i===28) { %>28. Data Pasar Modern & Tradisional<% } %>
-                <% if(i===29) { %>29. Data Bank Pemerintah/Non Pemerintah<% } %>
-                <% if(i===30) { %>30. Data Jumlah Koperasi<% } %>
-              </div>
-              <div class="ind-select">
-                <select name="ind_<%= i %>_status" required>
-                  <option value="">Pilih...</option>
-                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
-                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
-                </select>
-              </div>
-              <div class="ind-file">
-                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
-              </div>
-            </div>
-          <% } %>
-        </div>
-
-        <!-- KELOMPOK 4: SOSIAL & KEPENDUDUKAN (31-35, 40) -->
-        <div class="category-group">
-          <div class="category-header">👥 Data Sosial & Kependudukan (Indikator 31-35, 40)</div>
-          <% for(let i=31; i<=35; i++) { %>
-            <div class="indicator-row">
-              <div class="ind-label">
-                <% if(i===31) { %>31. SK/SP Tim Desa Siaga Tingkat Kecamatan<% } %>
-                <% if(i===32) { %>32. Data Masyarakat Miskin<% } %>
-                <% if(i===33) { %>33. Data Keluarga Rawan Pangan<% } %>
-                <% if(i===34) { %>34. Data Pengangguran<% } %>
-                <% if(i===35) { %>35. Data Lansia & Penyandang Cacat<% } %>
-              </div>
-              <div class="ind-select">
-                <select name="ind_<%= i %>_status" required>
-                  <option value="">Pilih...</option>
-                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
-                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
-                </select>
-              </div>
-              <div class="ind-file">
-                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
-              </div>
-            </div>
-          <% } %>
-          
-          <!-- Indikator 40 -->
-          <div class="indicator-row">
-            <div class="ind-label">40. Keberadaan PKK Kecamatan</div>
-            <div class="ind-select">
-              <select name="ind_40_status" required>
-                <option value="">Pilih...</option>
-                <option value="ada" <%= data && data.ind_40_status === 'ada' ? 'selected' : '' %>>Ada</option>
-                <option value="tidak" <%= data && data.ind_40_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-              </select>
-            </div>
-            <div class="ind-file">
-              <input type="file" name="ind_40_file" accept=".pdf,.xlsx,.jpg,.png">
-            </div>
-          </div>
-        </div>
-
-        <!-- KELOMPOK 5: HUKUM & PEMERINTAHAN (37-39) -->
-        <div class="category-group">
-          <div class="category-header">️ Data Hukum & Pemerintahan (Indikator 37-39)</div>
-          <% for(let i=37; i<=39; i++) { %>
-            <div class="indicator-row">
-              <div class="ind-label">
-                <% if(i===37) { %>37. Produk Hukum Kelurahan/Desa/Kecamatan<% } %>
-                <% if(i===38) { %>38. Jadwal Pembinaan Penyusunan Produk Hukum<% } %>
-                <% if(i===39) { %>39. Daftar Aparat Petugas Penyidik PNS<% } %>
-              </div>
-              <div class="ind-select">
-                <select name="ind_<%= i %>_status" required>
-                  <option value="">Pilih...</option>
-                  <option value="ada" <%= data && data['ind_'+i+'_status'] === 'ada' ? 'selected' : '' %>>Ada</option>
-                  <option value="tidak" <%= data && data['ind_'+i+'_status'] === 'tidak' ? 'selected' : '' %>>Tidak</option>
-                </select>
-              </div>
-              <div class="ind-file">
-                <input type="file" name="ind_<%= i %>_file" accept=".pdf,.xlsx,.jpg,.png">
-              </div>
-            </div>
-          <% } %>
-        </div>
-
-        <div class="btn-group">
-          <button type="submit" class="btn btn-primary">💾 Simpan Data Instrumen F</button>
-          <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
-        </div>
-      </form>
-    </div>
-  </div>
+</div>
 </body>
 </html>

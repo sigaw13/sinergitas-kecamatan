@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const db = require('../database/database');
+const { loginRateLimit, clearLoginAttempts } = require('../utils/security');
 
 // GET Login
 router.get('/login', (req, res) => {
@@ -16,7 +17,7 @@ router.get('/login', (req, res) => {
 });
 
 // POST Login
-router.post('/login', async (req, res) => {
+router.post('/login', loginRateLimit, async (req, res) => {
   try {
     const { username, password } = req.body;
     
@@ -56,8 +57,12 @@ router.post('/login', async (req, res) => {
       
       req.session.userId = row.id;
       req.session.username = row.username;
-      req.session.kecamatan = row.nama;
-      req.session.isAdmin = row.username === 'admin';
+      req.session.role = row.role || (row.username === 'admin' ? 'superadmin' : 'kecamatan');
+      req.session.kecamatan = req.session.role === 'evaluator'
+        ? (row.nama_pengelola || row.nama)
+        : row.nama;
+      req.session.isAdmin = ['superadmin', 'evaluator'].includes(req.session.role);
+      clearLoginAttempts(req);
       
       res.redirect('/dashboard');
     });

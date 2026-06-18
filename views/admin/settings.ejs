@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Settings - SIESELON</title>
+  <title>Pengaturan Admin - SIESELON</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #2f3542; }
@@ -29,84 +29,205 @@
       font-size: 14px;
     }
     .navbar a:hover { background: rgba(255,255,255,0.3); }
-    .container { max-width: 760px; margin: 32px auto; padding: 0 20px; }
+    .container { max-width: 1040px; margin: 32px auto; padding: 0 20px 50px; }
+    .page-heading { margin-bottom: 20px; }
+    .page-heading h2 { color: #111827; margin-bottom: 6px; }
+    .page-heading p { color: #64748b; line-height: 1.6; }
     .card {
       background: white;
       border-radius: 14px;
-      padding: 30px;
+      padding: 28px;
+      margin-bottom: 22px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     }
-    h2 { margin-bottom: 10px; color: #111827; }
-    p { color: #6b7280; line-height: 1.6; margin-bottom: 20px; }
-    .alert { padding: 14px; border-radius: 8px; margin-bottom: 18px; }
+    h3 { margin-bottom: 10px; color: #111827; }
+    p { color: #6b7280; line-height: 1.6; margin-bottom: 18px; }
+    .alert { padding: 14px; border-radius: 8px; margin-bottom: 18px; line-height: 1.5; }
     .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
     .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+    .alert-warning { background: #fff3cd; color: #664d03; border-left: 4px solid #ffc107; }
     .form-group { margin-bottom: 20px; }
     label { display: block; font-weight: 700; margin-bottom: 8px; color: #374151; }
-    input[type="date"] {
-      width: 100%;
-      padding: 12px 14px;
-      border: 2px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 15px;
+    input[type="date"], input[type="file"], input[type="text"] {
+      width: 100%; padding: 12px 14px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 15px; background: white;
     }
-    input[type="date"]:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 4px rgba(102,126,234,0.12); }
+    input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 4px rgba(102,126,234,0.12); }
     .btn {
-      display: inline-block;
-      padding: 11px 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: 700;
-      text-decoration: none;
+      display: inline-block; padding: 10px 17px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;
     }
+    .btn:hover { filter: brightness(1.05); }
+    .btn-danger { background: #dc3545; }
+    .btn-warning { background: #d97706; }
+    .btn-secondary { background: #64748b; }
+    .btn-success { background: #198754; }
     .current-deadline {
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 22px;
-      color: #475569;
+      background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-bottom: 22px; color: #475569;
+    }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin: 18px 0; }
+    .summary-item { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; }
+    .summary-item small { display:block; color:#64748b; margin-bottom:5px; }
+    .summary-item strong { color:#1e293b; overflow-wrap:anywhere; }
+    details { border: 1px solid #e2e8f0; border-radius: 12px; margin-top: 14px; overflow: hidden; }
+    summary { cursor:pointer; padding:16px 18px; background:#f8fafc; font-weight:800; color:#334155; list-style:none; }
+    summary::-webkit-details-marker { display:none; }
+    summary::after { content:'＋'; float:right; font-size:18px; }
+    details[open] summary::after { content:'−'; }
+    .details-body { padding: 18px; border-top:1px solid #e2e8f0; }
+    .backup-table { width:100%; border-collapse:collapse; margin-top:10px; }
+    .backup-table th, .backup-table td { border-bottom:1px solid #e5e7eb; padding:11px 8px; text-align:left; vertical-align:middle; }
+    .backup-table th { font-size:13px; color:#475569; background:#f8fafc; }
+    .actions { display:flex; flex-wrap:wrap; gap:7px; }
+    .inline-form { display:inline; }
+    .muted { font-size:13px; color:#64748b; }
+    .danger-zone { border-color:#fecaca; }
+    .danger-zone summary { background:#fff1f2; color:#991b1b; }
+    code { background:#eef2ff; color:#3730a3; padding:2px 5px; border-radius:4px; }
+    @media (max-width: 760px) {
+      .summary-grid { grid-template-columns: 1fr 1fr; }
+      .backup-table { display:block; overflow-x:auto; }
+      .card { padding:20px; }
     }
   </style>
 </head>
 <body>
+  <% const info = (typeof backupInfo !== 'undefined' && backupInfo) ? backupInfo : { backups: [], backupCount: 0, databaseMode: 'Tidak diketahui', tarAvailable: false }; %>
   <div class="navbar">
-    <h1>⚙️ Admin Settings SIESELON</h1>
+    <h1>⚙️ Pengaturan Admin SIESELON</h1>
     <div class="links">
       <span>👤 <%= username %></span>
       <a href="/dashboard">📊 Dashboard</a>
-      <a href="/logout">🚪 Logout</a>
+      <a href="/logout">🚪 Keluar</a>
     </div>
   </div>
 
   <div class="container">
+    <div class="page-heading">
+      <h2>Pengaturan Aplikasi</h2>
+      <p>Pengaturan deadline, backup, dan restore ditempatkan dalam satu halaman agar navigasi dashboard admin tetap ringkas.</p>
+    </div>
+
+    <% if (success) { %><div class="alert alert-success">✅ <%= success %></div><% } %>
+    <% if (error) { %><div class="alert alert-error">⚠️ <%= error %></div><% } %>
+
     <div class="card">
-      <h2>⏰ Pengaturan Deadline Pengisian</h2>
-      <p>Deadline ini akan tampil sebagai countdown di dashboard akun kecamatan. Admin tidak menampilkan countdown, tetapi dapat mengubah tanggal deadline dari halaman ini.</p>
-
-      <% if (success) { %>
-        <div class="alert alert-success">✅ <%= success %></div>
-      <% } %>
-      <% if (error) { %>
-        <div class="alert alert-error">⚠️ <%= error %></div>
-      <% } %>
-
-      <div class="current-deadline">
-        Deadline aktif saat ini: <strong><%= deadline %></strong>
-      </div>
-
+      <h3>⏰ Batas Waktu Pengisian</h3>
+      <p>Tanggal ini digunakan sebagai batas waktu aktif pengisian oleh seluruh kecamatan.</p>
+      <div class="current-deadline">Batas waktu aktif saat ini: <strong><%= deadline %></strong></div>
       <form action="/admin/settings/update-deadline" method="POST">
         <div class="form-group">
-          <label for="deadline">Tanggal Deadline Baru</label>
+          <label for="deadline">Tanggal Batas Waktu Baru</label>
           <input type="date" id="deadline" name="deadline" value="<%= deadline %>" required>
         </div>
-        <button type="submit" class="btn">💾 Simpan Deadline</button>
+        <button type="submit" class="btn">💾 Simpan Batas Waktu</button>
       </form>
     </div>
+
+    <div class="card" id="backup-restore">
+      <h3>🗄️ Backup dan Restore Data</h3>
+      <p>Backup mencakup database dan seluruh folder bukti pada <code>uploads</code>. Bagian rinci dibuat dapat dibuka-tutup agar halaman tetap rapi.</p>
+
+      <div class="summary-grid">
+        <div class="summary-item"><small>Mode Database</small><strong><%= info.databaseMode %></strong></div>
+        <div class="summary-item"><small>Jumlah Backup</small><strong><%= info.backupCount || 0 %></strong></div>
+        <div class="summary-item"><small>Backup Terakhir</small><strong><%= info.lastBackup ? new Date(info.lastBackup.createdAt).toLocaleString('id-ID') : 'Belum ada' %></strong></div>
+        <div class="summary-item"><small>Status Utilitas Arsip</small><strong><%= info.tarAvailable ? 'Siap' : 'Tidak tersedia' %></strong></div>
+      </div>
+
+      <% if (!info.tarAvailable) { %>
+        <div class="alert alert-error">Perintah <code>tar</code> tidak ditemukan. Backup lengkap belum dapat dibuat pada komputer ini.</div>
+      <% } %>
+
+      <% if (info.pendingRestore) { %>
+        <div class="alert alert-warning">
+          <strong>Restore menunggu restart.</strong><br>
+          Sumber: <%= info.pendingRestore.sourceName || 'backup' %><br>
+          Hentikan server dan jalankan <code>npm start</code> kembali untuk menerapkan restore.
+          <form action="/admin/settings/restore/cancel" method="POST" style="margin-top:10px;">
+            <button type="submit" class="btn btn-secondary">Batalkan Restore Terjadwal</button>
+          </form>
+        </div>
+      <% } %>
+
+      <details open>
+        <summary>Buat dan Kelola Backup</summary>
+        <div class="details-body">
+          <form action="/admin/settings/backup/create" method="POST" onsubmit="return confirm('Buat backup lengkap database dan seluruh folder uploads sekarang?');">
+            <button type="submit" class="btn btn-success" <%= info.tarAvailable ? '' : 'disabled' %>>➕ Buat Backup Lengkap</button>
+          </form>
+          <p class="muted" style="margin-top:10px;">Backup disimpan di folder <code>backups</code> dan dapat diunduh dari daftar berikut.</p>
+
+          <% if (!info.backups || info.backups.length === 0) { %>
+            <div class="current-deadline">Belum ada backup tersimpan.</div>
+          <% } else { %>
+            <table class="backup-table">
+              <thead><tr><th>Nama Backup</th><th>Tanggal</th><th>Ukuran</th><th>Tindakan</th></tr></thead>
+              <tbody>
+                <% info.backups.forEach(item => { %>
+                  <tr>
+                    <td><strong><%= item.filename %></strong></td>
+                    <td><%= new Date(item.createdAt).toLocaleString('id-ID') %></td>
+                    <td><%= item.sizeLabel %></td>
+                    <td>
+                      <div class="actions">
+                        <a class="btn btn-secondary" href="/admin/settings/backup/<%= encodeURIComponent(item.filename) %>/download">Unduh</a>
+                        <% if (info.databaseMode === 'SQLite') { %>
+                          <form class="inline-form" action="/admin/settings/backup/<%= encodeURIComponent(item.filename) %>/restore" method="POST" onsubmit="return confirmStoredRestore(this, '<%= item.filename.replace(/'/g, "\\'") %>');">
+                            <input type="hidden" name="confirm_restore" value="">
+                            <button type="submit" class="btn btn-warning">Restore</button>
+                          </form>
+                        <% } %>
+                        <form class="inline-form" action="/admin/settings/backup/<%= encodeURIComponent(item.filename) %>/delete" method="POST" onsubmit="return confirm('Hapus backup ini secara permanen?');">
+                          <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </details>
+
+      <details class="danger-zone">
+        <summary>Restore dari Berkas Backup</summary>
+        <div class="details-body">
+          <% if (info.databaseMode !== 'SQLite') { %>
+            <div class="alert alert-warning">Restore melalui halaman ini hanya tersedia untuk SQLite. Pada PostgreSQL, restore dilakukan melalui alat administrasi database.</div>
+          <% } else { %>
+            <p><strong>Perhatian:</strong> restore akan mengganti database dan folder uploads setelah server direstart. Sistem otomatis membuat backup keselamatan sebelum restore.</p>
+            <form action="/admin/settings/restore/upload" method="POST" enctype="multipart/form-data" onsubmit="return confirmUploadRestore(this);">
+              <div class="form-group">
+                <label for="backup_file">Pilih Backup SIESELON (.tar.gz atau .tgz)</label>
+                <input type="file" id="backup_file" name="backup_file" accept=".tar.gz,.tgz,application/gzip" required>
+              </div>
+              <input type="hidden" name="confirm_restore" value="">
+              <button type="submit" class="btn btn-danger">♻️ Verifikasi dan Jadwalkan Restore</button>
+            </form>
+          <% } %>
+        </div>
+      </details>
+    </div>
   </div>
+
+  <script>
+    function askRestoreConfirmation(message) {
+      const answer = window.prompt(message + '\n\nKetik PULIHKAN untuk melanjutkan:');
+      return answer && answer.trim().toUpperCase() === 'PULIHKAN' ? 'PULIHKAN' : '';
+    }
+    function confirmStoredRestore(form, filename) {
+      const value = askRestoreConfirmation('Restore backup ' + filename + '? Data aktif akan diganti setelah server direstart.');
+      if (!value) return false;
+      form.querySelector('[name="confirm_restore"]').value = value;
+      return true;
+    }
+    function confirmUploadRestore(form) {
+      const value = askRestoreConfirmation('Restore dari berkas yang dipilih? Data aktif akan diganti setelah server direstart.');
+      if (!value) return false;
+      form.querySelector('[name="confirm_restore"]').value = value;
+      return true;
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifikasi dan Finalisasi Penilaian Sinergitas Kinerja Kecamatan - SIESELON</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:#f4f6fb;color:#263247}.nav{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.nav a{color:#fff;text-decoration:none;background:rgba(255,255,255,.18);padding:8px 12px;border-radius:7px}.container{max-width:1600px;margin:24px auto;padding:0 16px}.card{background:#fff;border-radius:12px;box-shadow:0 3px 14px rgba(25,42,70,.08);padding:22px;margin-bottom:20px;overflow-x:auto}h1,h2{margin-top:0}.muted{color:#6c7688;line-height:1.5}.message{padding:12px 14px;border-radius:8px;margin-bottom:14px}.success{background:#d7f2df;color:#166534}.error{background:#f9d9df;color:#922b3e}.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}.metric{background:#fff;border-radius:12px;padding:18px;box-shadow:0 3px 14px rgba(25,42,70,.08);border-left:5px solid #5d73df}.metric strong{font-size:29px;color:#5267d2;display:block;margin-top:5px}table{border-collapse:collapse;width:100%;min-width:1350px}th,td{padding:10px;border:1px solid #e0e4ec;font-size:12px;text-align:center;vertical-align:middle}th{background:#5d73df;color:#fff;position:sticky;top:0}td:nth-child(2),td:nth-child(3){text-align:left}.badge{display:inline-block;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:700;white-space:nowrap}.verified{background:#d7f2df;color:#166534}.revision{background:#f9d9df;color:#922b3e}.pending{background:#fff1c7;color:#7c5700}.final{background:#d7f2df;color:#166534}.not-final{background:#e8ebf2;color:#4d586b}.progress{height:17px;background:#e8ebf2;border-radius:999px;overflow:hidden;min-width:80px}.bar{height:100%;background:linear-gradient(90deg,#5d73df,#7047a5);color:white;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}.btn{display:inline-block;text-decoration:none;color:#fff;background:#5d73df;padding:7px 11px;border-radius:6px;font-size:11px}.score{font-weight:800;color:#4e63c8}@media print{.nav,.btn{display:none}.container{max-width:none;margin:0}.card{box-shadow:none;padding:0}th,td{font-size:9px;padding:5px}}
+  </style>
+</head>
+<body>
+  <nav class="nav"><strong>✅ Verifikasi dan Finalisasi Penilaian Sinergitas Kinerja Kecamatan</strong><div><a href="/dashboard">Dashboard</a><a href="/ranking">Peringkat Resmi</a><a href="javascript:window.print()">Cetak</a></div></nav>
+  <main class="container">
+    <% if (success) { %><div class="message success"><%= success %></div><% } %>
+    <% if (error) { %><div class="message error"><%= error %></div><% } %>
+    <section class="card">
+      <h1>Verifikasi dan Finalisasi Evaluasi Kinerja</h1>
+      <p class="muted">Skor dihitung otomatis dari bukti dukung aktif menggunakan standar nilai workbook 2026. Administrator memverifikasi keabsahan data dan bukti dukung setiap instrumen. Kecamatan hanya masuk ke peringkat resmi setelah seluruh Instrumen A–F terverifikasi dan hasil difinalkan.</p>
+    </section>
+    <% const total = evaluations.length; const finalCount = evaluations.filter(item => item.finalStatus === 'Final').length; const verifiedAll = evaluations.filter(item => item.verifiedCount === 6).length; const revision = evaluations.filter(item => item.revisionCount > 0).length; %>
+    <section class="summary">
+      <div class="metric">Jumlah Kecamatan<strong><%= total %></strong></div>
+      <div class="metric">Siap Difinalkan<strong><%= verifiedAll - finalCount < 0 ? 0 : verifiedAll - finalCount %></strong></div>
+      <div class="metric">Sudah Final<strong><%= finalCount %></strong></div>
+      <div class="metric">Perlu Perbaikan<strong><%= revision %></strong></div>
+    </section>
+    <section class="card">
+      <table>
+        <thead><tr><th>No.</th><th>Kecamatan</th><th>Pengelola</th><th>Progres</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>Skor Sementara</th><th>Status Hasil</th><th>Aksi</th></tr></thead>
+        <tbody>
+          <% evaluations.forEach((item,index) => { %>
+            <tr>
+              <td><%= index+1 %></td>
+              <td><strong><%= item.nama %></strong><br><small><%= item.email || 'Email belum diisi' %></small></td>
+              <td><%= item.nama_pengelola || '-' %></td>
+              <td><div class="progress"><div class="bar" style="width:<%= item.progress.overall.percent %>%"><%= item.progress.overall.percent %>%</div></div></td>
+              <% ['A','B','C','D','E','F'].forEach(code => { const review = item.reviewMap.get(code); const cls = review.status === 'Terverifikasi' ? 'verified' : (review.status === 'Perlu Perbaikan' ? 'revision' : 'pending'); %>
+                <td><span class="badge <%= cls %>" title="<%= review.notes || '' %>"><%= review.status %></span></td>
+              <% }) %>
+              <td class="score"><%= item.reviewedScoring.totalScore %>/<%= item.reviewedScoring.maxScore %></td>
+              <td><span class="badge <%= item.finalStatus === 'Final' ? 'final' : 'not-final' %>"><%= item.finalStatus %></span></td>
+              <td><a class="btn" href="/evaluation/<%= item.id %>">Buka Evaluasi</a></td>
+            </tr>
+          <% }) %>
+          <% if (!evaluations.length) { %><tr><td colspan="13">Belum ada kecamatan.</td></tr><% } %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

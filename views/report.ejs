@@ -3,165 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laporan - Sinergitas Kinerja Kecamatan</title>
+  <title>Laporan Progres Pengisian SIESELON</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f7fa;
-    }
-    .navbar {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .navbar h1 { font-size: 20px; }
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 15px;
-      border-radius: 5px;
-      background: rgba(255,255,255,0.2);
-      margin-left: 10px;
-    }
-    .container {
-      max-width: 1400px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-    .table-container {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      overflow-x: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-      font-size: 14px;
-    }
-    th {
-      background: #667eea;
-      color: white;
-      font-weight: 600;
-    }
-    tr:hover { background: #f8f9fa; }
-    .status-sudah { 
-      background: #d4edda; 
-      color: #155724; 
-      padding: 5px 10px; 
-      border-radius: 15px; 
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .status-belum { 
-      background: #f8d7da; 
-      color: #721c24; 
-      padding: 5px 10px; 
-      border-radius: 15px; 
-      font-size: 12px;
-      font-weight: 600;
-    }
-    h2 { margin-bottom: 20px; color: #333; }
-    @media print {
-      .navbar { display: none; }
-      .container { margin: 0; }
-    }
+    *{box-sizing:border-box} body{font-family:"Segoe UI",Arial,sans-serif;background:#f4f6fb;margin:0;color:#273142}.nav{background:#5d73df;color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}.nav a{color:#fff;text-decoration:none;background:rgba(255,255,255,.18);padding:8px 12px;border-radius:6px;margin-left:6px}.container{max-width:1500px;margin:25px auto;padding:0 16px}.card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 3px 14px rgba(25,42,70,.08);overflow-x:auto}h2{margin-top:0}p{color:#677286}table{border-collapse:collapse;width:100%;min-width:1100px;margin-top:18px}th,td{padding:10px;border:1px solid #dde2ec;font-size:12px;text-align:center;vertical-align:middle}th{background:#5d73df;color:#fff}td:nth-child(2),td:nth-child(3){text-align:left}.progress{height:18px;background:#e7eaf1;border-radius:999px;overflow:hidden;min-width:78px}.bar{height:100%;background:linear-gradient(90deg,#5d73df,#7047a5);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}.small{font-size:10px;color:#7b8495;margin-top:3px}.note{margin-top:16px;padding:12px;background:#f7f8fc;border-left:4px solid #5d73df;border-radius:6px;font-size:12px;color:#566174}@media print{.nav{display:none}.container{margin:0;max-width:none}.card{box-shadow:none;padding:0}th,td{font-size:9px;padding:5px}}
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <h1>📊 Laporan Penilaian Sinergitas</h1>
-    <div>
-      <a href="/dashboard">← Kembali</a>
-      <a href="javascript:window.print()">🖨️ Cetak</a>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="table-container">
-      <h2>Laporan Status Pengisian Instrumen Penilaian</h2>
-      <p style="margin-bottom: 20px; color: #666;">Kabupaten Sumedang - Tahun Anggaran 2025</p>
-      
+  <div class="nav"><strong>📋 Laporan Progres Pengisian SIESELON</strong><div><a href="/dashboard">Kembali</a><a href="javascript:window.print()">Cetak</a></div></div>
+  <main class="container">
+    <section class="card">
+      <h2>Progres Pengisian Instrumen A–F per Kecamatan</h2>
+      <p>Kabupaten Sumedang — Kegiatan Tahun 2026</p>
       <table>
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Kecamatan</th>
-            <th>Pengelola</th>
-            <th>Email</th>
-            <th>Aspek A</th>
-            <th>Aspek B</th>
-            <th>Aspek C</th>
-            <th>Aspek D</th>
-            <th>Aspek E</th>
-            <th>Aspek F</th>
-            <th>Total</th>
-          </tr>
-        </thead>
+        <thead><tr><th>No.</th><th>Kecamatan</th><th>Pengelola</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>Progres Total</th></tr></thead>
         <tbody>
-          <% 
-            let totalSudah = 0;
-            kecamatans.forEach((kc, index) => {
-              let count = 0;
-              if (kc.status_a === 'Sudah') count++;
-              if (kc.status_b === 'Sudah') count++;
-              if (kc.status_c === 'Sudah') count++;
-              if (kc.status_d === 'Sudah') count++;
-              if (kc.status_e === 'Sudah') count++;
-              if (kc.status_f === 'Sudah') count++;
-              totalSudah += count;
-          %>
+          <% if (!kecamatans || kecamatans.length === 0) { %>
+            <tr><td colspan="10">Belum ada data kecamatan.</td></tr>
+          <% } %>
+          <% (kecamatans || []).forEach((kc,index) => { %>
             <tr>
-              <td><%= index + 1 %></td>
-              <td><strong><%= kc.nama %></strong></td>
-              <td><%= kc.nama_pengelola || '-' %></td>
-              <td><%= kc.email || '-' %></td>
-              <td><span class="status-<%= kc.status_a === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_a || 'Belum' %></span></td>
-              <td><span class="status-<%= kc.status_b === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_b || 'Belum' %></span></td>
-              <td><span class="status-<%= kc.status_c === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_c || 'Belum' %></span></td>
-              <td><span class="status-<%= kc.status_d === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_d || 'Belum' %></span></td>
-              <td><span class="status-<%= kc.status_e === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_e || 'Belum' %></span></td>
-              <td><span class="status-<%= kc.status_f === 'Sudah' ? 'sudah' : 'belum' %>"><%= kc.status_f || 'Belum' %></span></td>
-              <td><strong><%= count %>/6</strong></td>
+              <td><%= index+1 %></td><td><strong><%= kc.nama %></strong></td><td><%= kc.nama_pengelola || '-' %></td>
+              <% ['a','b','c','d','e','f'].forEach(code => { %>
+                <td><div class="progress"><div class="bar" style="width:<%= kc['progress_'+code] %>%"><%= kc['progress_'+code] %>%</div></div><div class="small">Isian <%= kc['data_progress_'+code] %>% · Bukti <%= kc['evidence_progress_'+code] %>%</div></td>
+              <% }) %>
+              <td><strong><%= kc.progress_percent %>%</strong></td>
             </tr>
           <% }) %>
-            <tbody>
-      <% if (!kecamatans || kecamatans.length === 0) { %>
-        <tr>
-          <td colspan="10" style="text-align: center; padding: 20px; color: #666;">
-            ⚠️ Belum ada data kecamatan yang tersedia.
-          </td>
-        </tr>
-      <% } else { %>
-        
-        <% 
-          let totalSudah = 0;
-          kecamatans.forEach((kc, index) => {
-            // Karena query disederhanakan, kita tampilkan data dasar dulu
-            // Jika ingin menampilkan status upload, pastikan kolom tersebut ada di query SELECT
-            // Untuk sementara, kita tampilkan data dasar agar tidak error
-        %>
-          <tr>
-            <td><%= index + 1 %></td>
-            <td><strong><%= kc.nama %></strong></td>
-            <td><%= kc.nama_pengelola || '-' %></td>
-            <td><%= kc.email || '-' %></td>
-            <td colspan="6" style="text-align: center; color: #666;">
-              (Data penilaian akan muncul setelah tabel database diperbarui)
-            </td>
-          </tr>
-        <% }) %>
-
-      <% } %>
-    </tbody>
+        </tbody>
+      </table>
+      <div class="note"><strong>Keterangan:</strong> progres merupakan gabungan kelengkapan isian dan bukti dukung. Progres pengisian tidak sama dengan skor kinerja.</div>
+    </section>
+  </main>
+</body>
+</html>

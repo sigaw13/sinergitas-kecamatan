@@ -3,641 +3,318 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instrumen A - Pelayanan Publik</title>
+  <title>Instrumen A — Pelayanan Publik</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f7fa;
-      padding: 20px;
-    }
-    .container { max-width: 1100px; margin: 0 auto; }
-    .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 25px;
-      border-radius: 10px;
-      margin-bottom: 25px;
-      text-align: center;
-    }
-    .header h1 { font-size: 24px; margin-bottom: 8px; }
-    .header p { font-size: 14px; opacity: 0.9; }
-    
-    .form-container {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-    }
-    
-    .indicator-group {
-      margin-bottom: 25px;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 8px;
-      border-left: 4px solid #667eea;
-    }
-    .indicator-group h4 {
-      color: #333;
-      margin-bottom: 15px;
-      font-size: 16px;
-      border-bottom: 2px solid #e9ecef;
-      padding-bottom: 10px;
-    }
-    
-    .form-row {
-      margin-bottom: 15px;
-      padding: 12px;
-      background: white;
-      border-radius: 5px;
-    }
-    .form-row label {
-      display: block;
-      margin-bottom: 8px;
-      color: #444;
-      font-weight: 500;
-      font-size: 14px;
-    }
-    .form-row small {
-      display: block;
-      margin-top: 5px;
-      color: #666;
-      font-size: 12px;
-      font-style: italic;
-    }
-    
-    select, input[type="number"], input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      border: 2px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-      transition: border-color 0.3s;
-    }
-    select:focus, input:focus {
-      outline: none;
-      border-color: #667eea;
-    }
-    
-    .file-upload {
-      margin-top: 10px;
-      padding: 10px;
-      background: #e9ecef;
-      border-radius: 5px;
-    }
-    .file-upload input[type="file"] {
-      width: 100%;
-      font-size: 13px;
-    }
-    
-    .btn-group {
-      display: flex;
-      gap: 15px;
-      margin-top: 30px;
-      justify-content: center;
-    }
-    .btn {
-      padding: 12px 35px;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-    .btn-secondary {
-      background: #6c757d;
-      color: white;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    }
-    
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 15px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-left: 10px;
-    }
-    .status-sudah { background: #d4edda; color: #155724; }
-    .status-belum { background: #f8d7da; color: #721c24; }
-    
-    .required { color: #dc3545; }
-    
-    .uploaded-files {
-      background: #d4edda;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      border-left: 4px solid #28a745;
-    }
-    .uploaded-files h3 {
-      color: #155724;
-      margin-bottom: 15px;
-    }
-    
-    .alert-success {
-      background: #d4edda;
-      color: #155724;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      border-left: 4px solid #28a745;
-    }
-    
-    @media (max-width: 768px) {
-      .btn-group { flex-direction: column; }
-      .indicator-group { padding: 15px; }
-    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Segoe UI",Tahoma,sans-serif;background:#f4f6fb;padding:18px;color:#273142}
+    .container{max-width:1120px;margin:auto}
+    .header{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff;padding:24px;border-radius:12px;text-align:center;margin-bottom:18px}
+    .header h1{font-size:23px;margin-bottom:7px}
+    .form{background:#fff;padding:24px;border-radius:12px;box-shadow:0 3px 14px rgba(25,42,70,.08)}
+    .indicator{background:#f8f9fc;border-left:5px solid #5d73df;padding:17px;border-radius:9px;margin-bottom:15px}
+    .indicator h3{font-size:15px;line-height:1.5;margin-bottom:10px}
+    .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+    .field{background:#fff;padding:11px;border-radius:7px;border:1px solid #e5e9f0}
+    .field label{display:block;font-size:13px;font-weight:600;line-height:1.45;margin-bottom:6px}
+    .field input,.field select{width:100%;padding:9px;border:1px solid #cfd5df;border-radius:6px;font-size:13px}
+    .note{background:#eef1ff;color:#4b5680;padding:9px 11px;border-radius:7px;font-size:12px;line-height:1.5;margin-bottom:10px}
+    .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+    .btn{border:0;border-radius:7px;padding:11px 20px;font-weight:700;text-decoration:none;cursor:pointer}
+    .primary{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff}
+    .draft{background:#f0b90b;color:#222}
+    .secondary{background:#667085;color:#fff}
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>📋 Instrumen A - Pelayanan Publik</h1>
-      <p>Kecamatan <%= kecamatan %> | Tahun Anggaran 2025</p>
-      <% if (data && data.upload_status === 'Sudah') { %>
-        <span class="status-badge status-sudah">✅ Sudah Diisi</span>
-      <% } else { %>
-        <span class="status-badge status-belum">⏳ Belum Diisi</span>
+<div class="container">
+  <header class="header">
+    <h1>Instrumen A — Pelayanan Publik</h1>
+    <p>Kecamatan <%= kecamatan %> · 16 indikator · 32 unsur bukti dukung</p>
+  </header>
+
+  <%- include('_progress-summary', { progress }) %>
+  <%- include('_standards-panel', { standard }) %>
+  <%- include('_file-panel', { instrument:'a', data, uploadedFiles, missingEvidenceKeys, saved, saveResult, kecamatan_id, isAdmin }) %>
+
+  <div class="form">
+    <%
+      // Kompatibel dengan project lama yang belum memakai middleware CSRF
+      // dan project produksi yang sudah menyediakan res.locals.csrfToken.
+      const safeCsrfToken = (typeof csrfToken !== 'undefined' && csrfToken)
+        ? String(csrfToken)
+        : '';
+      const formQuery = [];
+      if (kecamatan_id) formQuery.push('kecamatan_id=' + encodeURIComponent(kecamatan_id));
+      if (safeCsrfToken) formQuery.push('_csrf=' + encodeURIComponent(safeCsrfToken));
+      const formAction = '/assessment/instrument-a' + (formQuery.length ? '?' + formQuery.join('&') : '');
+    %>
+    <form action="<%= formAction %>" method="POST" enctype="multipart/form-data">
+      <% if (safeCsrfToken) { %>
+        <input type="hidden" name="_csrf" value="<%= safeCsrfToken %>">
       <% } %>
-    </div>
 
-    <% if (saved) { %>
-      <div class="alert-success">
-        ✅ Data berhasil disimpan! Skor akan dihitung otomatis.
+      <section class="indicator">
+        <h3>1. Kelengkapan data dan potensi kecamatan: Data Monografi Kecamatan</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> peta kecamatan, tabel data penduduk, Buku Profil Kecamatan, data desa atau kelurahan, tabel data Badan Permusyawaratan Desa (BPD), dan tabel data organisasi.</div>
+        <div class="field">
+          <label>Ketersediaan Data Monografi Kecamatan</label>
+          <select name="ind_1_status">
+            <option value="">Pilih jawaban</option>
+            <option value="ada" <%= data.ind_1_status==='ada'?'selected':'' %>>Ada</option>
+            <option value="tidak" <%= data.ind_1_status==='tidak'?'selected':'' %>>Tidak</option>
+          </select>
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'1',label:'Bukti indikator 1',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>2. Struktur Organisasi Kecamatan</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> dokumen sesuai masing-masing subindikator.</div>
+        <div class="fields">
+          <% [
+            ['a','Peraturan Daerah tentang pembentukan kecamatan','Peraturan Daerah kabupaten atau kota'],
+            ['b','Peraturan Kepala Daerah tentang tugas pokok dan fungsi','Peraturan Kepala Daerah tentang tugas pokok dan fungsi'],
+            ['c','Bagan Struktur Organisasi dan Tata Kerja (SOTK) Kecamatan','Bagan Struktur Organisasi dan Tata Kerja (SOTK) Kecamatan']
+          ].forEach(item => { %>
+            <div class="field">
+              <label>2.<%= item[0] %>. <%= item[1] %></label>
+              <select name="ind_2<%= item[0] %>_status">
+                <option value="">Pilih jawaban</option>
+                <option value="ada" <%= data['ind_2'+item[0]+'_status']==='ada'?'selected':'' %>>Ada</option>
+                <option value="tidak" <%= data['ind_2'+item[0]+'_status']==='tidak'?'selected':'' %>>Tidak</option>
+              </select>
+              <div class="note" style="margin-top:8px;margin-bottom:0"><strong>Bentuk data dukung:</strong> <%= item[2] %>.</div>
+              <%- include('_single-evidence-input',{instrument:'a',indicator:'2'+item[0],label:'Bukti subindikator 2.'+item[0],uploadedFiles,compact:true}) %>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>3. Peraturan Bupati atau Peraturan Wali Kota tentang pendelegasian sebagian kewenangan kepada Camat</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> dokumen Peraturan Bupati atau Peraturan Wali Kota tentang pendelegasian sebagian kewenangan kepada Camat.</div>
+        <div class="field">
+          <label>Ketersediaan peraturan pendelegasian sebagian kewenangan kepada Camat</label>
+          <select name="ind_3_status">
+            <option value="">Pilih jawaban</option>
+            <option value="ada" <%= data.ind_3_status==='ada'?'selected':'' %>>Ada</option>
+            <option value="tidak" <%= data.ind_3_status==='tidak'?'selected':'' %>>Tidak</option>
+          </select>
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'3',label:'Bukti indikator 3',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>4. Pelaksanaan urusan pemerintahan yang terkait dengan pelayanan perizinan nonusaha</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> rekapitulasi jumlah urusan pemerintahan yang terkait dengan perizinan nonusaha dan telah dilengkapi dengan instrumen pendukung.</div>
+        <div class="field">
+          <label>Jumlah urusan pemerintahan yang terkait dengan perizinan nonusaha dan telah dilengkapi dengan instrumen pendukung</label>
+          <input type="number" min="0" name="ind_4_jumlah" value="<%= data.ind_4_jumlah ?? '' %>" placeholder="Jumlah urusan">
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'4',label:'Bukti indikator 4',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>5. Pelaksanaan urusan pemerintahan yang terkait dengan kewenangan lain yang dilimpahkan</h3>
+        <div class="fields">
+          <div class="field">
+            <label>5.a. Jumlah urusan pemerintahan terkait dengan kewenangan lain yang dilimpahkan dan telah dilengkapi dengan instrumen pendukung</label>
+            <input type="number" min="0" name="ind_5a_jumlah" value="<%= data.ind_5a_jumlah ?? '' %>" placeholder="Jumlah urusan">
+            <div class="note" style="margin-top:8px;margin-bottom:0"><strong>Bentuk data dukung:</strong> rekapitulasi urusan pemerintahan terkait kewenangan lain yang dilimpahkan dan telah dilengkapi instrumen pendukung.</div>
+            <%- include('_single-evidence-input',{instrument:'a',indicator:'5a',label:'Bukti subindikator 5.a',uploadedFiles,compact:true}) %>
+          </div>
+          <div class="field">
+            <label>5.b. Jumlah urusan pemerintahan terkait dengan kewenangan lain yang dilimpahkan dan telah dilaksanakan</label>
+            <input type="number" min="0" name="ind_5b_jumlah" value="<%= data.ind_5b_jumlah ?? '' %>" placeholder="Jumlah urusan">
+            <div class="note" style="margin-top:8px;margin-bottom:0"><strong>Bentuk data dukung:</strong> rekapitulasi urusan pemerintahan terkait kewenangan lain yang dilimpahkan dan telah dilaksanakan.</div>
+            <%- include('_single-evidence-input',{instrument:'a',indicator:'5b',label:'Bukti subindikator 5.b',uploadedFiles,compact:true}) %>
+          </div>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>6. Keberadaan Tim Pelimpahan Sebagian Kewenangan Bupati atau Wali Kota kepada Camat</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> dokumen Keputusan Bupati atau Wali Kota tentang Tim Pelimpahan Kewenangan kepada Camat.</div>
+        <div class="field">
+          <label>Ketersediaan Tim Pelimpahan Sebagian Kewenangan</label>
+          <select name="ind_6_status">
+            <option value="">Pilih jawaban</option>
+            <option value="ada" <%= data.ind_6_status==='ada'?'selected':'' %>>Ada</option>
+            <option value="tidak" <%= data.ind_6_status==='tidak'?'selected':'' %>>Tidak</option>
+          </select>
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'6',label:'Bukti indikator 6',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>7. Ketersediaan pelaporan pelimpahan kewenangan</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> dokumen laporan Camat kepada Bupati atau Wali Kota.</div>
+        <div class="field">
+          <label>Jumlah laporan pelimpahan kewenangan</label>
+          <input type="number" min="0" name="ind_7_jumlah" value="<%= data.ind_7_jumlah ?? '' %>" placeholder="Jumlah laporan">
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'7',label:'Bukti indikator 7',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>8. Apakah kecamatan berfungsi sebagai simpul pelayanan terpadu satu pintu atau simpul pelayanan dari perangkat daerah terkait?</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> foto dan dokumen hasil pelayanan terpadu satu pintu.</div>
+        <div class="field">
+          <label>Fungsi kecamatan sebagai simpul pelayanan</label>
+          <select name="ind_8_status">
+            <option value="">Pilih jawaban</option>
+            <option value="ya" <%= data.ind_8_status==='ya'?'selected':'' %>>Ya</option>
+            <option value="tidak" <%= data.ind_8_status==='tidak'?'selected':'' %>>Tidak</option>
+          </select>
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'8',label:'Bukti indikator 8',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>9. Jumlah pelaksana teknis pelayanan</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> fotokopi Keputusan Camat tentang penetapan pelaksana teknis pelayanan publik di kecamatan untuk setiap unsur pelaksana.</div>
+        <div class="fields">
+          <% [
+            ['a','Petugas loket atau penerima berkas'],
+            ['b','Petugas informasi'],
+            ['c','Petugas operator komputer'],
+            ['d','Petugas khusus unit pengaduan'],
+            ['e','Petugas keamanan']
+          ].forEach(item => { %>
+            <div class="field">
+              <label>9.<%= item[0] %>. <%= item[1] %></label>
+              <select name="ind_9<%= item[0] %>_status">
+                <option value="">Pilih jawaban</option>
+                <option value="ada" <%= data['ind_9'+item[0]+'_status']==='ada'?'selected':'' %>>Ada</option>
+                <option value="tidak" <%= data['ind_9'+item[0]+'_status']==='tidak'?'selected':'' %>>Tidak</option>
+              </select>
+              <%- include('_single-evidence-input',{instrument:'a',indicator:'9'+item[0],label:'Bukti subindikator 9.'+item[0],uploadedFiles,compact:true}) %>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>10. Keberadaan informasi pelayanan yang diketahui publik</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> foto, dokumentasi, atau tangkapan layar sarana dan prasarana informasi pelayanan untuk setiap subindikator.</div>
+        <div class="fields">
+          <% [
+            ['a','Informasi bagan alur pelayanan'],
+            ['b','Motto pelayanan'],
+            ['c','Standar Operasional Prosedur (SOP) pelayanan'],
+            ['d','Maklumat pelayanan'],
+            ['e','Leaflet, brosur, atau jenis informasi lainnya terkait jenis dan profil pelayanan'],
+            ['f','Loket khusus lansia dan penyandang disabilitas'],
+            ['g','Situs web kecamatan dan media sosial lainnya']
+          ].forEach(item => { %>
+            <div class="field">
+              <label>10.<%= item[0] %>. <%= item[1] %></label>
+              <select name="ind_10<%= item[0] %>_status">
+                <option value="">Pilih jawaban</option>
+                <option value="ada" <%= data['ind_10'+item[0]+'_status']==='ada'?'selected':'' %>>Ada</option>
+                <option value="tidak" <%= data['ind_10'+item[0]+'_status']==='tidak'?'selected':'' %>>Tidak</option>
+              </select>
+              <%- include('_single-evidence-input',{instrument:'a',indicator:'10'+item[0],label:'Bukti subindikator 10.'+item[0],uploadedFiles,compact:true}) %>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>11. Tingkat kepuasan masyarakat terhadap pelayanan di kecamatan</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> laporan atau rekapitulasi survei kepuasan masyarakat.</div>
+        <div class="field">
+          <label>Hasil penilaian tingkat kepuasan masyarakat</label>
+          <select name="ind_11_status">
+            <option value="">Pilih hasil penilaian</option>
+            <% ['Sangat Baik','Baik','Kurang Baik','Tidak Baik','Tidak Ada Data'].forEach(option => { %>
+              <option value="<%= option %>" <%= data.ind_11_status===option?'selected':'' %>><%= option %></option>
+            <% }) %>
+          </select>
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'11',label:'Bukti indikator 11',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>12. Persentase keluhan atau pengaduan masyarakat yang ditindaklanjuti oleh kecamatan</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> daftar rincian keluhan masyarakat Tahun N-1 dan Tahun N beserta tindak lanjut penyelesaiannya. Tahun N adalah tahun penilaian.</div>
+        <div class="fields">
+          <div class="field">
+            <label>12.a. Jumlah keluhan masyarakat Tahun N yang sudah ditindaklanjuti</label>
+            <input type="number" min="0" name="ind_12a_jumlah" value="<%= data.ind_12a_jumlah ?? '' %>" placeholder="Jumlah keluhan">
+            <%- include('_single-evidence-input',{instrument:'a',indicator:'12a',label:'Bukti subindikator 12.a',uploadedFiles,compact:true}) %>
+          </div>
+          <div class="field">
+            <label>12.b. Jumlah keluhan masyarakat Tahun N-1</label>
+            <input type="number" min="0" name="ind_12b_jumlah" value="<%= data.ind_12b_jumlah ?? '' %>" placeholder="Jumlah keluhan">
+            <%- include('_single-evidence-input',{instrument:'a',indicator:'12b',label:'Bukti subindikator 12.b',uploadedFiles,compact:true}) %>
+          </div>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>13. Bidang kependudukan dan pencatatan sipil: tersedianya laporan kependudukan</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> laporan perkembangan kependudukan, data pelayanan Kartu Tanda Penduduk Elektronik (KTP-el), Kartu Keluarga, akta kelahiran di tingkat kecamatan, serta foto, rekapitulasi data, atau dokumen hasil kegiatan.</div>
+        <div class="field">
+          <label>Ketersediaan laporan kependudukan</label>
+          <select name="ind_13_status">
+            <option value="">Pilih jawaban</option>
+            <option value="ada" <%= data.ind_13_status==='ada'?'selected':'' %>>Ada</option>
+            <option value="tidak" <%= data.ind_13_status==='tidak'?'selected':'' %>>Tidak</option>
+          </select>
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'13',label:'Bukti indikator 13',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>14. Penyelenggaraan Sistem Pemerintahan Berbasis Elektronik (SPBE)</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> tangkapan layar fitur masing-masing aplikasi.</div>
+        <div class="fields">
+          <% [
+            ['a','Tersedianya sistem pengaduan masyarakat berbasis elektronik'],
+            ['b','Tersedianya administrasi pemerintahan berbasis elektronik'],
+            ['c','Sudah menerapkan sistem perkantoran elektronik (e-Office) atau sistem administrasi daring']
+          ].forEach(item => { %>
+            <div class="field">
+              <label>14.<%= item[0] %>. <%= item[1] %></label>
+              <select name="ind_14<%= item[0] %>_status">
+                <option value="">Pilih jawaban</option>
+                <option value="ada" <%= data['ind_14'+item[0]+'_status']==='ada'?'selected':'' %>>Ada</option>
+                <option value="tidak" <%= data['ind_14'+item[0]+'_status']==='tidak'?'selected':'' %>>Tidak</option>
+              </select>
+              <%- include('_single-evidence-input',{instrument:'a',indicator:'14'+item[0],label:'Bukti subindikator 14.'+item[0],uploadedFiles,compact:true}) %>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>15. Pencapaian target Nomor Induk Berusaha (NIB)</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> rekapitulasi data Nomor Induk Berusaha (NIB).</div>
+        <div class="field">
+          <label>Persentase pencapaian target Nomor Induk Berusaha (NIB)</label>
+          <input type="number" min="0" max="100" step="0.01" name="ind_15_persen" value="<%= data.ind_15_persen ?? '' %>" placeholder="Persentase">
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'15',label:'Bukti indikator 15',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <section class="indicator">
+        <h3>16. Pencapaian pungutan Pajak Bumi dan Bangunan (PBB)</h3>
+        <div class="note"><strong>Bentuk data dukung:</strong> rekapitulasi data Pajak Bumi dan Bangunan (PBB).</div>
+        <div class="field">
+          <label>Persentase pencapaian pungutan Pajak Bumi dan Bangunan (PBB)</label>
+          <input type="number" min="0" max="100" step="0.01" name="ind_16_persen" value="<%= data.ind_16_persen ?? '' %>" placeholder="Persentase">
+          <%- include('_single-evidence-input',{instrument:'a',indicator:'16',label:'Bukti indikator 16',uploadedFiles,compact:true}) %>
+        </div>
+      </section>
+
+      <div class="btns">
+        <button class="btn draft" name="save_action" value="draft">💾 Simpan Draft</button>
+        <button class="btn primary" name="save_action" value="final">✅ Kirim Final</button>
+        <a class="btn secondary" href="/dashboard">Kembali</a>
       </div>
-    <% } %>
-
-    <!-- Tampilkan file yang sudah diupload -->
-    <% if (data && data.upload_status === 'Sudah') { %>
-      <div class="uploaded-files">
-        <h3>📎 File yang Sudah Diupload</h3>
-        <div id="fileList">
-          <p>Memuat daftar file...</p>
-        </div>
-      </div>
-    <% } %>
-
-    <div class="form-container">
-      <form action="/assessment/aspect-a<%= kecamatan_id ? '?kecamatan_id=' + kecamatan_id : '' %>" method="POST" enctype="multipart/form-data" id="InstrumenAForm">
-        
-        <!-- Indikator 1 -->
-        <div class="indicator-group">
-          <h4>1. Kelengkapan Data dan Potensi Kecamatan <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Data Monografi Kecamatan</label>
-            <select name="ind_1_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_1_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_1_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-            <small>Dokumen: Peta Kecamatan, Tabel Data Penduduk, Buku Profil, Data Desa/Kel, Data BPD, Data Organisasi</small>
-            <div class="file-upload">
-              <label>📎 Upload Dokumen:</label>
-              <input type="file" name="ind_1_file" accept=".pdf,.doc,.docx,.xlsx,.jpg,.png">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 2 -->
-        <div class="indicator-group">
-          <h4>2. Struktur Organisasi Kecamatan <span class="required">*</span></h4>
-          
-          <div class="form-row">
-            <label>2a. Perda Pembentukan Kecamatan</label>
-            <select name="ind_2a_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_2a_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_2a_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-            <div class="file-upload">
-              <input type="file" name="ind_2a_file" accept=".pdf,.doc,.docx">
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <label>2b. Perkada tentang Tupoksi</label>
-            <select name="ind_2b_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_2b_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_2b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-            <div class="file-upload">
-              <input type="file" name="ind_2b_file" accept=".pdf,.doc,.docx">
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <label>2c. Bagan SOTK Kecamatan</label>
-            <select name="ind_2c_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_2c_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_2c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-            <div class="file-upload">
-              <input type="file" name="ind_2c_file" accept=".pdf,.jpg,.png">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 3 -->
-        <div class="indicator-group">
-          <h4>3. Perbup/Perwali Pendelegasian Kewenangan <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Peraturan Bupati/Walikota tentang pendelegasian kewenangan kepada Camat</label>
-            <select name="ind_3_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_3_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_3_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-            <div class="file-upload">
-              <input type="file" name="ind_3_file" accept=".pdf,.doc,.docx">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 4 -->
-        <div class="indicator-group">
-          <h4>4. Perizinan Non-Usaha <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Jumlah urusan pemerintahan terkait perizinan non-usaha</label>
-            <input type="number" name="ind_4_jumlah" min="0" value="<%= data.ind_4_jumlah || '' %>" placeholder="Contoh: 3">
-            <div class="file-upload">
-              <input type="file" name="ind_4_file" accept=".pdf,.doc,.docx,.xlsx">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 5 -->
-        <div class="indicator-group">
-          <h4>5. Kewenangan Lain yang Dilimpahkan <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>5a. Urusan yang telah dilengkapi instrumen pendukung</label>
-            <input type="number" name="ind_5a_jumlah" min="0" value="<%= data.ind_5a_jumlah || '' %>" placeholder="Jumlah urusan">
-            <div class="file-upload">
-              <input type="file" name="ind_5a_file" accept=".pdf,.doc,.docx">
-            </div>
-          </div>
-          <div class="form-row">
-            <label>5b. Urusan yang telah dilaksanakan</label>
-            <input type="number" name="ind_5b_jumlah" min="0" value="<%= data.ind_5b_jumlah || '' %>" placeholder="Jumlah urusan">
-            <div class="file-upload">
-              <input type="file" name="ind_5b_file" accept=".pdf,.doc,.docx">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 6 -->
-        <div class="indicator-group">
-          <h4>6. Tim Pelimpahan Kewenangan <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Keberadaan Tim Pelimpahan</label>
-            <select name="ind_6_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_6_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_6_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-            <div class="file-upload">
-              <input type="file" name="ind_6_file" accept=".pdf,.doc,.docx">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 7 -->
-        <div class="indicator-group">
-          <h4>7. Pelaporan Pelimpahan Kewenangan <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Jumlah laporan pelimpahan kewenangan</label>
-            <input type="number" name="ind_7_jumlah" min="0" value="<%= data.ind_7_jumlah || '' %>" placeholder="Contoh: 4">
-            <div class="file-upload">
-              <input type="file" name="ind_7_file" accept=".pdf,.doc,.docx">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 8 -->
-        <div class="indicator-group">
-          <h4>8. Simpul Pelayanan Terpadu <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Apakah Kecamatan berfungsi sebagai simpul pelayanan terpadu?</label>
-            <select name="ind_8_status" required>
-              <option value="">Pilih...</option>
-              <option value="ya" <%= data.ind_8_status === 'ya' ? 'selected' : '' %>>Ya</option>
-              <option value="tidak" <%= data.ind_8_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-            <div class="file-upload">
-              <input type="file" name="ind_8_file" accept=".pdf,.jpg,.png">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 9 -->
-        <div class="indicator-group">
-          <h4>9. Pelaksana Teknis Pelayanan <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>9a. Petugas Loket/Penerima Berkas</label>
-            <select name="ind_9a_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_9a_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_9a_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>9b. Petugas Informasi</label>
-            <select name="ind_9b_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_9b_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_9b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>9c. Petugas Operator Komputer</label>
-            <select name="ind_9c_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_9c_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_9c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>9d. Petugas Khusus Unit Pengaduan</label>
-            <select name="ind_9d_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_9d_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_9d_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>9e. Petugas Keamanan</label>
-            <select name="ind_9e_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_9e_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_9e_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="file-upload">
-            <label>📎 Upload SK Penetapan:</label>
-            <input type="file" name="ind_9_file" accept=".pdf,.doc,.docx">
-          </div>
-        </div>
-
-        <!-- Indikator 10 -->
-        <div class="indicator-group">
-          <h4>10. Informasi Pelayanan Publik <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>10a. Informasi Bagan Alur Pelayanan</label>
-            <select name="ind_10a_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_10a_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_10a_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>10b. Motto Pelayanan</label>
-            <select name="ind_10b_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_10b_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_10b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>10c. SOP Pelayanan</label>
-            <select name="ind_10c_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_10c_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_10c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>10d. Maklumat Pelayanan</label>
-            <select name="ind_10d_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_10d_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_10d_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>10e. Leaflet/Brosur Informasi</label>
-            <select name="ind_10e_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_10e_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_10e_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>10f. Loket Khusus Lansia & Penyandang Cacat</label>
-            <select name="ind_10f_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_10f_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_10f_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>10g. Website & Media Sosial Kecamatan</label>
-            <select name="ind_10g_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_10g_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_10g_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="file-upload">
-            <label>📎 Upload Dokumentasi/Foto:</label>
-            <input type="file" name="ind_10_file" accept=".pdf,.jpg,.png" multiple>
-          </div>
-        </div>
-
-        <!-- Indikator 11 -->
-        <div class="indicator-group">
-          <h4>11. Tingkat Kepuasan Masyarakat <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Hasil Survei Kepuasan Masyarakat</label>
-            <select name="ind_11_status" required>
-              <option value="">Pilih...</option>
-              <option value="Sangat Baik" <%= data.ind_11_status === 'Sangat Baik' ? 'selected' : '' %>>Sangat Baik</option>
-              <option value="Baik" <%= data.ind_11_status === 'Baik' ? 'selected' : '' %>>Baik</option>
-              <option value="Kurang Baik" <%= data.ind_11_status === 'Kurang Baik' ? 'selected' : '' %>>Kurang Baik</option>
-              <option value="Tidak Baik" <%= data.ind_11_status === 'Tidak Baik' ? 'selected' : '' %>>Tidak Baik</option>
-              <option value="Tidak Ada Data" <%= data.ind_11_status === 'Tidak Ada Data' ? 'selected' : '' %>>Tidak Ada Data</option>
-            </select>
-            <div class="file-upload">
-              <input type="file" name="ind_11_file" accept=".pdf,.doc,.docx,.xlsx">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 12 -->
-        <div class="indicator-group">
-          <h4>12. Penanganan Pengaduan Masyarakat <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>12a. Jumlah keluhan Tahun 2025 yang ditindaklanjuti</label>
-            <input type="number" name="ind_12a_jumlah" min="0" value="<%= data.ind_12a_jumlah || '' %>" placeholder="Contoh: 15">
-          </div>
-          <div class="form-row">
-            <label>12b. Jumlah keluhan Tahun 2024</label>
-            <input type="number" name="ind_12b_jumlah" min="0" value="<%= data.ind_12b_jumlah || '' %>" placeholder="Contoh: 20">
-          </div>
-          <div class="file-upload">
-            <label>📎 Upload Rekapitulasi Pengaduan:</label>
-            <input type="file" name="ind_12_file" accept=".pdf,.xlsx,.doc,.docx">
-          </div>
-        </div>
-
-        <!-- Indikator 13 -->
-        <div class="indicator-group">
-          <h4>13. Kependudukan & Catatan Sipil <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Tersedianya Laporan Kependudukan</label>
-            <select name="ind_13_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_13_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_13_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-            <div class="file-upload">
-              <input type="file" name="ind_13_file" accept=".pdf,.doc,.docx,.xlsx">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 14 -->
-        <div class="indicator-group">
-          <h4>14. SPBE (Sistem Pemerintahan Berbasis Elektronik) <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>14a. Sistem Pengaduan Masyarakat Berbasis Elektronik</label>
-            <select name="ind_14a_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_14a_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_14a_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>14b. Administrasi Pemerintahan Berbasis Elektronik</label>
-            <select name="ind_14b_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_14b_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_14b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label>14c. Penerapan E-Office / Sistem Administrasi Online</label>
-            <select name="ind_14c_status" required>
-              <option value="">Pilih...</option>
-              <option value="ada" <%= data.ind_14c_status === 'ada' ? 'selected' : '' %>>Ada</option>
-              <option value="tidak" <%= data.ind_14c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-            </select>
-          </div>
-          <div class="file-upload">
-            <label>📎 Upload Screenshot Aplikasi:</label>
-            <input type="file" name="ind_14_file" accept=".jpg,.png,.pdf" multiple>
-          </div>
-        </div>
-
-        <!-- Indikator 15 -->
-        <div class="indicator-group">
-          <h4>15. Pencapaian Target NIB <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Persentase Pencapaian Target NIB</label>
-            <input type="number" name="ind_15_persen" min="0" max="100" step="0.01" value="<%= data.ind_15_persen || '' %>" placeholder="Contoh: 85.50">
-            <small>Masukkan angka persentase (0-100)</small>
-            <div class="file-upload">
-              <input type="file" name="ind_15_file" accept=".pdf,.xlsx">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 16 -->
-        <div class="indicator-group">
-          <h4>16. Pencapaian Pungutan PBB <span class="required">*</span></h4>
-          <div class="form-row">
-            <label>Persentase Realisasi Pungutan PBB</label>
-            <input type="number" name="ind_16_persen" min="0" max="100" step="0.01" value="<%= data.ind_16_persen || '' %>" placeholder="Contoh: 92.30">
-            <small>Masukkan angka persentase (0-100)</small>
-            <div class="file-upload">
-              <input type="file" name="ind_16_file" accept=".pdf,.xlsx">
-            </div>
-          </div>
-        </div>
-
-        <!-- Tombol Submit -->
-        <div class="btn-group">
-          <button type="submit" class="btn btn-primary">💾 Simpan Data Instrumen A</button>
-          <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
-        </div>
-        
-      </form>
-    </div>
+    </form>
   </div>
-
-  <script>
-    // Load file list jika data sudah pernah disimpan
-    <% if (data && data.upload_status === 'Sudah') { %>
-    (function() {
-      var fileListElement = document.getElementById('fileList');
-      if (fileListElement) {
-        fetch('/assessment/files/a?kecamatan_id=<%= kecamatan_id || "" %>')
-          .then(function(response) { return response.json(); })
-          .then(function(result) {
-            if (result.files && result.files.length > 0) {
-              var html = '<ul style="list-style: none; padding: 0;">';
-              result.files.forEach(function(file) {
-                html += '<li style="padding: 8px; background: white; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">';
-                html += '<span>📄 ' + file.fieldName + ': <strong>' + file.fileName + '</strong></span>';
-                html += '<a href="' + file.url + '" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">👁️ Lihat</a>';
-                html += '</li>';
-              });
-              html += '</ul>';
-              fileListElement.innerHTML = html;
-            } else {
-              fileListElement.innerHTML = '<p>Belum ada file yang diupload</p>';
-            }
-          })
-          .catch(function(err) {
-            console.error('Error loading files:', err);
-            fileListElement.innerHTML = '<p style="color: #dc3545;">⚠️ Error memuat daftar file</p>';
-          });
-      }
-    })();
-    <% } %>
-
-    // Validasi form
-    var form = document.getElementById('InstrumenAForm');
-    if (form) {
-      form.addEventListener('submit', function(e) {
-        var requiredFields = this.querySelectorAll('[required]');
-        var isValid = true;
-        
-        requiredFields.forEach(function(field) {
-          if (!field.value) {
-            isValid = false;
-            field.style.borderColor = '#dc3545';
-          } else {
-            field.style.borderColor = '#ddd';
-          }
-        });
-        
-        if (!isValid) {
-          e.preventDefault();
-          alert('⚠️ Mohon lengkapi semua field yang wajib diisi (*)');
-        }
-      });
-    }
-
-    // Reset border color on input
-    document.querySelectorAll('select, input').forEach(function(field) {
-      field.addEventListener('input', function() {
-        this.style.borderColor = '#ddd';
-      });
-    });
-  </script>
+</div>
 </body>
 </html>

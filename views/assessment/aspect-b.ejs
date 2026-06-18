@@ -1,522 +1,363 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instrumen B - Penyelenggaraan Pemerintahan</title>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Instrumen B — Penyelenggaraan Urusan Pemerintahan Umum</title>
   <style>
-    /* Gunakan style yang sama dengan aspect-a.ejs agar konsisten */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; padding: 20px; }
-    .container { max-width: 1100px; margin: 0 auto; }
-    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; text-align: center; }
-    .header h1 { font-size: 24px; margin-bottom: 8px; }
-    .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); }
-    .indicator-group { margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea; }
-    .indicator-group h4 { color: #333; margin-bottom: 10px; font-size: 15px; border-bottom: 1px solid #e9ecef; padding-bottom: 8px; }
-    .form-row { margin-bottom: 10px; padding: 8px; background: white; border-radius: 5px; }
-    .form-row label { display: block; margin-bottom: 5px; color: #444; font-weight: 500; font-size: 13px; }
-    .form-row small { display: block; margin-top: 3px; color: #666; font-size: 11px; }
-    select, input[type="number"], input[type="text"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
-    .file-upload { margin-top: 8px; padding: 8px; background: #e9ecef; border-radius: 4px; }
-    .file-upload input[type="file"] { width: 100%; font-size: 12px; }
-    .btn-group { display: flex; gap: 15px; margin-top: 25px; justify-content: center; }
-    .btn { padding: 10px 25px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: transform 0.2s; }
-    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .btn-secondary { background: #6c757d; color: white; }
-    .btn:hover { transform: translateY(-2px); }
-    .sub-section { margin-left: 15px; border-left: 2px solid #ccc; padding-left: 10px; margin-top: 10px; }
-  </style>
+    *{box-sizing:border-box;margin:0;padding:0}body{font-family:"Segoe UI",Tahoma,sans-serif;background:#f4f6fb;padding:18px;color:#273142}.container{max-width:1180px;margin:auto}.header{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff;padding:24px;border-radius:12px;text-align:center;margin-bottom:18px}.header h1{font-size:23px;margin-bottom:7px}.form-container{background:#fff;padding:24px;border-radius:12px;box-shadow:0 3px 14px rgba(25,42,70,.08)}.indicator{background:#f8f9fc;border-left:5px solid #5d73df;border-radius:9px;padding:17px;margin-bottom:16px}.indicator h3{font-size:15px;line-height:1.45;margin-bottom:10px;color:#273142}.evidence-note{background:#eef1ff;color:#4b5680;padding:9px 11px;border-radius:7px;font-size:12px;line-height:1.45;margin-bottom:10px}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}.field{background:#fff;padding:10px;border-radius:7px}.field label{display:block;font-weight:600;font-size:13px;line-height:1.4;margin-bottom:6px}.field small{display:block;color:#6c7688;font-size:11px;margin-top:5px}.field input,.field select,.field textarea{width:100%;padding:9px;border:1px solid #cfd5df;border-radius:6px;font:inherit;font-size:13px}.field textarea{min-height:80px;resize:vertical}.computed{margin-top:6px;font-size:12px;color:#4f5d73;background:#f4f6fb;padding:7px;border-radius:5px}.btn-group{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}.btn{border:0;border-radius:7px;padding:11px 20px;font-weight:700;text-decoration:none;cursor:pointer}.primary{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff}.draft{background:#f0b90b;color:#222}.secondary{background:#667085;color:#fff}.file-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px}.file-box{background:#edf0f5;padding:10px;border-radius:7px}.file-box.done{background:#d9f1df;border:1px solid #9bd3aa}.badge{display:inline-block;background:#198754;color:#fff;padding:2px 7px;border-radius:999px;font-size:10px;margin-left:5px}.file-box input{width:100%;margin-top:7px}.section-title{font-size:18px;margin:24px 0 12px;color:#4d5ec1;border-bottom:2px solid #e5e8f1;padding-bottom:6px}.range{font-size:11px;color:#687386;margin-top:5px}.category-help{background:#fff7df;border-left:4px solid #e1a800;padding:10px;border-radius:6px;font-size:12px;line-height:1.5;margin-top:8px}
+.status-card{background:#fff;padding:14px 18px;border-radius:10px;margin-bottom:16px;border-left:5px solid #5d73df;box-shadow:0 2px 10px rgba(25,42,70,.06)}.status-card strong{color:#3348aa}.status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:10px}.status-metric{background:#f6f8fc;border:1px solid #e2e7f0;border-radius:7px;padding:9px;font-size:12px}.status-metric b{display:block;font-size:18px;color:#4258bf;margin-top:3px}.orphan-warning{background:#fff3cd;color:#735500;border-left:4px solid #d39e00;padding:10px 12px;border-radius:7px;margin-top:10px;font-size:12px;line-height:1.5}.inline-evidence-block{margin-top:12px;padding-top:12px;border-top:1px dashed #c9d2e3}.inline-evidence-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:9px;color:#3449ad;font-size:13px;font-weight:700}.inline-evidence-title small{font-weight:600;color:#687386}.inline-evidence-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:9px}.inline-evidence-slot{background:#fff;border:1px solid #d7dee9;border-radius:8px;padding:10px}.inline-evidence-slot.is-complete{background:#effaf2;border-color:#a8d8b2}.inline-evidence-slot-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px;font-size:12px}.inline-evidence-status{font-size:9px;font-weight:800;border-radius:999px;padding:3px 7px}.inline-evidence-status.done{background:#198754;color:#fff}.inline-evidence-status.pending{background:#fff1c7;color:#7c5700}.inline-evidence-folder{font-size:10px;color:#687386;line-height:1.35;margin-bottom:7px}.inline-evidence-slot input[type=file]{width:100%;font-size:11px}.inline-evidence-slot small{display:block;color:#687386;font-size:10px;margin-top:5px}.inline-evidence-file{background:#fff;border-radius:6px;padding:7px;font-size:11px;display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}.inline-evidence-file span{overflow-wrap:anywhere}.inline-evidence-actions{display:flex;gap:5px;flex-shrink:0}.inline-evidence-actions a,.inline-evidence-delete{border:0;border-radius:5px;padding:5px 7px;font-size:10px;font-weight:700;text-decoration:none;cursor:pointer}.inline-evidence-actions a{background:#5d73df;color:#fff}.inline-evidence-delete{background:#c0392b;color:#fff}.inline-evidence-locked{font-size:11px;color:#7c5700;background:#fff1c7;padding:7px;border-radius:5px;margin-bottom:6px}@media(max-width:640px){.inline-evidence-grid{grid-template-columns:1fr}.inline-evidence-title{align-items:flex-start;flex-direction:column}}
+
+.question-sequence{display:flex;flex-direction:column;gap:11px}.subquestion-row{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(290px,.75fr);gap:12px;align-items:stretch;background:#fff;border:1px solid #dfe5ef;border-radius:9px;padding:12px}.subquestion-main{min-width:0}.subquestion-main h4{font-size:13px;line-height:1.45;margin-bottom:8px;color:#2f3b52}.subquestion-main .fields{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}.subquestion-upload{min-width:0}.subquestion-weight{display:inline-block;background:#e8edff;color:#3348aa;border-radius:999px;padding:3px 8px;font-size:10px;font-weight:800;margin-left:6px}.rubric-table{margin-top:10px;border:1px solid #d8dfeb;border-radius:8px;overflow:hidden;background:#fff}.rubric-row{display:grid;grid-template-columns:55px minmax(0,1fr) 90px;border-bottom:1px solid #e5e9f0;font-size:12px}.rubric-row:last-child{border-bottom:0}.rubric-row>span{padding:8px 10px}.rubric-row>span:first-child{font-weight:800;color:#4258bf;background:#f5f7ff;text-align:center}.rubric-row>span:last-child{font-weight:800;text-align:center;background:#f7f9fc}.rubric-row.is-active{background:#ecf8ef}.rubric-row.is-active>span:first-child,.rubric-row.is-active>span:last-child{background:#d8f0df;color:#176b33}.score-preview{margin-top:9px;background:#eef3ff;border-left:4px solid #5d73df;padding:10px;border-radius:6px;font-size:12px;line-height:1.5}.score-preview strong{color:#3348aa}.inline-evidence-block.is-compact{margin:0;padding:0;border-top:0}.inline-evidence-grid.is-compact{grid-template-columns:1fr}.inline-evidence-grid.is-compact .inline-evidence-slot{height:100%}.paired-note{font-size:11px;color:#687386;margin-top:5px}.question-divider{height:1px;background:#e7eaf1;margin:12px 0}.single-upload-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,.75fr);gap:12px;align-items:start}.value-and-category{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.8fr);gap:12px;align-items:start}.category-panel{background:#fbfcff;border:1px solid #dde3ef;border-radius:8px;padding:10px}.category-panel h4{font-size:12px;margin-bottom:7px;color:#3348aa}@media(max-width:860px){.subquestion-row,.single-upload-row,.value-and-category{grid-template-columns:1fr}.subquestion-upload{margin-top:2px}.rubric-row{grid-template-columns:45px minmax(0,1fr) 75px}}
+  .choice-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.choice-option{background:#fff;border:1px solid #d7deea;border-radius:9px;padding:12px;transition:.2s}.choice-option.is-selected{border-color:#5d73df;box-shadow:0 0 0 2px rgba(93,115,223,.12);background:#f5f7ff}.choice-option-head{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}.choice-option-head input[type=radio]{width:auto;margin-top:3px}.choice-option-label{font-size:13px;font-weight:700;line-height:1.4}.choice-option-score{display:inline-block;margin-top:5px;background:#e8edff;color:#3348aa;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800}.choice-option .inline-evidence-slot{background:#f8f9fc}.choice-option:not(.is-selected) .inline-evidence-slot{opacity:.62}.choice-option-note{font-size:11px;color:#687386;margin-top:6px}</style>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>️ Instrumen B - Penyelenggaraan Pemerintahan</h1>
-      <p>Kecamatan <%= kecamatan %> | Total Indikator: 43</p>
+<body><div class="container">
+  <header class="header"><h1>Instrumen B — Penyelenggaraan Urusan Pemerintahan Umum</h1><p>Kecamatan <%= kecamatan %> · 43 pertanyaan utama · 106 slot bukti resmi</p></header>
+  <%- include('_progress-summary', { progress }) %>
+  <%- include('_standards-panel', { standard }) %>
+  <%
+    const bQuestions = (typeof questionDefinitions !== 'undefined' && Array.isArray(questionDefinitions)) ? questionDefinitions : [];
+    const bQuestionByNumber = Object.fromEntries(bQuestions.map(question => [Number(question.number), question]));
+    const evidenceFor = (number, key) => {
+      const question = bQuestionByNumber[Number(number)] || { evidence: [] };
+      return (Array.isArray(question.evidence) ? question.evidence : []).filter(item => String(item.key) === String(key));
+    };
+    const officialEvidenceKeys = new Set(bQuestions.flatMap(question => question.evidence.map(item => String(item.key))));
+    const hasLegacyEvidence = key => (uploadedFiles || []).some(file => String(file.indicatorKey || file.indicator_key || '') === String(key));
+    const orphanedEvidenceFiles = (uploadedFiles || []).filter(file => !officialEvidenceKeys.has(String(file.indicatorKey || '')));
+    const bEvaluationLocked = typeof evaluationLocked !== 'undefined' ? Boolean(evaluationLocked) : false;
+    const currentStatus = data && data.upload_status ? data.upload_status : 'Belum';
+    const statusLabel = currentStatus === 'Sudah' ? 'Selesai' : currentStatus;
+  %>
+  <div class="status-card">
+    <div><strong>Status Instrumen B</strong> <%= statusLabel %></div>
+    <div class="status-grid">
+      <div class="status-metric">Isian terisi<b><%= progress.dataFilled %>/<%= progress.dataTotal %></b></div>
+      <div class="status-metric">Bukti terunggah<b><%= progress.evidenceFilled %>/<%= progress.evidenceTotal %></b></div>
+      <div class="status-metric">Bukti belum lengkap<b><%= missingEvidenceKeys.length %></b></div>
+      <div class="status-metric">Skor sistem<b><%= Number(data.total_score || 0).toFixed(2) %>/30</b></div>
     </div>
-      <!-- Tampilkan file yang sudah diupload -->
-<% if (data && data.upload_status === 'Sudah') { %>
-  <div class="uploaded-files" style="background: #d4edda; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #28a745;">
-    <h3 style="color: #155724; margin-bottom: 15px;">📎 File yang Sudah Diupload</h3>
-    <div id="fileList" style="color: #155724;">
-      <p>Memuat daftar file...</p>
-    </div>
+    <% if (saved && saveResult) { %>
+      <div style="margin-top:9px;font-size:12px;color:#166534">Data berhasil disimpan dengan status <strong><%= saveResult.status %></strong>.</div>
+    <% } %>
+    <% if (orphanedEvidenceFiles.length > 0) { %>
+      <div class="orphan-warning">
+        <strong><%= orphanedEvidenceFiles.length %> bukti lama masih memakai slot pertanyaan induk.</strong>
+        Bukti tersebut tetap disimpan, tetapi belum dianggap sebagai bukti subpertanyaan. Unggah ulang pada slot yang tepat di setiap pertanyaan.
+      </div>
+    <% } %>
   </div>
+  <div class="form-container"><form action="/assessment/instrument-b<%= kecamatan_id ? '?kecamatan_id='+kecamatan_id : '' %>" method="POST" enctype="multipart/form-data">
+    <%
+      const numberField = (name,label,unit='') => ({type:'number',name,label,unit});
+      const selectField = (name,label,options) => ({type:'select',name,label,options});
+      const sections = [
+        {n:1,title:'Pembinaan Persatuan dan Kesatuan Bangsa: peringatan hari-hari besar nasional di kecamatan',evidence:'Laporan hasil kegiatan dan foto kegiatan.',fields:[numberField('ind_1_jumlah','Jumlah pelaksanaan peringatan hari besar nasional','kali')]},
+        {n:2,title:'Pembinaan kerukunan antarsuku dan intrasuku, umat beragama, ras, dan golongan lainnya guna mewujudkan stabilitas keamanan lokal, regional, dan nasional',evidence:'Laporan hasil kegiatan, undangan, daftar hadir, dan foto kegiatan.',fields:[numberField('ind_2_jumlah','Jumlah dialog rutin Camat dengan tokoh masyarakat, tokoh adat, dan tokoh agama','kali')]},
 
-  <script>
-    // Load file list
-    const kecamatanId = '<%= typeof kecamatan_id !== "undefined" ? kecamatan_id : "" %>';
+        {n:4,title:'Koordinasi dengan perangkat daerah atau Kepolisian Negara Republik Indonesia terkait penerapan dan penegakan peraturan perundang-undangan',evidence:'Laporan kegiatan, undangan, daftar hadir, foto kegiatan, dan rekapitulasi rekomendasi yang ditindaklanjuti.',fields:[numberField('ind_4a_jumlah','Pertemuan koordinasi Camat, Kepolisian Negara Republik Indonesia (Polri), Tentara Nasional Indonesia (TNI), dan instansi vertikal','kali'),numberField('ind_4b_jumlah','Rekomendasi pertemuan yang ditindaklanjuti','kali')]},
+        {n:5,title:'Peningkatan efektivitas kegiatan pemerintahan di tingkat kecamatan',evidence:'Laporan kegiatan, undangan, daftar hadir, foto kegiatan, dan rekomendasi yang ditindaklanjuti.',fields:[numberField('ind_5_jumlah','Jumlah pertemuan rutin antara Camat dan aparatur kecamatan','kali')]},
+        {n:6,title:'Persentase permasalahan bidang ketenteraman dan ketertiban yang diselesaikan Camat pada tahun penilaian',evidence:'Rekapitulasi permasalahan, dokumentasi penyelesaian, dan rekomendasi penyelesaian.',fields:[numberField('ind_6_jumlah','Jumlah permasalahan bidang ketenteraman dan ketertiban yang diselesaikan','permasalahan')]},
+        {n:7,title:'Koordinasi upaya penyelenggaraan ketenteraman dan ketertiban umum',evidence:'Dokumen rekomendasi hasil penanganan kasus yang ditindaklanjuti.',fields:[numberField('ind_7a_jumlah','Kasus ketenteraman dan ketertiban umum yang dikoordinasikan dengan instansi berwenang','kasus'),numberField('ind_7b_jumlah','Kasus ketenteraman dan ketertiban umum yang dipantau penyelesaiannya oleh kecamatan','kasus')]},
+        {n:8,title:'Koordinasi dan sinergi perencanaan serta pelaksanaan kegiatan pemerintahan dengan perangkat daerah dan instansi vertikal terkait',evidence:'Dokumen rekomendasi hasil pertemuan yang ditindaklanjuti.',fields:[numberField('ind_8a_jumlah','Pertemuan koordinasi perencanaan kegiatan pemerintahan','kali'),numberField('ind_8b_jumlah','Laporan hasil koordinasi yang ditindaklanjuti','laporan')]},
+        {n:9,title:'Fasilitasi percepatan pencapaian Standar Pelayanan Minimal (SPM) di wilayah kecamatan',evidence:'Laporan kegiatan dan data ketercapaian Standar Pelayanan Minimal (SPM).',fields:[numberField('ind_9a_jumlah','Kegiatan fasilitasi percepatan pencapaian Standar Pelayanan Minimal (SPM)','kali'),numberField('ind_9b_jumlah','Target Standar Pelayanan Minimal (SPM) yang tercapai','pelayanan')]},
+        {n:10,title:'Fasilitasi kecamatan dalam rangka penanganan kebencanaan',evidence:'Keputusan Kecamatan Tangguh Bencana dan laporan kegiatan pengurangan risiko bencana.',fields:[selectField('ind_10a_status','Apakah Kecamatan Tangguh Bencana (KENCANA) sudah terbentuk?',[['sudah','Sudah'],['belum','Belum']]),selectField('ind_10b_status','Apakah ada kegiatan yang mendukung pengurangan risiko dan mitigasi bencana?',[['ada','Ada'],['tidak','Tidak']]),selectField('ind_10c_status','Apakah ada kolaborasi dengan pemangku kepentingan untuk peningkatan Standar Pelayanan Minimal (SPM) kebencanaan?',[['ada','Ada'],['tidak','Tidak']])]},
+        {n:11,title:'Peningkatan efektivitas pelaksanaan pelayanan kepada masyarakat di wilayah kecamatan',evidence:'Dokumen penyusunan standar pelayanan dan laporan dialog dengan masyarakat.',fields:[numberField('ind_11a_jumlah','Penyusunan standar pelayanan dengan melibatkan perwakilan masyarakat','dokumen'),numberField('ind_11b_jumlah','Dialog dengan masyarakat untuk memantau pelaksanaan standar pelayanan','kali')]},
+        {n:12,title:'Harmonisasi hubungan dengan tokoh agama dan tokoh masyarakat',evidence:'Laporan hasil kegiatan dan dokumentasi kegiatan.',fields:[numberField('ind_12a_jumlah','Fasilitasi pembentukan Forum Kerukunan Umat Beragama (FKUB) kecamatan','kali'),numberField('ind_12b_jumlah','Kehadiran Camat atau perangkat kecamatan dalam pertemuan Forum Kerukunan Umat Beragama (FKUB) atau dengan tokoh agama dan tokoh masyarakat','kali')]},
+        {n:13,title:'Koordinasi pemeliharaan prasarana dan sarana pelayanan umum',evidence:'Dokumentasi sarana, prasarana, fasilitas umum, dan fasilitas sosial serta laporan koordinasi.',fields:[numberField('ind_13a_jumlah','Sarana, prasarana, fasilitas umum, dan fasilitas sosial rusak atau membutuhkan pemeliharaan','unit atau buah'),numberField('ind_13b_jumlah','Sarana, prasarana, fasilitas umum, dan fasilitas sosial yang dikoordinasikan penanganannya','unit atau buah')]},
+        {n:14,title:'Persentase sarana, prasarana, fasilitas umum, dan fasilitas sosial di wilayah kecamatan yang diperbaiki',evidence:'Rekapitulasi dan dokumentasi sarana yang ditemukan rusak, diperbaiki, atau dipelihara.',fields:[numberField('ind_14a_jumlah','Sarana, fasilitas umum, dan fasilitas sosial yang ditemukan atau dilaporkan rusak','unit atau buah'),numberField('ind_14b_jumlah','Sarana, fasilitas umum, dan fasilitas sosial yang diperbaiki oleh dinas terkait','unit atau buah'),numberField('ind_14c_jumlah','Prasarana dan fasilitas pelayanan umum yang dipelihara dengan melibatkan pihak terkait','unit atau buah')]},
+        {n:15,title:'Pemberdayaan masyarakat desa dan kelurahan melalui koordinasi kegiatan pemberdayaan',evidence:'Laporan kegiatan, rekapitulasi usulan, dan dokumentasi kegiatan.',fields:[numberField('ind_15a_jumlah','Kegiatan pemberdayaan masyarakat desa yang dilaporkan','kegiatan'),numberField('ind_15b_jumlah','Kegiatan pemberdayaan masyarakat desa yang menunjukkan hasil sesuai rencana','kegiatan'),numberField('ind_15c_jumlah','Kehadiran perwakilan masyarakat dalam Forum Musyawarah Perencanaan Pembangunan (Musrenbang) Desa','kali'),numberField('ind_15d_jumlah','Usulan masyarakat yang diakomodasi sebagai hasil Musyawarah Perencanaan Pembangunan (Musrenbang) Desa','usulan kegiatan')]},
+        {n:16,title:'Fasilitasi, rekomendasi, koordinasi, pembinaan, dan pengawasan pemerintahan desa',evidence:'Rekapitulasi peraturan desa, nama desa, rancangan peraturan desa, serta dokumen laporan hasil evaluasi.',fields:[numberField('ind_16a1_jumlah','Desa yang menetapkan Peraturan Desa tentang kewenangan berdasarkan hak asal usul dan kewenangan lokal berskala desa','peraturan desa'),numberField('ind_16a2_jumlah','Desa yang menyusun Laporan Penyelenggaraan Pemerintahan Desa (LPPD Desa)','desa'),numberField('ind_16a3_jumlah','Rancangan Peraturan Desa yang ditetapkan sesuai ketentuan','rancangan peraturan desa'),numberField('ind_16b1_jumlah','Hasil evaluasi rancangan Peraturan Desa terkait Anggaran Pendapatan dan Belanja Desa (APB Desa)','laporan'),numberField('ind_16b2_jumlah','Hasil evaluasi pengelolaan keuangan desa dan aset desa','laporan'),numberField('ind_16b3_jumlah','Hasil evaluasi dokumen laporan pertanggungjawaban Anggaran Pendapatan dan Belanja Desa (APB Desa)','laporan')]},
+        {n:17,title:'Fasilitasi administrasi tata pemerintahan desa',evidence:'Rekapitulasi dokumen Profil Desa yang dimutakhirkan.',fields:[numberField('ind_17_jumlah','Desa yang memiliki Profil Desa dan memutakhirkannya secara berkala','desa')]},
+        {n:18,title:'Fasilitasi pengelolaan keuangan desa dan pendayagunaan aset desa',evidence:'Rekapitulasi data desa.',fields:[numberField('ind_18a_jumlah','Desa yang memiliki kinerja keuangan baik','desa'),numberField('ind_18b_jumlah','Desa yang melakukan penatausahaan aset desa','desa')]},
+        {n:19,title:'Fasilitasi penerapan dan penegakan peraturan perundang-undangan dan Peraturan Daerah',evidence:'Rekapitulasi data kasus.',fields:[numberField('ind_19a_jumlah','Kasus pelanggaran peraturan perundang-undangan yang dikoordinasikan pemerintah desa dengan instansi berwenang','kasus'),numberField('ind_19b_jumlah','Kasus pelanggaran peraturan perundang-undangan yang dipantau penyelesaiannya oleh pemerintah desa','kasus')]},
+        {n:20,title:'Fasilitasi pelaksanaan tugas kepala desa dan perangkat desa',evidence:'Rekapitulasi struktur organisasi, Musyawarah Perencanaan Pembangunan Desa, dokumen perencanaan, program pembinaan, dan program pemberdayaan masyarakat.',fields:[numberField('ind_20a_jumlah','Desa yang memiliki struktur organisasi dan tata kerja pemerintahan desa','desa'),numberField('ind_20b_jumlah','Desa yang melaksanakan Musyawarah Perencanaan Pembangunan (Musrenbang) Desa tepat waktu','desa'),numberField('ind_20c_jumlah','Desa yang memiliki dokumen perencanaan dan penganggaran desa','desa'),numberField('ind_20d_jumlah','Desa yang memiliki dan melaksanakan program pembinaan masyarakat desa','desa'),numberField('ind_20e_jumlah','Desa yang memiliki dan melaksanakan program pemberdayaan masyarakat desa','desa')]},
+        {n:21,title:'Fasilitasi penetapan lokasi pembangunan kawasan perdesaan',evidence:'Laporan hasil kegiatan dan dokumentasi kegiatan.',fields:[numberField('ind_21_jumlah','Pertemuan koordinasi desa, kecamatan, dan perangkat daerah dalam penetapan lokasi pembangunan kawasan perdesaan','kali')]},
+        {n:22,title:'Fasilitasi penyelenggaraan ketenteraman dan ketertiban umum',evidence:'Laporan hasil kegiatan dan dokumentasi kegiatan.',fields:[numberField('ind_22_jumlah','Sosialisasi dan bimbingan teknis kepada pemerintah desa mengenai penyelenggaraan ketenteraman dan ketertiban umum','kali')]},
+        {n:23,title:'Fasilitasi pelaksanaan tugas, fungsi, dan kewajiban lembaga kemasyarakatan',evidence:'Laporan, dokumentasi kegiatan, dan rekapitulasi lembaga kemasyarakatan.',fields:[numberField('ind_23a_jumlah','Sosialisasi atau bimbingan teknis kepada pemerintah desa mengenai penyelenggaraan ketenteraman dan ketertiban umum','kali'),numberField('ind_23b_jumlah','Lembaga kemasyarakatan yang aktif melaksanakan tugas dan fungsi','lembaga')]},
+        {n:24,title:'Fasilitasi penyusunan perencanaan pembangunan partisipatif',evidence:'Laporan, dokumentasi kegiatan, dan rekapitulasi data desa.',fields:[numberField('ind_24a_jumlah','Sosialisasi atau bimbingan teknis pedoman penyusunan perencanaan pembangunan partisipatif','kali'),numberField('ind_24b_jumlah','Desa yang melaksanakan perencanaan pembangunan partisipatif','desa')]},
+        {n:25,title:'Fasilitasi kerja sama antardesa dan kerja sama desa dengan pihak ketiga',evidence:'Laporan dan dokumentasi kegiatan.',fields:[numberField('ind_25a_jumlah','Fasilitasi kerja sama antardesa dan kerja sama desa dengan pihak ketiga','kali'),numberField('ind_25b_jumlah','Desa yang melakukan kerja sama antardesa atau dengan pihak ketiga','desa')]},
+      ];
+    %>
 
-fetch('/assessment/files/b?kecamatan_id=' + encodeURIComponent(kecamatanId))
-      .then(res => res.json())
-      .then(data => {
-        const fileList = document.getElementById('fileList');
-        if (data.files && data.files.length > 0) {
-          let html = '<ul style="list-style: none; padding: 0;">';
-          data.files.forEach(file => {
-            html += `
-              <li style="padding: 8px; background: white; margin-bottom: 5px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
-                <span>📄 ${file.fieldName.replace('ind_', 'Indikator ').replace('_file', '')}: <strong>${file.fileName}</strong></span>
-                <a href="${file.url}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">👁️ Lihat</a>
-              </li>
-            `;
-          });
-          html += '</ul>';
-          fileList.innerHTML = html;
-        } else {
-          fileList.innerHTML = '<p>Belum ada file yang diupload</p>';
-        }
-      })
-      .catch(err => {
-        document.getElementById('fileList').innerHTML = '<p>Error memuat file</p>';
+    <h2 class="section-title">Indikator 1–27</h2>
+    <% sections.filter(section => section.n <= 2).forEach(section => { %>
+      <section class="indicator"><h3><%= section.n %>. <%= section.title %></h3><div class="evidence-note"><strong>Bentuk data dukung:</strong> <%= section.evidence %></div><div class="fields">
+        <% section.fields.forEach(field => { %><div class="field"><label><%= field.label %></label>
+          <% if (field.type === 'select') { %><select name="<%= field.name %>"><option value="">Pilih...</option><% field.options.forEach(option => { %><option value="<%= option[0] %>" <%= data[field.name] === option[0] ? 'selected' : '' %>><%= option[1] %></option><% }) %></select>
+          <% } else { %><input type="number" min="0" <%= field.name.includes('persen') ? 'max="100" step="0.01"' : '' %> name="<%= field.name %>" value="<%= data[field.name] ?? '' %>"><% if (field.unit) { %><small>Satuan: <%= field.unit %></small><% } %><% } %>
+        </div><% }) %>
+      </div><%- include('_question-evidence', { question: bQuestionByNumber[section.n], uploadedFiles, evaluationLocked: bEvaluationLocked }) %></section>
+    <% }) %>
+
+    <section class="indicator" id="question-3">
+      <h3>3. Pelaksanaan tugas Forum Koordinasi Pimpinan di Kecamatan (Forkopimcam)</h3>
+      <div class="evidence-note"><strong>Bentuk data dukung:</strong> Laporan hasil kegiatan, undangan, daftar hadir, dan foto kegiatan.</div>
+      <%
+        const q3 = bQuestionByNumber[3] || { options: [] };
+        const legacyQ3 = Number(data.ind_3_jumlah);
+        const legacyQ3Choice = data.ind_3_pilihan || (
+          hasLegacyEvidence('ind_3') && Number.isFinite(legacyQ3)
+            ? (legacyQ3 >= 1 && legacyQ3 < 5 ? 'a' : legacyQ3 >= 6 && legacyQ3 <= 11 ? 'b' : legacyQ3 >= 12 && legacyQ3 <= 35 ? 'c' : legacyQ3 >= 36 && legacyQ3 <= 48 ? 'd' : '')
+            : ''
+        );
+      %>
+      <%- include('_choice-question', {
+        question: q3,
+        selectedChoice: legacyQ3Choice,
+        uploadedFiles,
+        evaluationLocked: bEvaluationLocked,
+        evidenceFor
+      }) %>
+    </section>
+
+    <% sections.filter(section => section.n >= 4 && section.n <= 25).forEach(section => { %>
+      <section class="indicator"><h3><%= section.n %>. <%= section.title %></h3><div class="evidence-note"><strong>Bentuk data dukung:</strong> <%= section.evidence %></div><div class="fields">
+        <% section.fields.forEach(field => { %><div class="field"><label><%= field.label %></label>
+          <% if (field.type === 'select') { %><select name="<%= field.name %>"><option value="">Pilih...</option><% field.options.forEach(option => { %><option value="<%= option[0] %>" <%= data[field.name] === option[0] ? 'selected' : '' %>><%= option[1] %></option><% }) %></select>
+          <% } else { %><input type="number" min="0" <%= field.name.includes('persen') ? 'max="100" step="0.01"' : '' %> name="<%= field.name %>" value="<%= data[field.name] ?? '' %>"><% if (field.unit) { %><small>Satuan: <%= field.unit %></small><% } %><% } %>
+        </div><% }) %>
+      </div><%- include('_question-evidence', { question: bQuestionByNumber[section.n], uploadedFiles, evaluationLocked: bEvaluationLocked }) %></section>
+    <% }) %>
+
+    <section class="indicator" id="question-26">
+      <h3>26. Fasilitasi penyusunan program dan pelaksanaan pemberdayaan masyarakat desa</h3>
+      <div class="evidence-note"><strong>Bentuk data dukung:</strong> Laporan kegiatan dan dokumentasi kegiatan.</div>
+      <div class="question-sequence">
+        <div class="subquestion-row" data-subquestion="26.a">
+          <div class="subquestion-main"><h4>26.a. Sosialisasi dan bimbingan teknis tentang penyusunan program dan pelaksanaan pemberdayaan masyarakat desa <span class="subquestion-weight">Standar 0,30</span></h4><div class="fields"><div class="field"><label>Status kegiatan</label><select name="ind_26a_status"><option value="">Pilih...</option><option value="ada" <%= data.ind_26a_status==='ada'?'selected':'' %>>Ada</option><option value="tidak" <%= data.ind_26a_status==='tidak'?'selected':'' %>>Tidak</option></select></div><div class="field"><label>Jumlah kegiatan</label><input type="number" min="0" name="ind_26a_jumlah" value="<%= data.ind_26a_jumlah ?? '' %>"><small>Satuan: kegiatan</small></div></div></div>
+          <div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[26], evidenceItems: evidenceFor(26, 'ind_26a'), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div>
+        </div>
+        <div class="subquestion-row" data-subquestion="26.b">
+          <div class="subquestion-main"><h4>26.b. Jumlah desa yang memiliki program dan telah melaksanakan program pemberdayaan masyarakat desa <span class="subquestion-weight">Standar 0,30</span></h4><div class="field"><label>Jumlah desa</label><input type="number" min="0" name="ind_26b_jumlah" value="<%= data.ind_26b_jumlah ?? '' %>"><small>Satuan: desa</small></div></div>
+          <div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[26], evidenceItems: evidenceFor(26, 'ind_26b'), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div>
+        </div>
+        <% const q26Rows = [
+          ['c','Koordinasi pendampingan desa di wilayahnya','ind_26c_status','ind_26c_jumlah','0,10'],
+          ['d','Koordinasi dengan perangkat daerah dalam rangka pendampingan desa di wilayahnya','ind_26d_status','ind_26d_jumlah','0,10'],
+          ['e','Koordinasi pelaksanaan pembangunan kawasan perdesaan di wilayah kecamatan','ind_26e_status','ind_26e_jumlah','0,10'],
+          ['f','Koordinasi dengan perangkat daerah dalam rangka pelaksanaan pembangunan kawasan perdesaan di wilayahnya','ind_26f_status','ind_26f_jumlah','0,10']
+        ]; %>
+        <% q26Rows.forEach(item => { %>
+          <div class="subquestion-row" data-subquestion="26.<%= item[0] %>">
+            <div class="subquestion-main"><h4>26.<%= item[0] %>. <%= item[1] %> <span class="subquestion-weight">Standar <%= item[4] %></span></h4><div class="fields"><div class="field"><label>Status kegiatan</label><select name="<%= item[2] %>"><option value="">Pilih...</option><option value="ada" <%= data[item[2]]==='ada'?'selected':'' %>>Ada</option><option value="tidak" <%= data[item[2]]==='tidak'?'selected':'' %>>Tidak</option></select></div><div class="field"><label>Jumlah kegiatan</label><input type="number" min="0" name="<%= item[3] %>" value="<%= data[item[3]] ?? '' %>"><small>Satuan: kegiatan</small></div></div></div>
+            <div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[26], evidenceItems: evidenceFor(26, 'ind_26'+item[0]), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+
+    <section class="indicator" id="question-27">
+      <h3>27. Jumlah koordinasi dan sinkronisasi perencanaan dengan perangkat daerah atau pemerintah desa</h3>
+      <div class="evidence-note"><strong>Bentuk data dukung:</strong> Rekapitulasi jumlah koordinasi dan sinkronisasi, salinan undangan, daftar hadir, notulensi, berita acara, atau resume hasil koordinasi.</div>
+      <%
+        const q27 = bQuestionByNumber[27] || { options: [] };
+        const legacyQ27 = Number(data.ind_27_jumlah);
+        const legacyQ27Choice = data.ind_27_pilihan || (
+          hasLegacyEvidence('ind_27') && Number.isFinite(legacyQ27)
+            ? (legacyQ27 >= 1 && legacyQ27 <= 4 ? 'b' : legacyQ27 >= 5 && legacyQ27 <= 8 ? 'c' : legacyQ27 >= 9 ? 'd' : '')
+            : ''
+        );
+      %>
+      <%- include('_choice-question', {
+        question: q27,
+        selectedChoice: legacyQ27Choice,
+        uploadedFiles,
+        evaluationLocked: bEvaluationLocked,
+        evidenceFor
+      }) %>
+    </section>
+
+    <h2 class="section-title">Indikator 28–40 — Data Pembilang, Penyebut, dan Klasifikasi</h2>
+    <%
+      const ratioSections = {
+        28:{title:'Persentase desa atau kelurahan yang telah menetapkan batas desa menggunakan koordinat Sistem Informasi Geografis (SIG) dan peta batas desa sesuai Peraturan Menteri Dalam Negeri Nomor 45 Tahun 2016',a:'Jumlah desa atau kelurahan yang telah menetapkan batas desa menggunakan koordinat SIG dan peta batas desa',b:'Jumlah desa atau kelurahan yang berada di wilayah kecamatan',evidence:'Peraturan Bupati atau Peraturan Wali Kota tentang penetapan dan penegasan batas desa.',max:1},
+        29:{title:'Persentase desa atau kelurahan yang melaksanakan pembaruan Profil Desa dan Kelurahan (Prodeskel) selama dua tahun berturut-turut',a:'Jumlah desa atau kelurahan yang melaksanakan pembaruan Prodeskel',b:'Jumlah desa atau kelurahan yang berada di wilayah kecamatan',evidence:'Tangkapan layar pembaruan Prodeskel pada Sistem Informasi Profil Desa dan Kelurahan.',max:1},
+        31:{title:'Persentase desa yang memiliki RPJM Desa atau RKP Desa sesuai Peraturan Menteri Dalam Negeri Nomor 114 Tahun 2014, atau Renstra bagi kelurahan',a:'Jumlah desa atau kelurahan yang memiliki RPJM Desa, RKP Desa, atau Renstra kelurahan',b:'Jumlah desa atau kelurahan yang berada di wilayah kecamatan',evidence:'Rekapitulasi data RPJM Desa, RKP Desa, dan Renstra kelurahan.',max:1},
+        32:{title:'Persentase desa yang menetapkan APB Desa tepat waktu dan sesuai Peraturan Menteri Dalam Negeri Nomor 20 Tahun 2018, atau Renja bagi kelurahan',a:'Jumlah desa yang menetapkan APB Desa atau Renja kelurahan tepat waktu',b:'Jumlah desa atau kelurahan yang berada di wilayah kecamatan',evidence:'Rekapitulasi APB Desa, SK pengesahan APB Desa, dan Renja kelurahan.',max:1},
+        34:{title:'Persentase desa yang telah menggunakan Sistem Keuangan Desa (Siskeudes) atau aplikasi sejenis bagi kelurahan',a:'Jumlah desa yang telah menggunakan Siskeudes atau aplikasi sejenis',b:'Jumlah desa atau kelurahan yang terdapat di wilayah kecamatan',evidence:'Laporan penggunaan dana desa atau kelurahan.',max:1},
+        35:{title:'Persentase desa atau kelurahan yang memiliki laman website dan media sosial lainnya',a:'Jumlah desa atau kelurahan yang memiliki laman website dan media sosial lainnya',b:'Jumlah desa atau kelurahan yang terdapat di wilayah kecamatan',evidence:'Alamat website, laman Facebook, WhatsApp, Twitter, atau media sosial lainnya.',max:1},
+        36:{title:'Persentase desa atau kelurahan yang mengembangkan kapasitas aparaturnya',a:'Jumlah desa atau kelurahan yang mengalokasikan anggaran pengembangan aparatur desa atau kelurahan',b:'Jumlah desa atau kelurahan yang terdapat di wilayah kecamatan',evidence:'Rekapitulasi Peraturan Desa pertanggungjawaban APB Desa atau RKA dan DPA kelurahan.',max:0.5},
+        37:{title:'Persentase desa atau kelurahan yang melaksanakan evaluasi diri sesuai Peraturan Menteri Dalam Negeri Nomor 81 Tahun 2015',a:'Jumlah desa atau kelurahan yang melaksanakan evaluasi diri',b:'Jumlah desa atau kelurahan yang terdapat di wilayah kecamatan',evidence:'Hasil rekapitulasi sesuai Lampiran II Peraturan Menteri Dalam Negeri Nomor 81 Tahun 2015.',max:0.5},
+        38:{title:'Persentase desa dengan kategori berkembang, maju, dan mandiri sesuai Peraturan Menteri Desa, Pembangunan Daerah Tertinggal, dan Transmigrasi Nomor 11 Tahun 2019',a:'Jumlah desa dengan kategori berkembang, maju, dan mandiri',b:'Jumlah desa atau kelurahan yang terdapat di wilayah kecamatan',evidence:'Rekapitulasi kategori desa.',max:0.5,fixed:true},
+        39:{title:'Persentase desa atau kelurahan yang memiliki Pos Pelayanan Terpadu strata Purnama dan Mandiri atau Multifungsi',a:'Jumlah desa atau kelurahan yang memiliki Pos Pelayanan Terpadu strata Purnama dan Mandiri atau Multifungsi',b:'Jumlah desa atau kelurahan yang terdapat di wilayah kecamatan',evidence:'Rekapitulasi Pos Pelayanan Terpadu per desa atau kelurahan.',max:0.5},
+        40:{title:'Persentase desa atau kelurahan yang melaksanakan program Padat Karya Tunai Desa atau program sejenis',a:'Jumlah desa atau kelurahan yang melaksanakan program Padat Karya Tunai Desa',b:'Jumlah desa atau kelurahan yang terdapat di wilayah kecamatan',evidence:'Rekapitulasi penggunaan dana desa atau kelurahan untuk Padat Karya Tunai Desa.',max:0.5}
+      };
+      const bumdesFields = [
+        ['a','Desa yang memiliki BUM Desa, BUEK, atau BUM Desa Bersama'],
+        ['b','Desa yang memiliki BUM Desa'],
+        ['c','Desa yang memiliki BUM Desa Bersama'],
+        ['d','BUM Desa Bersama hasil transformasi Lembaga Keuangan Desa (LKD)'],
+        ['e','BUM Desa dan BUM Desa Bersama yang telah berbadan hukum'],
+        ['f','Jumlah desa atau kelurahan di wilayah kecamatan']
+      ];
+    %>
+
+    <% for (let n = 28; n <= 40; n += 1) { %>
+      <% if (n === 30) { %>
+        <section class="indicator" id="question-30">
+          <h3>30. Persentase desa atau kelurahan dengan klasifikasi Swadaya, Swakarsa, dan Swasembada</h3>
+          <div class="evidence-note"><strong>Bentuk data dukung:</strong> Tangkapan layar klasifikasi desa pada Sistem Informasi Profil Desa dan Kelurahan.</div>
+          <div class="question-sequence">
+            <div class="subquestion-row"><div class="subquestion-main"><h4>30.a. Jumlah desa atau kelurahan dengan klasifikasi Swadaya, Swakarsa, dan Swasembada</h4><div class="field"><label>Jumlah desa atau kelurahan yang telah diklasifikasikan</label><input type="number" min="0" name="ind_30a_jumlah" value="<%= data.ind_30a_jumlah ?? '' %>" data-ratio-numerator="30"><small>Satuan: desa atau kelurahan</small></div></div><div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[30], evidenceItems: evidenceFor(30, 'ind_30a'), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div></div>
+            <div class="subquestion-row"><div class="subquestion-main"><h4>30.b. Jumlah desa atau kelurahan yang berada di wilayah kecamatan</h4><div class="field"><label>Jumlah seluruh desa atau kelurahan</label><input type="number" min="0" name="ind_30b_jumlah" value="<%= data.ind_30b_jumlah ?? '' %>" data-ratio-denominator="30"><small>Satuan: desa atau kelurahan</small></div></div><div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[30], evidenceItems: evidenceFor(30, 'ind_30b'), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div></div>
+          </div>
+          <div class="field" style="margin-top:10px"><label>Klasifikasi dengan persentase tertinggi</label><select name="ind_30_klasifikasi" data-classification-score="30"><option value="">Pilih...</option><option value="swasembada" <%= data.ind_30_klasifikasi==='swasembada'?'selected':'' %>>Swasembada — nilai 1,00</option><option value="swakarya" <%= data.ind_30_klasifikasi==='swakarya'?'selected':'' %>>Swakarya atau Swakarsa — nilai 0,75</option><option value="swadaya" <%= data.ind_30_klasifikasi==='swadaya'?'selected':'' %>>Swadaya — nilai 0,50</option></select></div>
+        </section>
+      <% } else if (n === 33) { %>
+        <section class="indicator" id="question-33">
+          <h3>33. Persentase desa yang memiliki Badan Usaha Milik Desa, Badan Usaha Ekonomi Kelurahan, atau Badan Usaha Milik Desa Bersama</h3>
+          <div class="evidence-note"><strong>Bentuk data dukung:</strong> Rekapitulasi Peraturan Desa tentang BUM Desa atau rekapitulasi BUEK atau nama lain bagi kelurahan.</div>
+          <div class="question-sequence">
+            <% const bumdesWeights = {a:'0,20',b:'0,10',c:'0,10',d:'0,10',e:'0,50',f:'0,00'}; %>
+            <% bumdesFields.forEach(item => { %>
+              <div class="subquestion-row"><div class="subquestion-main"><h4>33.<%= item[0] %>. <%= item[1] %> <span class="subquestion-weight">Standar <%= bumdesWeights[item[0]] %></span></h4><div class="field"><label>Jumlah</label><input type="number" min="0" name="ind_33<%= item[0] %>_jumlah" value="<%= data['ind_33'+item[0]+'_jumlah'] ?? '' %>"><small>Satuan: desa atau kelurahan</small></div></div><div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[33], evidenceItems: evidenceFor(33, 'ind_33'+item[0]), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div></div>
+            <% }) %>
+          </div>
+        </section>
+      <% } else { const item = ratioSections[n]; const pct = data['ind_'+n+'_persen']; %>
+        <section class="indicator" id="question-<%= n %>">
+          <h3><%= n %>. <%= item.title %></h3>
+          <div class="evidence-note"><strong>Bentuk data dukung:</strong> <%= item.evidence %></div>
+          <div class="question-sequence">
+            <div class="subquestion-row"><div class="subquestion-main"><h4><%= n %>.a. <%= item.a %></h4><div class="field"><label>Jumlah pada butir <%= n %>.a</label><input type="number" min="0" name="ind_<%= n %>a_jumlah" value="<%= data['ind_'+n+'a_jumlah'] ?? '' %>" data-ratio-numerator="<%= n %>"><small>Satuan: desa atau kelurahan</small></div></div><div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[n], evidenceItems: evidenceFor(n, 'ind_'+n+'a'), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div></div>
+            <div class="subquestion-row"><div class="subquestion-main"><h4><%= n %>.b. <%= item.b %></h4><div class="field"><label>Jumlah pada butir <%= n %>.b</label><input type="number" min="0" name="ind_<%= n %>b_jumlah" value="<%= data['ind_'+n+'b_jumlah'] ?? '' %>" data-ratio-denominator="<%= n %>"><small>Satuan: desa atau kelurahan</small></div></div><div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[n], evidenceItems: evidenceFor(n, 'ind_'+n+'b'), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div></div>
+          </div>
+          <% if (item.fixed) { %>
+            <div class="score-preview" id="score-preview-<%= n %>">Nilai butir 38.a: <strong>0,50</strong>.</div>
+          <% } else { %>
+            <div class="rubric-table" data-ratio-rubric="<%= n %>" data-max-score="<%= item.max %>">
+              <% if (item.max === 1) { %>
+                <div class="rubric-row" data-min="76" data-max="100"><span>a</span><span>76% sampai dengan 100%</span><span>1,00</span></div><div class="rubric-row" data-min="51" data-max="75.999"><span>b</span><span>51% sampai dengan 75%</span><span>0,75</span></div><div class="rubric-row" data-min="26" data-max="50.999"><span>c</span><span>26% sampai dengan 50%</span><span>0,50</span></div><div class="rubric-row" data-min="0" data-max="25.999"><span>d</span><span>0% sampai dengan 25%</span><span>0,25</span></div>
+              <% } else { %>
+                <div class="rubric-row" data-min="76" data-max="100"><span>a</span><span>76% sampai dengan 100%</span><span>0,50</span></div><div class="rubric-row" data-min="51" data-max="75.999"><span>b</span><span>51% sampai dengan 75%</span><span>0,40</span></div><div class="rubric-row" data-min="26" data-max="50.999"><span>c</span><span>26% sampai dengan 50%</span><span>0,30</span></div><div class="rubric-row" data-min="0" data-max="25.999"><span>d</span><span>0% sampai dengan 25%</span><span>0,20</span></div>
+              <% } %>
+            </div>
+            <% } %>
+        </section>
+      <% } %>
+    <% } %>
+
+    <%
+      const q41 = bQuestionByNumber[41] || { options: [] };
+      const sakipRaw = String(data.ind_41_nilai || '').toUpperCase();
+      const sakipLegacyChoice = ['A','AA','A-AA'].includes(sakipRaw) ? 'a' : (['B','BB','B-BB'].includes(sakipRaw) ? 'b' : (['C','CC','C-CC'].includes(sakipRaw) ? 'c' : (['D','DD','D-DD'].includes(sakipRaw) ? 'd' : '')));
+      const q41Choice = data.ind_41_pilihan || (hasLegacyEvidence('ind_41') ? sakipLegacyChoice : '');
+    %>
+    <section class="indicator" id="question-41">
+      <h3>41. Nilai Sistem Akuntabilitas Kinerja Instansi Pemerintah (SAKIP) Perangkat Daerah</h3>
+      <div class="evidence-note"><strong>Bentuk data dukung:</strong> Fotokopi piagam atau sertifikat SAKIP, atau laporan penilaian SAKIP kabupaten atau kota pada tahun penilaian.</div>
+      <%- include('_choice-question', {
+        question: q41,
+        selectedChoice: q41Choice,
+        uploadedFiles,
+        evaluationLocked: bEvaluationLocked,
+        evidenceFor
+      }) %>
+    </section>
+
+    <section class="indicator"><h3>42. Penyusunan laporan inventarisasi aset daerah</h3><div class="evidence-note"><strong>Bentuk data dukung:</strong> Fotokopi laporan inventarisasi aset perangkat daerah.</div><div class="field"><label>Apakah laporan inventarisasi aset daerah tersedia?</label><select name="ind_42_status"><option value="">Pilih...</option><option value="ada" <%= data.ind_42_status==='ada'?'selected':'' %>>Ada</option><option value="tidak" <%= data.ind_42_status==='tidak'?'selected':'' %>>Tidak</option></select></div>
+    <%- include('_question-evidence', { question: bQuestionByNumber[42], uploadedFiles, evaluationLocked: bEvaluationLocked }) %>
+    </section>
+
+    <section class="indicator" id="question-43">
+      <h3>43. Gambaran umum kerja sama kecamatan</h3>
+      <div class="evidence-note"><strong>Bentuk data dukung:</strong> Rekapitulasi kegiatan kerja sama, contoh naskah, data potensi, laporan pemetaan, dan laporan evaluasi.</div>
+      <div class="question-sequence">
+        <% const coopDocs=[
+          ['a','Apakah ada naskah kerja sama di kecamatan yang telah dilaksanakan, baik antarpemerintah, perguruan tinggi atau bidang pendidikan, maupun pihak ketiga?'],
+          ['b','Apakah ada kerja sama wilayah perbatasan dengan kecamatan berbatasan, baik dalam satu kabupaten maupun kabupaten atau provinsi berbatasan?']
+        ]; %>
+        <% coopDocs.forEach(item => { %>
+          <div class="subquestion-row">
+            <div class="subquestion-main">
+              <h4>43.<%= item[0] %>. <%= item[1] %></h4>
+              <div class="fields">
+                <div class="field"><label>Status</label><select name="ind_43<%= item[0] %>_status"><option value="">Pilih...</option><option value="ada" <%= data['ind_43'+item[0]+'_status']==='ada'?'selected':'' %>>Ada</option><option value="tidak" <%= data['ind_43'+item[0]+'_status']==='tidak'?'selected':'' %>>Tidak</option></select></div>
+                <div class="field"><label>Jumlah dokumen</label><input type="number" min="0" name="ind_43<%= item[0] %>_jumlah" value="<%= data['ind_43'+item[0]+'_jumlah'] ?? '' %>"><small>Satuan: dokumen</small></div>
+              </div>
+            </div>
+            <div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[43], evidenceItems: evidenceFor(43, 'ind_43'+item[0]), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div>
+          </div>
+        <% }) %>
+        <div class="subquestion-row">
+          <div class="subquestion-main"><h4>43.c. Sebutkan potensi kerja sama di kecamatan</h4><div class="field"><label>Sebutkan potensi kerja sama di kecamatan</label><textarea name="ind_43c_komentar" rows="6"><%= data.ind_43c_komentar ?? '' %></textarea></div></div>
+          <div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[43], evidenceItems: evidenceFor(43, 'ind_43c'), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div>
+        </div>
+        <div class="subquestion-row">
+          <div class="subquestion-main">
+            <h4>43.d. Apakah telah dilakukan pemetaan potensi kerja sama?</h4>
+            <div class="fields">
+              <div class="field"><label>Status</label><select name="ind_43d_status"><option value="">Pilih...</option><option value="ada" <%= data.ind_43d_status==='ada'?'selected':'' %>>Ada</option><option value="tidak" <%= data.ind_43d_status==='tidak'?'selected':'' %>>Tidak</option></select></div>
+              <div class="field"><label>Jumlah dokumen</label><input type="number" min="0" name="ind_43d_jumlah" value="<%= data.ind_43d_jumlah ?? '' %>"><small>Satuan: dokumen</small></div>
+            </div>
+          </div>
+          <div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[43], evidenceItems: evidenceFor(43, 'ind_43d'), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div>
+        </div>
+        <div class="subquestion-row">
+          <div class="subquestion-main"><h4>43.e. Apakah telah dilaksanakan evaluasi terhadap pelaksanaan kerja sama?</h4><div class="field"><label>Status evaluasi</label><select name="ind_43e_status"><option value="">Pilih...</option><option value="ya" <%= data.ind_43e_status==='ya'?'selected':'' %>>Ya</option><option value="tidak" <%= data.ind_43e_status==='tidak'?'selected':'' %>>Tidak</option></select></div></div>
+          <div class="subquestion-upload"><%- include('_question-evidence', { question: bQuestionByNumber[43], evidenceItems: evidenceFor(43, 'ind_43e'), uploadedFiles, evaluationLocked: bEvaluationLocked, compact: true, showTitle: false }) %></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="btn-group"><button class="btn draft" name="save_action" value="draft">💾 Simpan Draft</button><button class="btn primary" name="save_action" value="final">✅ Kirim Final</button><a class="btn secondary" href="/dashboard">Kembali</a></div>
+  </form></div>
+</div>
+<script>
+(function(){
+  const numberValue = element => {
+    if (!element || element.value === '') return null;
+    const value = Number(element.value);
+    return Number.isFinite(value) ? value : null;
+  };
+  const activateRubric = (table, value) => {
+    if (!table) return null;
+    let active = null;
+    table.querySelectorAll('.rubric-row').forEach(row => {
+      const min = Number(row.dataset.min);
+      const max = Number(row.dataset.max);
+      const match = value !== null && value >= min && value <= max;
+      row.classList.toggle('is-active', match);
+      if (match) active = row;
+    });
+    return active;
+  };
+  const updateCountRubric = number => {
+    const input = document.querySelector(`[data-count-rubric="${number}"]`);
+    const table = document.querySelector(`[data-rubric-table="${number}"]`);
+    activateRubric(table, numberValue(input));
+  };
+  const updateRatio = number => {
+    const numerator = document.querySelector(`[data-ratio-numerator="${number}"]`);
+    const denominator = document.querySelector(`[data-ratio-denominator="${number}"]`);
+    const top = numberValue(numerator);
+    const bottom = numberValue(denominator);
+    const pct = top !== null && bottom !== null && bottom > 0 ? Math.max(0, Math.min(100, top / bottom * 100)) : null;
+    activateRubric(document.querySelector(`[data-ratio-rubric="${number}"]`), pct);
+  };
+  const updateChoiceGroup = fieldName => {
+    const group = document.querySelector(`[data-choice-group="${fieldName}"]`);
+    if (!group) return;
+    const checked = group.querySelector(`input[name="${fieldName}"]:checked`);
+    group.querySelectorAll('[data-choice-option]').forEach(card => {
+      const selected = checked && card.dataset.choiceOption === checked.value;
+      card.classList.toggle('is-selected', Boolean(selected));
+      card.querySelectorAll('input[type="file"][name]').forEach(input => {
+        input.disabled = !selected;
       });
-  </script>
-<% } %>
-    <div class="form-container">
-      <form action="/assessment/aspect-b<%= kecamatan_id ? '?kecamatan_id=' + kecamatan_id : '' %>" method="POST" enctype="multipart/form-data">
-        
-        <!-- Indikator 1-2 -->
-        <div class="indicator-group">
-          <h4>1. Pembinaan Persatuan & Kesatuan Bangsa</h4>
-          <div class="form-row">
-            <label>Jumlah Peringatan Hari Besar Nasional</label>
-            <input type="number" name="ind_1_jumlah" min="0" value="<%= data.ind_1_jumlah || '' %>">
-          </div>
-        </div>
-
-        <div class="indicator-group">
-          <h4>2. Pembinaan Kerukunan Antarumat Beragama</h4>
-          <div class="form-row">
-            <label>Jumlah Dialog Rutin Camat dengan Tokoh Masyarakat/Agama</label>
-            <input type="number" name="ind_2_jumlah" min="0" value="<%= data.ind_2_jumlah || '' %>">
-          </div>
-        </div>
-
-        <!-- Indikator 3 -->
-        <div class="indicator-group">
-          <h4>3. Pelaksanaan Tugas Forkopimcam</h4>
-          <div class="form-row">
-            <label>Jumlah Rapat Forkopimcam</label>
-            <input type="number" name="ind_3_jumlah" min="0" value="<%= data.ind_3_jumlah || '' %>" placeholder="Masukkan angka total rapat">
-            <small>Sistem otomatis menghitung poin berdasarkan range: < 5, 6-11, 12-35, ≥ 36</small>
-          </div>
-        </div>
-
-        <!-- Indikator 4 -->
-        <div class="indicator-group">
-          <h4>4. Koordinasi Penegakan Perundang-undangan</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>4a. Jumlah pertemuan koordinasi (Camat, Polri, TNI)</label>
-              <input type="number" name="ind_4a_jumlah" min="0" value="<%= data.ind_4a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>4b. Rekomendasi pertemuan yang ditindaklanjuti</label>
-              <input type="number" name="ind_4b_jumlah" min="0" value="<%= data.ind_4b_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 5 -->
-        <div class="indicator-group">
-          <h4>5. Peningkatan Efektifitas Kegiatan Pemerintahan</h4>
-          <div class="form-row">
-            <label>Persentase Pertemuan Rutin Camat & Aparatur yang ditindaklanjuti</label>
-            <input type="number" name="ind_5_persen" min="0" max="100" step="0.01" value="<%= data.ind_5_persen || '' %>">
-          </div>
-        </div>
-
-        <!-- Indikator 6 -->
-        <div class="indicator-group">
-          <h4>6. Permasalahan Trantib yang Diselesaikan</h4>
-          <div class="form-row">
-            <label>Jumlah Permasalahan Trantib Tahun 2025</label>
-            <input type="number" name="ind_6_jumlah" min="0" value="<%= data.ind_6_jumlah || '' %>">
-          </div>
-        </div>
-
-        <!-- Indikator 7 -->
-        <div class="indicator-group">
-          <h4>7. Koordinasi Penyelenggaraan Trantibum</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>7a. Kasus trantibum dikoordinasikan dengan instansi berwenang</label>
-              <input type="number" name="ind_7a_jumlah" min="0" value="<%= data.ind_7a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>7b. Kasus trantibum dipantau penyelesaiannya</label>
-              <input type="number" name="ind_7b_jumlah" min="0" value="<%= data.ind_7b_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 8 -->
-        <div class="indicator-group">
-          <h4>8. Koordinasi/Sinergi Perencanaan</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>8a. Jumlah pertemuan koordinasi perencanaan</label>
-              <input type="number" name="ind_8a_jumlah" min="0" value="<%= data.ind_8a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>8b. Laporan hasil koordinasi yang ditindaklanjuti</label>
-              <input type="number" name="ind_8b_jumlah" min="0" value="<%= data.ind_8b_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 9 -->
-        <div class="indicator-group">
-          <h4>9. Fasilitasi Percepatan SPM</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>9a. Jumlah kegiatan fasilitasi SPM</label>
-              <input type="number" name="ind_9a_jumlah" min="0" value="<%= data.ind_9a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>9b. Target SPM yang tercapai</label>
-              <input type="number" name="ind_9b_jumlah" min="0" value="<%= data.ind_9b_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 10 -->
-        <div class="indicator-group">
-          <h4>10. Fasilitasi Penanganan Kebencanaan</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>10a. Ketersediaan KENCANA (Keputusan Kecamatan)</label>
-              <select name="ind_10a_status">
-                <option value="sudah" <%= data.ind_10a_status === 'sudah' ? 'selected' : '' %>>Sudah</option>
-                <option value="belum" <%= data.ind_10a_status === 'belum' ? 'selected' : '' %>>Belum</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <label>10b. Kegiatan Pengurangan Resiko Bencana</label>
-              <select name="ind_10b_status">
-                <option value="ada" <%= data.ind_10b_status === 'ada' ? 'selected' : '' %>>Ada</option>
-                <option value="tidak" <%= data.ind_10b_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <label>10c. Kolaborasi Stakeholder SPM Kebencanaan</label>
-              <select name="ind_10c_status">
-                <option value="ada" <%= data.ind_10c_status === 'ada' ? 'selected' : '' %>>Ada</option>
-                <option value="tidak" <%= data.ind_10c_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 11 -->
-        <div class="indicator-group">
-          <h4>11. Peningkatan Efektifitas Pelayanan Masyarakat</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>11a. Dokumen Standar Pelayanan dengan Masyarakat</label>
-              <input type="number" name="ind_11a_jumlah" min="0" value="<%= data.ind_11a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>11b. Dialog Monitoring Pelaksanaan Standar Pelayanan</label>
-              <input type="number" name="ind_11b_jumlah" min="0" value="<%= data.ind_11b_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 12 -->
-        <div class="indicator-group">
-          <h4>12. Harmonisasi Tokoh Agama & Masyarakat</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>12a. Fasilitasi FKUB Kecamatan</label>
-              <input type="number" name="ind_12a_jumlah" min="0" value="<%= data.ind_12a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>12b. Kehadiran Camat di Pertemuan FKUB</label>
-              <input type="number" name="ind_12b_jumlah" min="0" value="<%= data.ind_12b_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 13 -->
-        <div class="indicator-group">
-          <h4>13. Koordinasi Pemeliharaan Prasarana & Sarana Umum</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>13a. Sarana/Fasum/Fasos rusak dikoordinasikan</label>
-              <input type="number" name="ind_13a_jumlah" min="0" value="<%= data.ind_13a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>13b. Sarana/Fasum/Fasos rusak dipantau perbaikannya</label>
-              <input type="number" name="ind_13b_jumlah" min="0" value="<%= data.ind_13b_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 14 -->
-        <div class="indicator-group">
-          <h4>14. Persentase Sarana Prasarana Diperbaiki</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>14a. Jumlah ditemukan/dilaporkan rusak</label>
-              <input type="number" name="ind_14a_jumlah" min="0" value="<%= data.ind_14a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>14b. Jumlah diperbaiki oleh dinas terkait</label>
-              <input type="number" name="ind_14b_jumlah" min="0" value="<%= data.ind_14b_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>14c. Jumlah dipelihara dengan swasta</label>
-              <input type="number" name="ind_14c_jumlah" min="0" value="<%= data.ind_14c_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 15 -->
-        <div class="indicator-group">
-          <h4>15. Koordinasi Kegiatan Pemberdayaan Desa</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>15a. Kegiatan dilaporkan</label>
-              <input type="number" name="ind_15a_jumlah" min="0" value="<%= data.ind_15a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>15b. Kegiatan sesuai rencana</label>
-              <input type="number" name="ind_15b_jumlah" min="0" value="<%= data.ind_15b_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>15c. Kehadiran Forum Musrenbang</label>
-              <input type="number" name="ind_15c_jumlah" min="0" value="<%= data.ind_15c_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>15d. Usulan diakomodasi</label>
-              <input type="number" name="ind_15d_jumlah" min="0" value="<%= data.ind_15d_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 16 (Sangat Panjang, disederhanakan) -->
-        <div class="indicator-group">
-          <h4>16. Fasilitasi Pembinaan & Pengawasan Desa</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>16a1. Desa dengan Perdes Kewenangan Asli Usul</label>
-              <input type="number" name="ind_16a1_jumlah" min="0" value="<%= data.ind_16a1_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>16a2. Desa menyusun LPPD</label>
-              <input type="number" name="ind_16a2_jumlah" min="0" value="<%= data.ind_16a2_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>16a3. Raperdes ditetapkan sesuai ketentuan</label>
-              <input type="number" name="ind_16a3_jumlah" min="0" value="<%= data.ind_16a3_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>16b1. Evaluasi Rancangan Perdes APBDesa</label>
-              <input type="number" name="ind_16b1_jumlah" min="0" value="<%= data.ind_16b1_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>16b2. Evaluasi Pengelolaan Keuangan & Aset</label>
-              <input type="number" name="ind_16b2_jumlah" min="0" value="<%= data.ind_16b2_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>16b3. Evaluasi LPJ APBDesa</label>
-              <input type="number" name="ind_16b3_jumlah" min="0" value="<%= data.ind_16b3_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 17-26 (Ringkasan Input) -->
-        <div class="indicator-group">
-          <h4>17-26. Administrasi & Fasilitasi Desa Lainnya</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>17. Desa dengan Profil Dimutakhirkan</label>
-              <input type="number" name="ind_17_jumlah" min="0" value="<%= data.ind_17_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>18a. Desa Kinerja Keuangan Baik</label>
-              <input type="number" name="ind_18a_jumlah" min="0" value="<%= data.ind_18a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>18b. Desa Penatausahaan Aset</label>
-              <input type="number" name="ind_18b_jumlah" min="0" value="<%= data.ind_18b_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>19a. Kasus dikoordinasikan</label>
-              <input type="number" name="ind_19a_jumlah" min="0" value="<%= data.ind_19a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>19b. Kasus dipantau</label>
-              <input type="number" name="ind_19b_jumlah" min="0" value="<%= data.ind_19b_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>20a. Desa Struktur Organisasi</label>
-              <input type="number" name="ind_20a_jumlah" min="0" value="<%= data.ind_20a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>20b. Musrenbang Tepat Waktu</label>
-              <input type="number" name="ind_20b_jumlah" min="0" value="<%= data.ind_20b_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>20c. Dokumen Perencanaan Desa</label>
-              <input type="number" name="ind_20c_jumlah" min="0" value="<%= data.ind_20c_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>20d. Program Pembinaan Masyarakat</label>
-              <input type="number" name="ind_20d_jumlah" min="0" value="<%= data.ind_20d_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>20e. Program Pemberdayaan Masyarakat</label>
-              <input type="number" name="ind_20e_jumlah" min="0" value="<%= data.ind_20e_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>21. Pertemuan Kawasan Perdesaan</label>
-              <input type="number" name="ind_21_jumlah" min="0" value="<%= data.ind_21_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>22. Sosialisasi Trantibum Desa</label>
-              <input type="number" name="ind_22_jumlah" min="0" value="<%= data.ind_22_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>23a. Sosialisasi Lembaga Kemasyarakatan</label>
-              <input type="number" name="ind_23a_jumlah" min="0" value="<%= data.ind_23a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>23b. Lembaga Aktif</label>
-              <input type="number" name="ind_23b_jumlah" min="0" value="<%= data.ind_23b_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>24a. Sosialisasi Perencanaan Partisipatif</label>
-              <input type="number" name="ind_24a_jumlah" min="0" value="<%= data.ind_24a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>24b. Desa Perencanaan Partisipatif</label>
-              <input type="number" name="ind_24b_jumlah" min="0" value="<%= data.ind_24b_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>25a. Fasilitasi Kerja Sama Antar Desa</label>
-              <input type="number" name="ind_25a_jumlah" min="0" value="<%= data.ind_25a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>25b. Desa Kerja Sama Antar Desa</label>
-              <input type="number" name="ind_25b_jumlah" min="0" value="<%= data.ind_25b_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>26a. Sosialisasi Program Pemberdayaan</label>
-              <input type="number" name="ind_26a_jumlah" min="0" value="<%= data.ind_26a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>26b. Desa Program Pemberdayaan</label>
-              <input type="number" name="ind_26b_jumlah" min="0" value="<%= data.ind_26b_jumlah || '' %>">
-            </div>
-          </div>
-        </div>
-
-        <!-- Indikator 27-43 (Sisanya) -->
-        <div class="indicator-group">
-          <h4>27-43. Koordinasi, Prodeskel, BUMDes, dan Lainnya</h4>
-          <div class="sub-section">
-            <div class="form-row">
-              <label>27. Jumlah Koordinasi & Sinkronisasi Perencanaan</label>
-              <input type="number" name="ind_27_jumlah" min="0" value="<%= data.ind_27_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>28. % Desa Batas SIG (Input Persentase)</label>
-              <input type="number" name="ind_28_persen" min="0" max="100" value="<%= data.ind_28_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>29. % Desa Update Prodeskel</label>
-              <input type="number" name="ind_29_persen" min="0" max="100" value="<%= data.ind_29_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>30. % Klasifikasi Desa (Swasembada/Swakarsa/Swadaya)</label>
-              <input type="number" name="ind_30_persen" min="0" max="100" value="<%= data.ind_30_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>31. % Desa RPJMDesa/RKPDesa</label>
-              <input type="number" name="ind_31_persen" min="0" max="100" value="<%= data.ind_31_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>32. % Desa APBDesa Tepat Waktu</label>
-              <input type="number" name="ind_32_persen" min="0" max="100" value="<%= data.ind_32_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>33a. Desa BUMDes</label>
-              <input type="number" name="ind_33a_jumlah" min="0" value="<%= data.ind_33a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>33b. Desa BUMDesMa</label>
-              <input type="number" name="ind_33b_jumlah" min="0" value="<%= data.ind_33b_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>33c. Desa BUMDes Ma Hasil Transformasi</label>
-              <input type="number" name="ind_33c_jumlah" min="0" value="<%= data.ind_33c_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>33d. BUMDes Berbadan Hukum</label>
-              <input type="number" name="ind_33d_jumlah" min="0" value="<%= data.ind_33d_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>34. % Desa SISKEUDES</label>
-              <input type="number" name="ind_34_persen" min="0" max="100" value="<%= data.ind_34_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>35. % Desa Website/Medsos</label>
-              <input type="number" name="ind_35_persen" min="0" max="100" value="<%= data.ind_35_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>36. % Desa Anggaran Pengembangan Aparatur</label>
-              <input type="number" name="ind_36_persen" min="0" max="100" value="<%= data.ind_36_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>37. % Desa Evaluasi Diri</label>
-              <input type="number" name="ind_37_persen" min="0" max="100" value="<%= data.ind_37_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>38a. Desa Berkembang/Maju/Mandiri</label>
-              <input type="number" name="ind_38a_jumlah" min="0" value="<%= data.ind_38a_jumlah || '' %>">
-            </div>
-            <div class="form-row">
-              <label>39. % Posyandu Purnama/Mandiri</label>
-              <input type="number" name="ind_39_persen" min="0" max="100" value="<%= data.ind_39_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>40. % Padat Karya Tunai</label>
-              <input type="number" name="ind_40_persen" min="0" max="100" value="<%= data.ind_40_persen || '' %>">
-            </div>
-            <div class="form-row">
-              <label>41. Nilai SAKIP (Pilih)</label>
-              <select name="ind_41_nilai">
-                <option value="A" <%= data.ind_41_nilai === 'A' ? 'selected' : '' %>>A</option>
-                <option value="B" <%= data.ind_41_nilai === 'B' ? 'selected' : '' %>>B</option>
-                <option value="C" <%= data.ind_41_nilai === 'C' ? 'selected' : '' %>>C</option>
-                <option value="D" <%= data.ind_41_nilai === 'D' ? 'selected' : '' %>>D</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <label>42. Inventarisasi Aset</label>
-              <select name="ind_42_status">
-                <option value="ada" <%= data.ind_42_status === 'ada' ? 'selected' : '' %>>Ada</option>
-                <option value="tidak" <%= data.ind_42_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <label>43. Gambaran Umum Kerjasama</label>
-              <select name="ind_43_status">
-                <option value="ada" <%= data.ind_43_status === 'ada' ? 'selected' : '' %>>Ada</option>
-                <option value="tidak" <%= data.ind_43_status === 'tidak' ? 'selected' : '' %>>Tidak</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="btn-group">
-          <button type="submit" class="btn btn-primary">💾 Simpan Data Instrumen B</button>
-          <a href="/dashboard" class="btn btn-secondary">← Kembali</a>
-        </div>
-      </form>
-    </div>
-  </div>
-</body>
-</html>
+    });
+  };
+  document.querySelectorAll('[data-choice-group]').forEach(group => {
+    const fieldName = group.dataset.choiceGroup;
+    group.querySelectorAll(`input[name="${fieldName}"]`).forEach(input => {
+      input.addEventListener('change', () => updateChoiceGroup(fieldName));
+    });
+    updateChoiceGroup(fieldName);
+  });
+  [28,29,30,31,32,34,35,36,37,38,39,40].forEach(number => {
+    document.querySelectorAll(`[data-ratio-numerator="${number}"],[data-ratio-denominator="${number}"]`).forEach(input => input.addEventListener('input', () => updateRatio(number)));
+    updateRatio(number);
+  });
+})();
+</script>
+</body></html>

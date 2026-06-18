@@ -1,0 +1,57 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="800" y1="0" x2="800" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#164E3A"/>
+      <stop offset=".52" stop-color="#0D3B2D"/>
+      <stop offset="1" stop-color="#06271E"/>
+    </linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F8DF9B" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#C99A3D" stop-opacity=".12"/>
+    </linearGradient>
+    <linearGradient id="hillA" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2B7656"/>
+      <stop offset="1" stop-color="#164D3A"/>
+    </linearGradient>
+    <linearGradient id="hillB" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#184B38"/>
+      <stop offset="1" stop-color="#092D23"/>
+    </linearGradient>
+    <pattern id="motif" width="96" height="96" patternUnits="userSpaceOnUse">
+      <path d="M48 8 88 48 48 88 8 48 48 8Z" stroke="#E9C56F" stroke-opacity=".09" stroke-width="2"/>
+      <path d="m48 26 22 22-22 22-22-22 22-22Z" stroke="#E9C56F" stroke-opacity=".07"/>
+      <circle cx="48" cy="48" r="5" fill="#E9C56F" fill-opacity=".07"/>
+    </pattern>
+    <filter id="blur" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="50"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <rect width="1600" height="1000" fill="url(#motif)"/>
+  <circle cx="335" cy="235" r="160" fill="url(#sun)" filter="url(#blur)" opacity=".58"/>
+  <circle cx="335" cy="235" r="82" fill="#F2D688" opacity=".84"/>
+
+  <path d="M0 540C175 425 314 432 480 534c166 102 313 60 480-22 167-83 327-61 640 91v397H0V540Z" fill="#2D7255" opacity=".76"/>
+  <path d="M0 653c188-119 348-87 535 7 188 95 317 27 487-45 169-72 337-53 578 67v318H0V653Z" fill="url(#hillA)"/>
+  <path d="M0 778c227-87 383-49 565 22 183 71 350 27 503-25 154-52 324-44 532 55v170H0V778Z" fill="url(#hillB)"/>
+
+  <!-- Stylized Lingga monument silhouette -->
+  <g transform="translate(255 355)">
+    <path d="M47 356h226l24 49H23l24-49Z" fill="#E9C56F" opacity=".28"/>
+    <path d="M71 326h178l24 30H47l24-30Z" fill="#E9C56F" opacity=".42"/>
+    <path d="M85 295h150l14 31H71l14-31Z" fill="#F5D986" opacity=".78"/>
+    <path d="M104 83h112l13 212H91l13-212Z" fill="#F3E5B9"/>
+    <path d="m96 83 64-67 64 67H96Z" fill="#D5AB4F"/>
+    <path d="M125 112h70v142h-70V112Z" fill="#164736"/>
+    <path d="M143 131h34v104h-34V131Z" fill="#E1C270" opacity=".9"/>
+    <path d="M112 270h96v25h-96v-25Z" fill="#B48A39"/>
+    <circle cx="160" cy="76" r="13" fill="#F5D986"/>
+  </g>
+
+  <g opacity=".56" fill="#E7C66F">
+    <circle cx="111" cy="690" r="4"/><circle cx="143" cy="668" r="3"/>
+    <circle cx="511" cy="717" r="4"/><circle cx="549" cy="696" r="3"/>
+    <circle cx="755" cy="654" r="3"/><circle cx="802" cy="675" r="4"/>
+  </g>
+</svg>

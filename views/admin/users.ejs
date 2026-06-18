@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Manajemen Evaluator - SIESELON</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial;background:#f4f6fb;color:#273142}
+    .nav{background:linear-gradient(135deg,#5d73df,#7047a5);color:#fff;padding:14px 24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .nav a{color:#fff;text-decoration:none;background:rgba(255,255,255,.18);padding:8px 12px;border-radius:7px}
+    .container{max-width:1300px;margin:28px auto;padding:0 18px}.card{background:#fff;padding:24px;border-radius:13px;box-shadow:0 3px 14px rgba(25,42,70,.08);margin-bottom:22px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.field{margin-bottom:14px}label{display:block;font-weight:700;margin-bottom:6px}
+    input{width:100%;padding:10px;border:1px solid #ccd3df;border-radius:7px}.regions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:12px;background:#f7f8fc;border-radius:9px}
+    .regions label{font-weight:500;margin:0}.regions input{width:auto;margin-right:6px}.btn{border:0;border-radius:7px;padding:9px 13px;color:#fff;background:#5d73df;cursor:pointer;font-weight:700}
+    .danger{background:#dc3545}.secondary{background:#687386}.message{padding:12px;border-radius:8px;margin-bottom:16px}.success{background:#d7f2df;color:#166534}.error{background:#f9d9df;color:#922b3e}
+    .admin{border:1px solid #e1e5ed;border-radius:10px;padding:18px;margin-top:15px}.admin h3{margin:0 0 6px}.muted{color:#687386;font-size:13px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    @media(max-width:800px){.grid{grid-template-columns:1fr}.regions{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <div class="nav"><strong>👥 Manajemen Evaluator dan Wilayah Kerja</strong><div><a href="/dashboard">Dashboard</a> <a href="/logout">Keluar</a></div></div>
+  <main class="container">
+    <% if(success){%><div class="message success"><%= success %></div><%}%>
+    <% if(error){%><div class="message error"><%= error %></div><%}%>
+    <section class="card">
+      <h2>Buat Akun Evaluator</h2>
+      <p class="muted">Evaluator hanya dapat melihat, memverifikasi, menilai, dan memfinalisasi kecamatan yang dipilih.</p>
+      <form method="POST" action="/admin/users">
+        <div class="grid">
+          <div class="field"><label>Nama evaluator</label><input name="nama" required></div>
+          <div class="field"><label>Username</label><input name="username" pattern="[a-zA-Z0-9._-]{4,40}" required></div>
+          <div class="field"><label>Password awal</label><input type="password" name="password" minlength="6" required></div>
+          <div class="field"><label>Email</label><input type="email" name="email"></div>
+        </div>
+        <label>Wilayah kecamatan</label>
+        <div class="regions"><% kecamatans.forEach(k=>{%><label><input type="checkbox" name="kecamatan_ids" value="<%= k.id %>"><%= k.nama %></label><%})%></div>
+        <p style="margin-top:14px"><button class="btn">Buat Evaluator</button></p>
+      </form>
+    </section>
+    <section class="card">
+      <h2>Daftar Evaluator</h2>
+      <% if(!admins.length){%><p>Belum ada akun evaluator.</p><%}%>
+      <% admins.forEach(admin=>{ const assigned=(assignmentMap[admin.id]||[]).map(x=>Number(x.kecamatan_id)); %>
+        <article class="admin">
+          <h3><%= admin.nama %> <span class="muted">(@<%= admin.username %>)</span></h3>
+          <p class="muted">Wilayah aktif: <%= (assignmentMap[admin.id]||[]).map(x=>x.kecamatan).join(', ') || 'Belum ditentukan' %></p>
+          <form method="POST" action="/admin/users/<%= admin.id %>/assignments">
+            <div class="regions"><% kecamatans.forEach(k=>{%><label><input type="checkbox" name="kecamatan_ids" value="<%= k.id %>" <%= assigned.includes(Number(k.id))?'checked':'' %>><%= k.nama %></label><%})%></div>
+            <div class="actions"><button class="btn">Simpan Wilayah</button></div>
+          </form>
+          <div class="actions">
+            <form method="POST" action="/admin/users/<%= admin.id %>/password"><input type="password" name="password" minlength="6" placeholder="Password baru" required style="width:210px"><button class="btn secondary">Reset Password</button></form>
+            <form method="POST" action="/admin/users/<%= admin.id %>/delete" onsubmit="return confirm('Hapus akun evaluator ini?')"><button class="btn danger">Hapus Akun</button></form>
+          </div>
+        </article>
+      <%})%>
+    </section>
+  </main>
+</body>
+</html>

@@ -89,8 +89,8 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1> Ranking Penilaian Sinergitas Kinerja Kecamatan</h1>
-      <p>Kabupaten Sumedang - Tahun Anggaran 2025</p>
+      <h1> Peringkat Resmi Evaluasi Sinergitas Kinerja Kecamatan</h1>
+      <p>Kabupaten Sumedang — Kegiatan Tahun 2026</p>
     </div>
 
     <div class="ranking-table">
@@ -99,19 +99,22 @@
           <tr>
             <th>Ranking</th>
             <th>Kecamatan</th>
-            <th>Aspek A</th>
-            <th>Aspek B</th>
-            <th>Aspek C</th>
-            <th>Aspek D</th>
-            <th>Aspek E</th>
-            <th>Aspek F</th>
+            <th>Instrumen A</th>
+            <th>Instrumen B</th>
+            <th>Instrumen C</th>
+            <th>Instrumen D</th>
+            <th>Instrumen E</th>
+            <th>Instrumen F</th>
             <th>Total Skor</th>
             <th>Persentase</th>
             <th>Kategori</th>
           </tr>
         </thead>
         <tbody>
-          <% rankings.forEach((item, index) => { %>
+          <% if (!rankings || rankings.length === 0) { %>
+            <tr><td colspan="11" style="text-align:center;padding:28px;color:#666;">Belum ada hasil evaluasi yang difinalkan. Peringkat resmi akan muncul setelah seluruh Instrumen A–F terverifikasi.</td></tr>
+          <% } %>
+          <% (rankings || []).forEach((item, index) => { %>
             <tr class="<%= index < 3 ? 'rank-' + (index + 1) : '' %>">
               <td><strong><%= item.ranking %></strong></td>
               <td><strong><%= item.kecamatan %></strong></td>
@@ -124,7 +127,7 @@
               <td><strong><%= item.totalScore %>/<%= item.maxScore %></strong></td>
               <td><%= item.percentage %>%</td>
               <td>
-                <span class="score-badge category-<%= item.category.toLowerCase().replace(' ', '-') %>">
+                <span class="score-badge category-<%= item.category.toLowerCase().replace(/\s+/g, '-') %>">
                   <%= item.category %>
                 </span>
               </td>
@@ -136,7 +139,7 @@
 
     <div class="btn-group">
       <a href="/dashboard" class="btn">← Kembali ke Dashboard</a>
-      <a href="/ranking" class="btn" onclick="window.print()">🖨️ Cetak Ranking</a>
+      <a href="javascript:window.print()" class="btn">🖨️ Cetak Peringkat</a>
     </div>
   </div>
 </body>
