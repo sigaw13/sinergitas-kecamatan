@@ -7,6 +7,15 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const read = relativePath => fs.readFileSync(path.join(root, relativePath), 'utf8');
 
+const packageLock = JSON.parse(read('package-lock.json'));
+for (const [packagePath, metadata] of Object.entries(packageLock.packages || {})) {
+  if (!packagePath) continue;
+  assert.ok(
+    typeof metadata.version === 'string' && metadata.version.trim(),
+    `Package lock wajib memiliki versi valid: ${packagePath}`
+  );
+}
+
 const appSource = read('app.js');
 assert.ok(appSource.includes("app.get('/health'"), 'Endpoint /health wajib tersedia.');
 assert.ok(appSource.includes("app.set('trust proxy', 1)"), 'Trust proxy produksi wajib aktif.');

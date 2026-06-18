@@ -1,6 +1,6 @@
 {
   "name": "form-penilaian-sieselon",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "private": true,
   "description": "Sistem Informasi Evaluasi Sinergitas Kinerja dan Laporan Kecamatan Kabupaten Sumedang",
   "main": "app.js",
