@@ -1,0 +1,15 @@
+Salin seluruh isi folder ini ke folder sinergitas-kecamatan-update dan pilih Replace.
+
+Kemudian jalankan:
+cd /d "%USERPROFILE%\Documents\sinergitas-kecamatan-update"
+git add routes/admin.js views/admin/settings.ejs package.json package-lock.json tests/reset-trial-data.test.js tests/deployment.test.js
+git commit -m "feat: add safe trial data reset"
+git push origin main
+
+Setelah Railway sukses deploy:
+1. Login sebagai superadmin.
+2. Buka Pengaturan Admin.
+3. Turun ke Reset Data Uji Coba.
+4. Klik Hapus Seluruh Data Uji Coba.
+5. Ketik HAPUS DATA UJI COBA.
+6. Konfirmasi sekali lagi.
