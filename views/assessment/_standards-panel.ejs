@@ -20,20 +20,5 @@
     .standard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px;margin-top:10px}
     .standard-item{background:#f6f8fc;border:1px solid #e1e6ef;border-radius:7px;padding:8px;font-size:11px;color:#3f4a5d;display:flex;justify-content:space-between;gap:8px}
     .standard-item b{color:#145c44}
-  </style>
-  <section class="standard-panel" aria-label="Standar nilai instrumen">
-    <div class="standard-head">
-      <strong>Standar nilai resmi Instrumen <%= activeStandard.code %></strong>
-      <span class="standard-total">Maksimum <%= formatWeight(activeStandard.maxScore) %></span>
-    </div>
-    <div class="standard-rule">Nilai otomatis mengikuti workbook 2026. Setiap bukti dukung aktif memberi nilai sebesar bobot indikator terkait. Indikator tanpa bukti aktif bernilai 0.</div>
-    <details>
-      <summary>Lihat bobot setiap data dukung</summary>
-      <div class="standard-grid">
-        <% Object.entries(activeStandard.evidenceWeights || {}).forEach(([key, value]) => { %>
-          <div class="standard-item"><span>Indikator <%= labelKey(key) %></span><b><%= formatWeight(value) %></b></div>
-        <% }) %>
-      </div>
-    </details>
-  </section>
+  </style>  
 <% } %>
