@@ -15,3 +15,5 @@ yarn-error.log*
 workbook-pdf/
 wado.txt
 coverage/
+.vs/ 
+tests.zip 
