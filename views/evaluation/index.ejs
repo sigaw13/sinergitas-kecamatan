@@ -11,8 +11,13 @@
 <body>
   <nav class="nav"><strong>✅ Verifikasi dan Finalisasi Penilaian Sinergitas Kinerja Kecamatan</strong><div><a href="/dashboard">Dashboard</a><a href="/ranking">Peringkat Resmi</a><a href="javascript:window.print()">Cetak</a></div></nav>
   <main class="container">
-    <% if (success) { %><div class="message success"><%= success %></div><% } %>
-    <% if (error) { %><div class="message error"><%= error %></div><% } %>
+    <%
+  const safeSuccess = typeof success !== 'undefined' ? success : null;
+  const safeError = typeof error !== 'undefined' ? error : null;
+%>
+
+<% if (safeSuccess) { %><div class="message success"><%= safeSuccess %></div><% } %>
+<% if (safeError) { %><div class="message error"><%= safeError %></div><% } %>
     <section class="card">
       <h1>Verifikasi dan Finalisasi Evaluasi Kinerja</h1>
       <p class="muted">Skor dihitung otomatis dari bukti dukung aktif menggunakan standar nilai workbook 2026. Administrator memverifikasi keabsahan data dan bukti dukung setiap instrumen. Kecamatan hanya masuk ke peringkat resmi setelah seluruh Instrumen A–F terverifikasi dan hasil difinalkan.</p>

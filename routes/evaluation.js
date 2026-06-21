@@ -299,12 +299,14 @@ router.get('/', ensureAuthenticated, isAdmin, async (req, res) => {
     const activeStandard = getActiveStandard(req);
 
     res.render('evaluation/index', {
-      evaluations,
-      username: req.session.username,
-      userRole,
-      activeStandard,
-      canViewStandards: userRole === 'superadmin' && Boolean(activeStandard)
-    });
+  evaluations,
+  username: req.session.username,
+  success: req.query.success || null,
+  error: req.query.error || null,
+  userRole,
+  activeStandard,
+  canViewStandards: userRole === 'superadmin' && Boolean(activeStandard)
+});
 
   } catch (error) {
     console.error(error);
