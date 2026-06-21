@@ -23,9 +23,13 @@
       <div class="header-grid">
         <div class="metric">Kecamatan<strong><%= evaluation.nama %></strong><small>Pengelola <%= evaluation.nama_pengelola || '-' %></small></div>
         <div class="metric">Progres Pengisian<strong><%= evaluation.progress.overall.percent %>%</strong><small><%= evaluation.progress.overall.completed %>/<%= evaluation.progress.overall.total %> unsur</small></div>
-        <% if (showStandards) { %>
-          <div class="metric">Nilai Sistem Sementara<strong><%= Number(evaluation.scoring.totalScore || 0).toFixed(2) %></strong><small>dari <%= evaluation.scoring.maxScore %></small></div>
-        <% } %>
+        <div class="metric">
+  Nilai Sistem Sementara
+  <strong>
+    <%= Number(evaluation.scoring.totalScore || 0).toFixed(2) %><% if (showStandards) { %>/<%= evaluation.scoring.maxScore %><% } %>
+  </strong>
+  <small>hasil otomatis dari jawaban dan bukti dukung</small>
+</div>
         <div class="metric">Hasil Penilaian Admin<strong><%= Number(evaluation.reviewedScoring.totalScore || 0).toFixed(2) %></strong><small><%= evaluation.reviewedScoring.category %></small></div>
       </div>
     </section>
@@ -56,9 +60,12 @@
             <div class="mini">Isian<strong><%= progress.dataFilled %>/<%= progress.dataTotal %></strong></div>
             <div class="mini">Bukti tersimpan<strong><%= files.length %></strong></div>
             <div class="mini">Slot bukti resmi<strong><%= matrix.evidenceFilled %>/<%= matrix.evidenceTotal %></strong></div>
-            <% if (showStandards) { %>
-              <div class="mini">Nilai sistem<strong><%= Number(matrix.automaticTotal || 0).toFixed(2) %>/<%= matrix.maxScore %></strong></div>
-            <% } %>
+            <div class="mini">
+  Nilai sistem
+  <strong>
+    <%= Number(matrix.automaticTotal || 0).toFixed(2) %><% if (showStandards) { %>/<%= matrix.maxScore %><% } %>
+  </strong>
+</div>
             <div class="mini">Nilai admin<strong class="instrument-total-display"><%= Number(matrix.awardedTotal || 0).toFixed(2) %><% if (showStandards) { %>/<%= matrix.maxScore %><% } %></strong></div>
           </div>
 
@@ -79,11 +86,11 @@
                     <th style="width:260px">Jawaban Kecamatan</th>
                     <th style="width:330px">Data Dukung</th>
                     <% if (showStandards) { %>
-                      <th style="width:105px">Standar Nilai</th>
-                      <th style="width:105px">Nilai Sistem</th>
-                    <% } %>
-                    <th style="width:135px">Hasil Penilaian</th>
-                    <th style="width:220px">Catatan Per Pertanyaan</th>
+  <th style="width:105px">Standar Nilai</th>
+<% } %>
+<th style="width:105px">Nilai Sistem</th>
+<th style="width:125px">Hasil Penilaian</th>
+<th style="width:190px">Catatan Per Pertanyaan</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -117,9 +124,22 @@
                         </div>
                       </td>
                       <% if (showStandards) { %>
-                        <td><div class="standard-value"><%= Number(question.maxScore || 0).toFixed(2) %></div><div class="rubric"><% if((question.rubricValues || []).length){ %>Rubrik Excel <%= question.rubricValues.map(value => Number(value).toFixed(2)).join(' · ') %><% } else { %>Nilai maksimum pertanyaan<% } %></div></td>
-                        <td><div class="system-score"><%= Number(question.automaticScore || 0).toFixed(2) %></div><small class="muted">usulan sistem</small></td>
-                      <% } %>
+  <td>
+    <div class="standard-value"><%= Number(question.maxScore || 0).toFixed(2) %></div>
+    <div class="rubric">
+      <% if((question.rubricValues || []).length){ %>
+        Rubrik Excel <%= question.rubricValues.map(value => Number(value).toFixed(2)).join(' · ') %>
+      <% } else { %>
+        Nilai maksimum pertanyaan
+      <% } %>
+    </div>
+  </td>
+<% } %>
+
+<td>
+  <div class="system-score"><%= Number(question.automaticScore || 0).toFixed(2) %></div>
+  <small class="muted">usulan sistem</small>
+</td>
                       <td>
                         <select class="score-select" name="score_<%= question.key %>" data-score required>
                           <% optionValues.forEach(value => { %><option value="<%= Number(value).toFixed(2) %>" <%= Math.abs(Number(value)-selectedValue)<0.001 ? 'selected' : '' %>><%= Number(value).toFixed(2) %></option><% }) %>
@@ -132,12 +152,12 @@
                 <tfoot>
                   <tr class="score-total-row">
                     <td colspan="4">Jumlah Nilai Instrumen <%= code %></td>
-                    <% if (showStandards) { %>
-                      <td><%= Number(matrix.maxScore || 0).toFixed(2) %></td>
-                      <td><%= Number(matrix.automaticTotal || 0).toFixed(2) %></td>
-                    <% } %>
-                    <td><span class="instrument-total"><%= Number(matrix.awardedTotal || 0).toFixed(2) %></span></td>
-                    <td><%= showStandards ? 'Nilai tidak dapat melebihi maksimum instrumen' : 'Nilai mengikuti validasi server' %></td>
+<% if (showStandards) { %>
+  <td><%= Number(matrix.maxScore || 0).toFixed(2) %></td>
+<% } %>
+<td><%= Number(matrix.automaticTotal || 0).toFixed(2) %></td>
+<td><span class="instrument-total"><%= Number(matrix.awardedTotal || 0).toFixed(2) %></span></td>
+<td><%= showStandards ? 'Nilai tidak dapat melebihi maksimum instrumen' : 'Nilai mengikuti validasi server' %></td>
                   </tr>
                 </tfoot>
               </table>
