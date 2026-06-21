@@ -224,14 +224,20 @@ async function addHistory({ kecamatanId, instrument = null, action, previousStat
   );
 }
 
+function getUserRole(req) {
+  return req.session?.role || 'guest';
+}
+
 async function buildEvaluationRow(kecamatan) {
   const rows = await getRows(kecamatan.id);
+
   const [progress, reviews, finalResult, itemScores] = await Promise.all([
     getProgress(kecamatan.id, rows),
     getReviews(kecamatan.id),
     getFinalResult(kecamatan.id),
     getItemScores(kecamatan.id)
   ]);
+
   const scoring = calculateScore(rows, progress.evidenceMap);
   const reviewedScoring = calculateReviewedScoring(scoring, itemScores);
   const reviewMap = new Map(reviews.map(review => [review.instrument, review]));
@@ -250,7 +256,7 @@ async function buildEvaluationRow(kecamatan) {
     reviewedScoring,
     itemScores,
     finalResult,
-    finalStatus: finalResult && finalResult.status === 'Final' ? 'Final' : 'Belum Final'
+    finalStatus: finalResult?.status === 'Final' ? 'Final' : 'Belum Final'
   };
 }
 
@@ -261,36 +267,54 @@ router.get('/', ensureAuthenticated, isAdmin, async (req, res) => {
        FROM kecamatan WHERE role = ? ORDER BY nama`,
       ['kecamatan']
     );
+
     const authorizedIds = await getAuthorizedKecamatanIds(req);
-    const allowed = Array.isArray(authorizedIds) ? new Set(authorizedIds.map(Number)) : null;
-    const visibleKecamatans = kecamatans.filter(item => !allowed || allowed.has(Number(item.id)));
-    const evaluations = await Promise.all(visibleKecamatans.map(buildEvaluationRow));
+    const allowed = Array.isArray(authorizedIds)
+      ? new Set(authorizedIds.map(Number))
+      : null;
+
+    const visibleKecamatans = kecamatans.filter(
+      item => !allowed || allowed.has(Number(item.id))
+    );
+
+    const evaluations = await Promise.all(
+      visibleKecamatans.map(buildEvaluationRow)
+    );
+
     res.render('evaluation/index', {
       evaluations,
       username: req.session.username,
-      success: req.query.success || null,
-      error: req.query.error || null
+      userRole: getUserRole(req)
     });
+
   } catch (error) {
-    console.error('Gagal memuat daftar evaluasi:', error);
-    res.status(500).send('Gagal memuat daftar evaluasi kinerja.');
+    console.error(error);
+    res.status(500).send('Error');
   }
 });
 
 router.get('/:id', ensureAuthenticated, isAdmin, requireKecamatanAccess('id'), async (req, res) => {
   try {
     const kecamatanId = Number.parseInt(req.params.id, 10);
-    if (!Number.isInteger(kecamatanId)) return res.status(400).send('Kecamatan tidak valid.');
+    if (!Number.isInteger(kecamatanId)) {
+      return res.status(400).send('Kecamatan tidak valid.');
+    }
+
     const kecamatan = await getKecamatan(kecamatanId);
-    if (!kecamatan) return res.status(404).send('Kecamatan tidak ditemukan.');
+    if (!kecamatan) {
+      return res.status(404).send('Kecamatan tidak ditemukan.');
+    }
 
     const evaluation = await buildEvaluationRow(kecamatan);
+
     const files = await dbAll(
       `SELECT id, instrument, indicator_key, original_name, mime_type, size_bytes, uploaded_at
-       FROM assessment_files WHERE kecamatan_id = ?
+       FROM assessment_files
+       WHERE kecamatan_id = ?
        ORDER BY instrument, indicator_key, uploaded_at DESC`,
       [kecamatanId]
     );
+
     const history = await dbAll(
       `SELECT h.*, k.nama AS actor_name
        FROM evaluation_history h
@@ -301,23 +325,43 @@ router.get('/:id', ensureAuthenticated, isAdmin, requireKecamatanAccess('id'), a
       [kecamatanId]
     );
 
-    const filesByInstrument = new Map(CODES.map(code => [code.toUpperCase(), []]));
+    // 📁 group files
+    const filesByInstrument = new Map(
+      CODES.map(code => [code.toUpperCase(), []])
+    );
+
     for (const file of files) {
       const instrument = String(file.instrument || '').toUpperCase();
-      if (!filesByInstrument.has(instrument)) filesByInstrument.set(instrument, []);
-      filesByInstrument.get(instrument).push({ ...file, url: `/assessment/download/${file.id}` });
+
+      if (!filesByInstrument.has(instrument)) {
+        filesByInstrument.set(instrument, []);
+      }
+
+      filesByInstrument.get(instrument).push({
+        ...file,
+        url: `/assessment/download/${file.id}`
+      });
     }
 
-    const questionMatrices = Object.fromEntries(CODES.map(code => {
-      const instrument = code.toUpperCase();
-      return [instrument, buildInstrumentMatrix({
-        code: instrument,
-        row: evaluation.rows[code] || {},
-        files: filesByInstrument.get(instrument) || [],
-        itemScores: evaluation.itemScores.filter(item => String(item.instrument || '').toUpperCase() === instrument),
-        aspectScore: evaluation.scoring.aspects[instrument]
-      })];
-    }));
+    // 📊 matrix build
+    const questionMatrices = Object.fromEntries(
+      CODES.map(code => {
+        const instrument = code.toUpperCase();
+
+        return [
+          instrument,
+          buildInstrumentMatrix({
+            code: instrument,
+            row: evaluation.rows[code] || {},
+            files: filesByInstrument.get(instrument) || [],
+            itemScores: evaluation.itemScores.filter(
+              item => String(item.instrument || '').toUpperCase() === instrument
+            ),
+            aspectScore: evaluation.scoring.aspects[instrument]
+          })
+        ];
+      })
+    );
 
     res.render('evaluation/detail', {
       evaluation,
@@ -326,8 +370,10 @@ router.get('/:id', ensureAuthenticated, isAdmin, requireKecamatanAccess('id'), a
       history,
       username: req.session.username,
       success: req.query.success || null,
-      error: req.query.error || null
+      error: req.query.error || null,
+      userRole: getUserRole(req)
     });
+
   } catch (error) {
     console.error('Gagal memuat detail evaluasi:', error);
     res.status(500).send('Gagal memuat detail evaluasi kinerja.');
