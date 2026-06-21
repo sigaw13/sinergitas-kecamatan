@@ -1,5 +1,9 @@
 <%
-  const activeStandard = typeof standard !== 'undefined' ? standard : null;
+  const safeUserRole = typeof userRole !== 'undefined' ? String(userRole || '') : 'guest';
+  const resolvedStandard = typeof activeStandard !== 'undefined'
+    ? activeStandard
+    : (typeof standard !== 'undefined' ? standard : null);
+  const showStandards = safeUserRole === 'superadmin' && Boolean(resolvedStandard);
   const labelKey = key => String(key || '')
     .replace(/^ind_/, '')
     .replace(/^(\d+)([a-z])$/, '$1.$2');
@@ -8,7 +12,8 @@
     maximumFractionDigits: 2
   });
 %>
-<% if (activeStandard && userRole === 'superadmin') { %>
+
+<% if (showStandards) { %>
   <style>
     .standard-panel{background:#fff;border:1px solid #dbe3f0;border-left:5px solid #1f7a5a;border-radius:10px;padding:14px 16px;margin:0 0 16px;box-shadow:0 2px 10px rgba(25,42,70,.05)}
     .standard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}

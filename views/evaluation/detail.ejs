@@ -9,6 +9,11 @@
   </style>
 </head>
 <body>
+  <%
+    const safeUserRole = typeof userRole !== 'undefined' ? String(userRole || '') : 'guest';
+    const safeActiveStandard = typeof activeStandard !== 'undefined' ? activeStandard : null;
+    const showStandards = safeUserRole === 'superadmin' && Boolean(safeActiveStandard);
+  %>
   <nav class="nav"><strong>Verifikasi Penilaian — <%= evaluation.nama %></strong><div><a href="/evaluation">Daftar Verifikasi</a> <a href="/dashboard">Dashboard</a></div></nav>
   <main class="container">
     <% if (success) { %><div class="message success"><%= success %></div><% } %>
@@ -18,19 +23,32 @@
       <div class="header-grid">
         <div class="metric">Kecamatan<strong><%= evaluation.nama %></strong><small>Pengelola <%= evaluation.nama_pengelola || '-' %></small></div>
         <div class="metric">Progres Pengisian<strong><%= evaluation.progress.overall.percent %>%</strong><small><%= evaluation.progress.overall.completed %>/<%= evaluation.progress.overall.total %> unsur</small></div>
-        <div class="metric">Nilai Sistem Sementara<strong><%= Number(evaluation.scoring.totalScore || 0).toFixed(2) %></strong><small>dari <%= evaluation.scoring.maxScore %></small></div>
+        <% if (showStandards) { %>
+          <div class="metric">Nilai Sistem Sementara<strong><%= Number(evaluation.scoring.totalScore || 0).toFixed(2) %></strong><small>dari <%= evaluation.scoring.maxScore %></small></div>
+        <% } %>
         <div class="metric">Hasil Penilaian Admin<strong><%= Number(evaluation.reviewedScoring.totalScore || 0).toFixed(2) %></strong><small><%= evaluation.reviewedScoring.category %></small></div>
       </div>
     </section>
 
-    <% evaluation.progress.details.forEach((progress, instrumentIndex) => { const code = progress.instrument; const review = evaluation.reviewMap.get(code); const row = evaluation.rows[code.toLowerCase()] || {}; const score = evaluation.scoring.aspects[code]; const reviewedScore = evaluation.reviewedScoring.aspects[code]; const statusClass = review.status === 'Terverifikasi' ? 'verified' : (review.status === 'Perlu Perbaikan' ? 'revision' : 'pending'); const files = filesByInstrument.get(code) || []; const matrix = questionMatrices[code]; %>
+    <% evaluation.progress.details.forEach((progress, instrumentIndex) => {
+      const code = progress.instrument;
+      const review = evaluation.reviewMap.get(code) || { status: 'Belum Dinilai', notes: '' };
+      const row = evaluation.rows[code.toLowerCase()] || {};
+      const score = evaluation.scoring.aspects[code] || { name: `Instrumen ${code}` };
+      const reviewedScore = evaluation.reviewedScoring.aspects[code] || { totalScore: 0, maxScore: 0 };
+      const statusClass = review.status === 'Terverifikasi' ? 'verified' : (review.status === 'Perlu Perbaikan' ? 'revision' : 'pending');
+      const files = filesByInstrument.get(code) || [];
+      const matrix = questionMatrices[code] || {
+        totalQuestions: 0, evidenceTotal: 0, evidenceFilled: 0, maxScore: 0, automaticTotal: 0, awardedTotal: 0, questions: []
+      };
+    %>
       <details class="instrument" <%= instrumentIndex === 0 ? 'open' : '' %>>
         <summary>
           <div class="summary-title">
             <span class="badge <%= statusClass %>"><%= review.status %></span>
             <div><h2>Instrumen <%= code %> — <%= score.name %></h2><small>Pencapaian <strong><%= progress.percent %>%</strong> · Status pengiriman <strong><%= row.upload_status || 'Belum' %></strong> · <%= matrix.totalQuestions %> pertanyaan · <%= matrix.evidenceTotal %> slot bukti resmi</small><div class="progress-line"><div class="progress-fill" style="width:<%= Math.max(0, Math.min(100, Number(progress.percent || 0))) %>%"></div></div></div>
           </div>
-          <div class="summary-score"><strong><%= Number(reviewedScore.totalScore || 0).toFixed(2) %>/<%= reviewedScore.maxScore %></strong><div class="muted">hasil admin</div></div>
+          <div class="summary-score"><strong><%= Number(reviewedScore.totalScore || 0).toFixed(2) %><% if (showStandards) { %>/<%= reviewedScore.maxScore %><% } %></strong><div class="muted">hasil admin</div></div>
         </summary>
         <div class="instrument-body">
           <div class="instrument-metrics">
@@ -38,40 +56,70 @@
             <div class="mini">Isian<strong><%= progress.dataFilled %>/<%= progress.dataTotal %></strong></div>
             <div class="mini">Bukti tersimpan<strong><%= files.length %></strong></div>
             <div class="mini">Slot bukti resmi<strong><%= matrix.evidenceFilled %>/<%= matrix.evidenceTotal %></strong></div>
-            <div class="mini">Nilai sistem<strong><%= Number(matrix.automaticTotal || 0).toFixed(2) %>/<%= matrix.maxScore %></strong></div>
-            <div class="mini">Nilai admin<strong class="instrument-total-display"><%= Number(matrix.awardedTotal || 0).toFixed(2) %>/<%= matrix.maxScore %></strong></div>
+            <% if (showStandards) { %>
+              <div class="mini">Nilai sistem<strong><%= Number(matrix.automaticTotal || 0).toFixed(2) %>/<%= matrix.maxScore %></strong></div>
+            <% } %>
+            <div class="mini">Nilai admin<strong class="instrument-total-display"><%= Number(matrix.awardedTotal || 0).toFixed(2) %><% if (showStandards) { %>/<%= matrix.maxScore %><% } %></strong></div>
           </div>
 
-          <div class="hint">Setiap pertanyaan menampilkan jawaban kecamatan, seluruh slot bukti sesuai struktur folder resmi, standar nilai Excel, nilai sistem sementara, dan hasil penilaian administrator. Hasil administrator menjadi dasar nilai resmi setelah finalisasi.</div>
+          <% if (showStandards) { %>
+            <div class="hint">Setiap pertanyaan menampilkan jawaban kecamatan, seluruh slot bukti sesuai struktur folder resmi, standar nilai Excel, nilai sistem sementara, dan hasil penilaian administrator. Hasil administrator menjadi dasar nilai resmi setelah finalisasi.</div>
+          <% } else { %>
+            <div class="hint">Setiap pertanyaan menampilkan jawaban kecamatan, data dukung, hasil penilaian, dan catatan verifikasi. Standar nilai disembunyikan untuk menjaga integritas evaluasi.</div>
+          <% } %>
           <p><a class="btn btn-secondary" href="/assessment/instrument-<%= code.toLowerCase() %>?kecamatan_id=<%= evaluation.id %>" target="_blank">Buka Instrumen dan Bukti</a></p>
 
-          <form method="POST" action="/evaluation/<%= evaluation.id %>/instrument/<%= code.toLowerCase() %>" class="instrument-form" data-max-score="<%= matrix.maxScore %>">
+          <form method="POST" action="/evaluation/<%= evaluation.id %>/instrument/<%= code.toLowerCase() %>" class="instrument-form" data-max-score="<%= showStandards ? matrix.maxScore : '' %>" data-show-standards="<%= showStandards ? '1' : '0' %>">
             <div class="table-wrap">
               <table class="score-table">
-                <thead><tr><th style="width:45px">No</th><th style="width:330px">Pertanyaan</th><th style="width:260px">Jawaban Kecamatan</th><th style="width:330px">Data Dukung</th><th style="width:105px">Standar Nilai</th><th style="width:105px">Nilai Sistem</th><th style="width:135px">Hasil Penilaian</th><th style="width:220px">Catatan Per Pertanyaan</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th style="width:45px">No</th>
+                    <th style="width:330px">Pertanyaan</th>
+                    <th style="width:260px">Jawaban Kecamatan</th>
+                    <th style="width:330px">Data Dukung</th>
+                    <% if (showStandards) { %>
+                      <th style="width:105px">Standar Nilai</th>
+                      <th style="width:105px">Nilai Sistem</th>
+                    <% } %>
+                    <th style="width:135px">Hasil Penilaian</th>
+                    <th style="width:220px">Catatan Per Pertanyaan</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <% matrix.questions.forEach(question => { const selectedValue = Number(question.awardedScore || 0); const optionValues = [...question.scoreOptions]; if (!optionValues.some(value => Math.abs(Number(value)-selectedValue)<0.001)) optionValues.push(selectedValue); optionValues.sort((a,b)=>a-b); %>
+                  <% (matrix.questions || []).forEach(question => {
+                    const selectedValue = Number(question.awardedScore || 0);
+                    const scoreOptions = Array.isArray(question.scoreOptions) ? question.scoreOptions : [];
+                    const optionValues = [...scoreOptions];
+                    const answers = Array.isArray(question.answers) ? question.answers : [];
+                    const expectedEvidence = Array.isArray(question.expectedEvidence) ? question.expectedEvidence : [];
+                    const legacyFiles = Array.isArray(question.legacyFiles) ? question.legacyFiles : [];
+                    if (!optionValues.some(value => Math.abs(Number(value)-selectedValue)<0.001)) optionValues.push(selectedValue);
+                    optionValues.sort((a,b)=>a-b);
+                  %>
                     <tr>
                       <td><strong><%= question.number %></strong></td>
                       <td><div class="question-title"><%= question.label %></div><small class="muted">Kunci <%= question.key %></small><% if(question.saved){ %><div class="saved-marker">NILAI TERSIMPAN</div><% } %></td>
                       <td>
                         <div class="answer-list">
-                          <% if(question.answers.length){ question.answers.forEach(answer => { %><div class="answer-item"><span><%= answer.label %></span><strong><%= answer.value %></strong></div><% }) } else { %><div class="answer-item"><strong>Belum ada data jawaban</strong></div><% } %>
+                          <% if(answers.length){ answers.forEach(answer => { %><div class="answer-item"><span><%= answer.label %></span><strong><%= answer.value %></strong></div><% }) } else { %><div class="answer-item"><strong>Belum ada data jawaban</strong></div><% } %>
                         </div>
                       </td>
                       <td>
                         <div class="evidence-list">
-                          <% question.expectedEvidence.forEach(evidence => { %>
+                          <% expectedEvidence.forEach(evidence => { %>
                             <div class="evidence-item <%= evidence.complete ? 'done' : '' %>">
-                              <strong><%= evidence.folder.replaceAll('/', ' › ') %> · <%= evidence.complete ? 'Sudah' : 'Belum' %></strong>
-                              <% if(evidence.files.length){ evidence.files.forEach(file => { %><div><a href="<%= file.url %>" target="_blank"><%= file.original_name %></a></div><% }) } else { %><span>Belum ada file pada slot ini</span><% } %>
+                              <strong><%= String(evidence.folder || '').replaceAll('/', ' › ') %> · <%= evidence.complete ? 'Sudah' : 'Belum' %></strong>
+                              <% if(Array.isArray(evidence.files) && evidence.files.length){ evidence.files.forEach(file => { %><div><a href="<%= file.url %>" target="_blank"><%= file.original_name %></a></div><% }) } else { %><span>Belum ada file pada slot ini</span><% } %>
                             </div>
                           <% }) %>
-                          <% if(question.legacyFiles.length){ %><div class="legacy-warning"><strong>Bukti induk lama ditemukan</strong><br>File induk belum menggantikan kewajiban upload pada setiap subpertanyaan.</div><% } %>
+                          <% if(legacyFiles.length){ %><div class="legacy-warning"><strong>Bukti induk lama ditemukan</strong><br>File induk belum menggantikan kewajiban upload pada setiap subpertanyaan.</div><% } %>
                         </div>
                       </td>
-                      <td><div class="standard-value"><%= Number(question.maxScore).toFixed(2) %></div><div class="rubric"><% if(question.rubricValues.length){ %>Rubrik Excel <%= question.rubricValues.map(value => Number(value).toFixed(2)).join(' · ') %><% } else { %>Nilai maksimum pertanyaan<% } %></div></td>
-                      <td><div class="system-score"><%= Number(question.automaticScore || 0).toFixed(2) %></div><small class="muted">usulan sistem</small></td>
+                      <% if (showStandards) { %>
+                        <td><div class="standard-value"><%= Number(question.maxScore || 0).toFixed(2) %></div><div class="rubric"><% if((question.rubricValues || []).length){ %>Rubrik Excel <%= question.rubricValues.map(value => Number(value).toFixed(2)).join(' · ') %><% } else { %>Nilai maksimum pertanyaan<% } %></div></td>
+                        <td><div class="system-score"><%= Number(question.automaticScore || 0).toFixed(2) %></div><small class="muted">usulan sistem</small></td>
+                      <% } %>
                       <td>
                         <select class="score-select" name="score_<%= question.key %>" data-score required>
                           <% optionValues.forEach(value => { %><option value="<%= Number(value).toFixed(2) %>" <%= Math.abs(Number(value)-selectedValue)<0.001 ? 'selected' : '' %>><%= Number(value).toFixed(2) %></option><% }) %>
@@ -81,7 +129,17 @@
                     </tr>
                   <% }) %>
                 </tbody>
-                <tfoot><tr class="score-total-row"><td colspan="4">Jumlah Nilai Instrumen <%= code %></td><td><%= Number(matrix.maxScore).toFixed(2) %></td><td><%= Number(matrix.automaticTotal).toFixed(2) %></td><td><span class="instrument-total"><%= Number(matrix.awardedTotal).toFixed(2) %></span></td><td>Nilai tidak dapat melebihi maksimum instrumen</td></tr></tfoot>
+                <tfoot>
+                  <tr class="score-total-row">
+                    <td colspan="4">Jumlah Nilai Instrumen <%= code %></td>
+                    <% if (showStandards) { %>
+                      <td><%= Number(matrix.maxScore || 0).toFixed(2) %></td>
+                      <td><%= Number(matrix.automaticTotal || 0).toFixed(2) %></td>
+                    <% } %>
+                    <td><span class="instrument-total"><%= Number(matrix.awardedTotal || 0).toFixed(2) %></span></td>
+                    <td><%= showStandards ? 'Nilai tidak dapat melebihi maksimum instrumen' : 'Nilai mengikuti validasi server' %></td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
 
@@ -121,16 +179,17 @@
       const totalNode = form.querySelector('.instrument-total');
       const summaryNode = form.closest('.instrument').querySelector('.instrument-total-display');
       const maxScore = Number(form.dataset.maxScore || 0);
+      const showMaxScore = form.dataset.showStandards === '1';
       const calculate = () => {
         const raw = [...form.querySelectorAll('[data-score]')].reduce((sum, input) => sum + Number(input.value || 0), 0);
-        const total = Math.min(raw, maxScore);
+        const total = showMaxScore && maxScore > 0 ? Math.min(raw, maxScore) : raw;
         if (totalNode) totalNode.textContent = total.toFixed(2);
-        if (summaryNode) summaryNode.textContent = `${total.toFixed(2)}/${maxScore}`;
+        if (summaryNode) summaryNode.textContent = showMaxScore ? `${total.toFixed(2)}/${maxScore}` : total.toFixed(2);
       };
       form.querySelectorAll('[data-score]').forEach(input => input.addEventListener('change', calculate));
       form.addEventListener('submit', event => {
         const total = [...form.querySelectorAll('[data-score]')].reduce((sum, input) => sum + Number(input.value || 0), 0);
-        if (total > maxScore + 0.001) {
+        if (showMaxScore && maxScore > 0 && total > maxScore + 0.001) {
           event.preventDefault();
           alert(`Jumlah nilai ${total.toFixed(2)} melebihi maksimum instrumen ${maxScore.toFixed(2)}.`);
         }

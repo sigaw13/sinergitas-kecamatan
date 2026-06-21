@@ -761,7 +761,8 @@ function renderInstrument(instrumentKey, viewName) {
         uploadedFiles: evidence.files,
         missingEvidenceKeys: evidence.missingKeys,
         progress,
-        standard: getInstrumentStandard(instrumentKey),
+        standard: req.session.role === 'superadmin' ? getInstrumentStandard(instrumentKey) : null,
+        activeStandard: req.session.role === 'superadmin' ? getInstrumentStandard(instrumentKey) : null,
         questionDefinitions: (EVALUATION_QUESTIONS[instrumentKey.toUpperCase()] || {}).questions || [],
         evaluationLocked: Boolean(finalEvaluation && finalEvaluation.status === 'Final') || deadlineLocked,
         deadlineLocked,
@@ -774,7 +775,8 @@ function renderInstrument(instrumentKey, viewName) {
         kecamatan: req.targetKecamatan.nama,
         isAdmin: req.session.isAdmin,
         kecamatan_id: req.kecamatan_id,
-        username: req.session.username
+        username: req.session.username,
+        userRole: req.session.role || 'guest'
       });
     } catch (error) {
       console.error(`Error fetching instrument ${instrumentKey.toUpperCase()}:`, error);

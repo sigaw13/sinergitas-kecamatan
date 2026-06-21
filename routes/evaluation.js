@@ -10,7 +10,7 @@ const {
   getAuthorizedKecamatanIds
 } = require('../middleware/auth');
 const ScoringSystem = require('../utils/scoring');
-const { expandEvidenceKeys } = require('../utils/standards');
+const { expandEvidenceKeys, getInstrumentStandard } = require('../utils/standards');
 const {
   getInstrumentCatalog,
   getInstrumentQuestions,
@@ -29,6 +29,7 @@ const {
 
 const CODES = ['a', 'b', 'c', 'd', 'e', 'f'];
 const REVIEW_STATUSES = new Set(['Belum Dinilai', 'Perlu Perbaikan', 'Terverifikasi']);
+const VALID_ROLES = new Set(['superadmin', 'evaluator', 'kecamatan']);
 const TABLES = Object.fromEntries(CODES.map(code => [code, `aspect_${code}`]));
 
 function dbGet(sql, params = []) {
@@ -225,7 +226,20 @@ async function addHistory({ kecamatanId, instrument = null, action, previousStat
 }
 
 function getUserRole(req) {
-  return req.session?.role || 'guest';
+  const role = String(req.session?.role || '').trim().toLowerCase();
+  return VALID_ROLES.has(role) ? role : 'guest';
+}
+
+function canViewStandards(req) {
+  return getUserRole(req) === 'superadmin';
+}
+
+function getActiveStandard(req) {
+  if (!canViewStandards(req)) return null;
+  return Object.fromEntries(CODES.map(code => [
+    code.toUpperCase(),
+    getInstrumentStandard(code)
+  ]));
 }
 
 async function buildEvaluationRow(kecamatan) {
@@ -281,10 +295,15 @@ router.get('/', ensureAuthenticated, isAdmin, async (req, res) => {
       visibleKecamatans.map(buildEvaluationRow)
     );
 
+    const userRole = getUserRole(req);
+    const activeStandard = getActiveStandard(req);
+
     res.render('evaluation/index', {
       evaluations,
       username: req.session.username,
-      userRole: getUserRole(req)
+      userRole,
+      activeStandard,
+      canViewStandards: userRole === 'superadmin' && Boolean(activeStandard)
     });
 
   } catch (error) {
@@ -362,6 +381,8 @@ router.get('/:id', ensureAuthenticated, isAdmin, requireKecamatanAccess('id'), a
         ];
       })
     );
+    const userRole = getUserRole(req);
+    const activeStandard = getActiveStandard(req);
 
     res.render('evaluation/detail', {
       evaluation,
@@ -371,7 +392,9 @@ router.get('/:id', ensureAuthenticated, isAdmin, requireKecamatanAccess('id'), a
       username: req.session.username,
       success: req.query.success || null,
       error: req.query.error || null,
-      userRole: getUserRole(req)
+      userRole,
+      activeStandard,
+      canViewStandards: userRole === 'superadmin' && Boolean(activeStandard)
     });
 
   } catch (error) {
@@ -418,7 +441,10 @@ router.post('/:id/instrument/:code', ensureAuthenticated, isAdmin, requireKecama
       const instrumentDefinition = getInstrumentCatalog(code);
       const submittedTotal = roundScore(scoredItems.reduce((sum, item) => sum + item.awardedScore, 0));
       if (submittedTotal > Number(instrumentDefinition.maxScore) + 0.000001) {
-        return res.redirect(`/evaluation/${kecamatanId}?error=${encodeURIComponent(`Jumlah nilai Instrumen ${code.toUpperCase()} sebesar ${submittedTotal} melebihi standar maksimum ${instrumentDefinition.maxScore}.`)}`);
+        const message = canViewStandards(req)
+          ? `Jumlah nilai Instrumen ${code.toUpperCase()} sebesar ${submittedTotal} melebihi standar maksimum ${instrumentDefinition.maxScore}.`
+          : `Jumlah nilai Instrumen ${code.toUpperCase()} melebihi batas validasi.`;
+        return res.redirect(`/evaluation/${kecamatanId}?error=${encodeURIComponent(message)}`);
       }
     }
 

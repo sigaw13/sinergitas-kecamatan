@@ -57,7 +57,9 @@ router.post('/login', loginRateLimit, async (req, res) => {
       
       req.session.userId = row.id;
       req.session.username = row.username;
-      req.session.role = row.role || (row.username === 'admin' ? 'superadmin' : 'kecamatan');
+      const validRoles = new Set(['superadmin', 'evaluator', 'kecamatan']);
+      const role = String(row.role || '').trim().toLowerCase();
+      req.session.role = validRoles.has(role) ? role : 'kecamatan';
       req.session.kecamatan = req.session.role === 'evaluator'
         ? (row.nama_pengelola || row.nama)
         : row.nama;
