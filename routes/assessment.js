@@ -35,8 +35,10 @@ const ALLOWED_MIME_TYPES = new Set([
   'image/png',
   'application/octet-stream'
 ]);
-const MAX_FILE_BYTES = Math.max(1, Number(process.env.MAX_FILE_MB || 10)) * 1024 * 1024;
-const MAX_UPLOAD_REQUEST_BYTES = Math.max(1, Number(process.env.MAX_UPLOAD_REQUEST_MB || 100)) * 1024 * 1024;
+const MAX_FILE_MB = Math.max(1, Number(process.env.MAX_FILE_MB || 30));
+const MAX_UPLOAD_REQUEST_MB = Math.max(1, Number(process.env.MAX_UPLOAD_REQUEST_MB || 100));
+const MAX_FILE_BYTES = MAX_FILE_MB * 1024 * 1024;
+const MAX_UPLOAD_REQUEST_BYTES = MAX_UPLOAD_REQUEST_MB * 1024 * 1024;
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -447,7 +449,7 @@ async function enforceTotalUploadLimit(req, res, next) {
 
   await removeNewlyUploadedFiles(files);
   return res.status(413).send(
-    `Total berkas dalam satu pengiriman melebihi batas ${Math.round(MAX_UPLOAD_REQUEST_BYTES / 1024 / 1024)} Megabita.`
+    `Total ukuran file dalam satu pengiriman melebihi ${MAX_UPLOAD_REQUEST_MB} MB. Silakan kompres PDF atau upload bukti secara bertahap.`
   );
 }
 
@@ -1050,9 +1052,26 @@ router.post('/files/:id/delete', ensureAuthenticated, async (req, res) => {
 });
 
 router.use((error, req, res, next) => {
-  if (error instanceof multer.MulterError || (error && error.message && error.message.includes('tidak diizinkan'))) {
+  if (error instanceof multer.MulterError) {
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).send(
+        `Ukuran file melebihi batas ${MAX_FILE_MB} MB per file. Silakan kompres PDF atau unggah file yang lebih kecil.`
+      );
+    }
+
+    if (error.code === 'LIMIT_FILE_COUNT') {
+      return res.status(413).send(
+        'Jumlah file dalam satu pengiriman terlalu banyak. Silakan upload bukti secara bertahap.'
+      );
+    }
+
     return res.status(400).send(`Upload gagal: ${error.message}`);
   }
+
+  if (error && error.message && error.message.includes('tidak diizinkan')) {
+    return res.status(400).send(`Upload gagal: ${error.message}`);
+  }
+
   next(error);
 });
 
