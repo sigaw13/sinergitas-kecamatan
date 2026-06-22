@@ -454,14 +454,8 @@ router.post('/:id/instrument/:code', ensureAuthenticated, isAdmin, requireKecama
       return res.redirect(`/evaluation/${kecamatanId}?error=${encodeURIComponent(`Hasil penilaian per pertanyaan Instrumen ${code.toUpperCase()} wajib disimpan.`)}`);
     }
 
-    if (status === 'Terverifikasi') {
-      if (instrumentRow.upload_status !== 'Sudah') {
-        return res.redirect(`/evaluation/${kecamatanId}?error=${encodeURIComponent(`Instrumen ${code.toUpperCase()} belum dikirim final.`)}`);
-      }
-      if (!detail || detail.percent < 100) {
-        return res.redirect(`/evaluation/${kecamatanId}?error=${encodeURIComponent(`Progres Instrumen ${code.toUpperCase()} belum 100%.`)}`);
-      }
-    }
+    // Verifikasi admin tidak dikunci oleh status kirim final atau progres 100%.
+    // Setiap instrumen tetap dapat dinilai dan diverifikasi berdasarkan data serta bukti yang tersedia.
 
     if (scoredItems.length) {
       for (const item of scoredItems) {
@@ -562,10 +556,7 @@ router.post('/:id/finalize', ensureAuthenticated, isAdmin, requireKecamatanAcces
     if (reviews.some(review => review.status !== 'Terverifikasi')) {
       return res.redirect(`/evaluation/${kecamatanId}?error=${encodeURIComponent('Semua Instrumen A–F harus berstatus Terverifikasi sebelum hasil difinalkan.')}`);
     }
-    if (progress.overall.percent < 100) {
-      return res.redirect(`/evaluation/${kecamatanId}?error=${encodeURIComponent('Progres pengisian keseluruhan belum 100%.')}`);
-    }
-
+    
     const itemScores = await getItemScores(kecamatanId);
     for (const code of CODES) {
       const expected = getInstrumentQuestions(code).length;
