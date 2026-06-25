@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title || 'Log Preview Bukti Dukung' %></title>
+  <link rel="stylesheet" href="/css/preview.css" />
+</head>
+<body>
+  <div class="preview-shell">
+    <div class="preview-header">
+      <div>
+        <div class="preview-title">📊 Log Preview Bukti Dukung</div>
+        <div class="preview-subtitle">300 aktivitas terbaru</div>
+      </div>
+      <button type="button" class="btn-back" onclick="history.back()">Kembali</button>
+    </div>
+
+    <div class="table-card">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>Waktu</th>
+            <th>File</th>
+            <th>User ID</th>
+            <th>Role</th>
+            <th>Aksi</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% logs.forEach(log => { %>
+            <tr>
+              <td><%= new Date(log.created_at).toLocaleString('id-ID') %></td>
+              <td><%= log.original_filename || log.file_name || log.filename || ('File #' + log.file_id) %></td>
+              <td><%= log.user_id || '-' %></td>
+              <td><%= log.user_role || '-' %></td>
+              <td><%= log.action %></td>
+              <td><%= log.ip_address || '-' %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

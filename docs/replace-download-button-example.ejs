@@ -1,0 +1,7 @@
+<!-- CARI kode lama seperti ini di halaman Verifikasi Penilaian Evaluator: -->
+<a href="/assessment/download/<%= file.id %>">Unduh</a>
+
+<!-- GANTI menjadi: -->
+<a class="btn-preview" href="/assessment/preview/<%= file.id %>" target="_blank" rel="noopener">👁 Preview</a>
+
+<!-- Tombol Hapus boleh tetap ada kalau memang alur lama mengizinkan evaluator/admin menghapus. -->

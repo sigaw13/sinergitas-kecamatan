@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title || 'Preview Bukti Dukung' %></title>
+  <link rel="stylesheet" href="/css/preview.css" />
+</head>
+<body>
+  <div class="preview-shell">
+    <div class="preview-header">
+      <div>
+        <div class="preview-title">👁 Preview Bukti Dukung</div>
+        <div class="preview-subtitle"><%= file.display_name || file.original_filename || 'File bukti' %></div>
+      </div>
+      <button type="button" class="btn-back" onclick="window.close(); if(!window.closed){history.back()}" >Kembali</button>
+    </div>
+
+    <div class="preview-warning">
+      Mode preview evaluator. File ditampilkan untuk verifikasi, bukan untuk diunduh. Aktivitas preview tercatat di audit log SI ESELON.
+    </div>
+
+    <div id="pdfContainer" class="pdf-container" data-url="<%= rawUrl %>" data-watermark="<%= watermarkText %>">
+      <div id="loading" class="loading">Memuat dokumen...</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as pdfjsLib from '/vendor/pdfjs/pdf.mjs'
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/vendor/pdfjs/pdf.worker.mjs'
+
+    const container = document.getElementById('pdfContainer')
+    const loading = document.getElementById('loading')
+    const url = container.dataset.url
+    const watermarkText = container.dataset.watermark || 'SI ESELON'
+
+    function blockDownloadShortcuts(event) {
+      const key = String(event.key || '').toLowerCase()
+      if ((event.ctrlKey || event.metaKey) && ['s', 'p', 'u'].includes(key)) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+    }
+
+    document.addEventListener('keydown', blockDownloadShortcuts, true)
+    document.addEventListener('contextmenu', (e) => e.preventDefault(), true)
+
+    async function renderPdf() {
+      try {
+        const pdf = await pdfjsLib.getDocument({
+          url,
+          withCredentials: true,
+          disableAutoFetch: false,
+          disableStream: false
+        }).promise
+
+        loading.remove()
+
+        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+          const page = await pdf.getPage(pageNumber)
+          const viewport = page.getViewport({ scale: 1.35 })
+
+          const pageWrap = document.createElement('div')
+          pageWrap.className = 'pdf-page-wrap'
+
+          const canvas = document.createElement('canvas')
+          const ctx = canvas.getContext('2d')
+          canvas.width = viewport.width
+          canvas.height = viewport.height
+          canvas.className = 'pdf-page-canvas'
+
+          const wm = document.createElement('div')
+          wm.className = 'watermark'
+          wm.innerText = watermarkText
+
+          const pageNumberEl = document.createElement('div')
+          pageNumberEl.className = 'page-number'
+          pageNumberEl.innerText = `Halaman ${pageNumber} / ${pdf.numPages}`
+
+          pageWrap.appendChild(canvas)
+          pageWrap.appendChild(wm)
+          pageWrap.appendChild(pageNumberEl)
+          container.appendChild(pageWrap)
+
+          await page.render({ canvasContext: ctx, viewport }).promise
+        }
+      } catch (err) {
+        console.error(err)
+        loading.innerHTML = 'Gagal memuat preview. Pastikan file tersedia di storage dan format PDF valid.'
+        loading.classList.add('error')
+      }
+    }
+
+    renderPdf()
+  </script>
+</body>
+</html>

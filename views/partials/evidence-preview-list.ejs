@@ -1,0 +1,27 @@
+<% /*
+  Pakai partial ini untuk mengganti daftar tombol Unduh/Hapus pada halaman Verifikasi Evaluator.
+  Variable yang dibutuhkan: files / savedFiles / buktiFiles berisi array assessment_files.
+*/ %>
+
+<% const previewFiles = typeof files !== 'undefined' ? files : (typeof savedFiles !== 'undefined' ? savedFiles : (typeof buktiFiles !== 'undefined' ? buktiFiles : [])); %>
+
+<div class="evidence-list">
+  <% previewFiles.forEach(file => { %>
+    <div class="evidence-row">
+      <div class="evidence-name">
+        <b><%= file.indicator_code || file.indikator || ('Indikator ' + (file.indicator_id || '')) %></b>
+        — <%= file.original_filename || file.file_name || file.filename || file.name || 'File bukti' %>
+      </div>
+      <div class="evidence-actions">
+        <a class="btn-preview" href="/assessment/preview/<%= file.id %>" target="_blank" rel="noopener">
+          👁 Preview
+        </a>
+        <% if (typeof canDeleteEvidence !== 'undefined' && canDeleteEvidence) { %>
+          <form method="POST" action="/assessment/file/<%= file.id %>/delete" onsubmit="return confirm('Hapus file ini?')">
+            <button type="submit" class="btn-delete">Hapus</button>
+          </form>
+        <% } %>
+      </div>
+    </div>
+  <% }) %>
+</div>

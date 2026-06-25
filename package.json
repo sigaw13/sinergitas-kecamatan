@@ -17,6 +17,7 @@
     "recalculate": "node scripts/recalculate-evidence-scores.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.108.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.5",
     "cors": "^2.8.6",
@@ -24,7 +25,8 @@
     "ejs": "^3.1.10",
     "express": "^4.22.2",
     "express-session": "^1.19.0",
-    "multer": "^2.1.1",
+    "multer": "^2.2.0",
+    "pdfjs-dist": "^6.0.227",
     "pg": "^8.21.0",
     "sqlite3": "^5.1.7"
   },
