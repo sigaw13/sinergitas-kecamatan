@@ -950,6 +950,65 @@ router.get('/scoring', ensureAuthenticated, getKecamatanId, async (req, res) => 
   }
 });
 
+router.get('/preview/:id', ensureAuthenticated, async (req, res) => {
+  try {
+    const fileId = Number.parseInt(req.params.id, 10)
+
+    if (!Number.isInteger(fileId)) {
+      return res.status(400).send('File tidak valid.')
+    }
+
+    const file = await dbGet(
+      'SELECT * FROM assessment_files WHERE id = ?',
+      [fileId]
+    )
+
+    if (!file) {
+      return res.status(404).send('File tidak ditemukan.')
+    }
+
+    if (!(await canAccessKecamatan(req.session.userId, req.session.role, file.kecamatan_id))) {
+      return res.status(403).send('Akses file ditolak.')
+    }
+
+    const filePath = resolveAssessmentFilePath(file)
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).send('File fisik tidak ditemukan.')
+    }
+
+    // Audit log opsional. Kalau tabel log belum ada, preview tetap jalan.
+    dbRun(
+      `INSERT INTO assessment_file_access_logs 
+       (user_id, file_id, action, ip_address, user_agent, created_at) 
+       VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
+      [
+        req.session.userId || null,
+        file.id,
+        'PREVIEW',
+        req.ip || null,
+        req.headers['user-agent'] || null
+      ]
+    ).catch(() => {})
+
+    const mimeType = file.mime_type || 'application/pdf'
+    const safeName = String(file.original_name || 'bukti.pdf').replace(/[\r\n"]/g, '')
+
+    res.setHeader('Content-Type', mimeType)
+    res.setHeader('Content-Disposition', `inline; filename="${safeName}"`)
+    res.setHeader('Cache-Control', 'private, no-store, no-cache, must-revalidate')
+    res.setHeader('Pragma', 'no-cache')
+    res.setHeader('Expires', '0')
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN')
+
+    return res.sendFile(filePath)
+  } catch (error) {
+    console.error('Error previewing file:', error)
+    return res.status(500).send('Gagal membuka preview file.')
+  }
+})
+
 router.get('/files/:instrument', ensureAuthenticated, getKecamatanId, async (req, res) => {
   try {
     const instrument = String(req.params.instrument || '').toLowerCase();
