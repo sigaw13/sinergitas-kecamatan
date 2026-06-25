@@ -73,7 +73,15 @@
             <% if (file.unmappedSubindicator) { %><small style="display:block;color:#9a6700;margin-top:3px;">Bukti lama masih berada pada indikator utama dan belum dihitung sebagai bukti subindikator.</small><% } %>
           </span>
           <span style="display:flex; gap:8px; align-items:center;">
-            <a href="<%= file.url %>" class="btn btn-secondary" style="padding:6px 10px; font-size:12px;">Unduh</a>
+           <a 
+  href="/assessment/preview/<%= file.id %>" 
+  class="btn btn-secondary" 
+  style="padding:6px 10px; font-size:12px;" 
+  target="_blank" 
+  rel="noopener"
+>
+  Preview
+</a>
             <% if (!file.legacy && !safeEvaluationLocked) { %>
               <form action="/assessment/files/<%= file.id %>/delete<%= safeCsrfToken ? '?_csrf=' + encodeURIComponent(safeCsrfToken) : '' %>" method="POST" onsubmit="return confirm('Hapus file ini?');" style="display:inline;">
                 <% if (safeCsrfToken) { %><input type="hidden" name="_csrf" value="<%= safeCsrfToken %>"><% } %>
