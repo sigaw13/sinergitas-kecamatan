@@ -971,12 +971,7 @@ router.get('/preview/:id', ensureAuthenticated, async (req, res) => {
       return res.status(403).send('Akses file ditolak.')
     }
 
-    const filePath = resolveAssessmentFilePath(file)
-
-    console.log('[PREVIEW DEBUG] file.id:', file.id)
-    console.log('[PREVIEW DEBUG] file:', file)
-    console.log('[PREVIEW DEBUG] resolved filePath:', filePath)
-    console.log('[PREVIEW DEBUG] exists:', fs.existsSync(filePath))
+    const filePath = resolveAssessmentFilePath(file)    
 
     if (!fs.existsSync(filePath)) {
       return res.status(404).send('File fisik tidak ditemukan.')
