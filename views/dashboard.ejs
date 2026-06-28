@@ -166,6 +166,22 @@
         <div class="instrument-card"><h3>Batas Waktu Aktif</h3><div class="metric" style="font-size:27px"><%= deadline %></div><p style="min-height:0;text-align:center"><a class="btn" href="/admin/settings">Ubah Batas Waktu</a></p></div>
       </div>
 
+      <% if (typeof isSuperAdmin !== 'undefined' && isSuperAdmin) { %>
+        <%
+          const totalUploadedVerified = kecamatans.reduce((sum,item)=>sum+(item.uploaded_verified_instruments || 0),0);
+          const totalUploadedUnverified = kecamatans.reduce((sum,item)=>sum+(item.uploaded_unverified_instruments || 0),0);
+        %>
+        <section class="card">
+          <h2>Grafik Capaian Kecamatan Berdasarkan Upload Data</h2>
+          <p class="muted">Grafik ini menampilkan jumlah Instrumen A sampai F yang sudah diunggah final oleh kecamatan, lalu dipisahkan menjadi sudah diverifikasi dan belum diverifikasi.</p>
+          <div class="grid" style="margin-top:14px">
+            <div class="instrument-card"><h3>Upload Sudah Diverifikasi</h3><div class="metric"><%= totalUploadedVerified %></div><p style="min-height:0;text-align:center">Total instrumen berstatus upload final dan terverifikasi.</p></div>
+            <div class="instrument-card"><h3>Upload Belum Diverifikasi</h3><div class="metric"><%= totalUploadedUnverified %></div><p style="min-height:0;text-align:center">Total instrumen berstatus upload final tetapi belum terverifikasi.</p></div>
+          </div>
+          <canvas id="uploadVerificationChart" height="120"></canvas>
+        </section>
+      <% } %>
+
       <section class="card">
         <h2>Rata-rata Progres per Instrumen</h2>
         <canvas id="progressChart" height="95"></canvas>
@@ -192,6 +208,7 @@
                 <td>
                   <% if (kc.workbook_score !== null) { %>
                     <strong><%= kc.workbook_score %>/100</strong>
+                    <% if (kc.workbook_ranking !== null && kc.workbook_ranking !== undefined) { %><div class="subtle">Peringkat <%= kc.workbook_ranking %></div><% } %>
                     <div class="subtle"><%= kc.workbook_source || 'Workbook impor' %></div>
                   <% } else { %>
                     <span class="subtle">Belum diimpor</span>
@@ -208,8 +225,9 @@
 
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
+        const kecamatanProgressData = <%- JSON.stringify(kecamatans.map(k => ({a:k.progress_a,b:k.progress_b,c:k.progress_c,d:k.progress_d,e:k.progress_e,f:k.progress_f}))) %>;
         const averages = ['a','b','c','d','e','f'].map(code => {
-          const values = <%- JSON.stringify(kecamatans.map(k => ({a:k.progress_a,b:k.progress_b,c:k.progress_c,d:k.progress_d,e:k.progress_e,f:k.progress_f}))) %>.map(item => item[code] || 0);
+          const values = kecamatanProgressData.map(item => item[code] || 0);
           return values.length ? Math.round(values.reduce((a,b)=>a+b,0)/values.length) : 0;
         });
         new Chart(document.getElementById('progressChart'), {
@@ -217,6 +235,33 @@
           data:{ labels:['A — Pelayanan Publik','B — Pemerintahan Umum','C — Anggaran','D — Inovasi','E — Sumber Daya Manusia','F — Data Dukung'], datasets:[{ data:averages, backgroundColor:['#5d73df','#7047a5','#27975a','#d49a00','#16859d','#e36b1c'] }] },
           options:{ responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:100,title:{display:true,text:'Progres (%)'}}} }
         });
+
+        const uploadChartElement = document.getElementById('uploadVerificationChart');
+        if (uploadChartElement) {
+          const uploadVerificationData = <%- JSON.stringify(kecamatans.map(k => ({
+            nama: k.nama,
+            verified: k.uploaded_verified_instruments || 0,
+            unverified: k.uploaded_unverified_instruments || 0
+          }))) %>;
+          new Chart(uploadChartElement, {
+            type:'bar',
+            data:{
+              labels: uploadVerificationData.map(item => item.nama),
+              datasets:[
+                { label:'Sudah Diverifikasi', data:uploadVerificationData.map(item => item.verified), backgroundColor:'#22a447' },
+                { label:'Belum Diverifikasi', data:uploadVerificationData.map(item => item.unverified), backgroundColor:'#efb400' }
+              ]
+            },
+            options:{
+              responsive:true,
+              plugins:{legend:{position:'bottom'}},
+              scales:{
+                x:{stacked:true,ticks:{autoSkip:false,maxRotation:60,minRotation:30}},
+                y:{stacked:true,beginAtZero:true,max:6,ticks:{stepSize:1},title:{display:true,text:'Jumlah upload instrumen'}}
+              }
+            }
+          });
+        }
       </script>
     <% } %>
   </main>

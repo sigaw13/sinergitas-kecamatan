@@ -199,7 +199,7 @@ async function getKecamatanProgressRows(authorizedIds = null) {
     dbAll('SELECT kecamatan_id, instrument, indicator_key FROM assessment_files'),
     dbAll('SELECT kecamatan_id, instrument, status, notes FROM evaluation_reviews'),
     dbAll('SELECT kecamatan_id, status, total_score, max_score, percentage, category, finalized_at FROM evaluation_results'),
-    dbAll('SELECT kecamatan_id, total_score, source_file, imported_at FROM workbook_baselines')
+    dbAll('SELECT kecamatan_id, total_score, ranking, source_file, imported_at FROM workbook_baselines')
   ]);
 
   const tableMaps = {};
@@ -271,6 +271,8 @@ async function getKecamatanProgressRows(authorizedIds = null) {
     const finalResult = finalMap.get(Number(kecamatan.id)) || null;
     result.completed_instruments = CODES.filter(code => result[`status_${code}`] === 'Sudah').length;
     result.verified_instruments = CODES.filter(code => result[`review_${code}`] === 'Terverifikasi').length;
+    result.uploaded_verified_instruments = CODES.filter(code => result[`status_${code}`] === 'Sudah' && result[`review_${code}`] === 'Terverifikasi').length;
+    result.uploaded_unverified_instruments = CODES.filter(code => result[`status_${code}`] === 'Sudah' && result[`review_${code}`] !== 'Terverifikasi').length;
     result.revision_instruments = CODES.filter(code => result[`review_${code}`] === 'Perlu Perbaikan').length;
     result.evaluation_status = finalResult && finalResult.status === 'Final' ? 'Final' : 'Belum Final';
     result.final_score = finalResult && finalResult.status === 'Final' ? Number(finalResult.total_score || 0) : null;
@@ -278,6 +280,7 @@ async function getKecamatanProgressRows(authorizedIds = null) {
     result.final_category = finalResult && finalResult.status === 'Final' ? finalResult.category : null;
     const baseline = baselineMap.get(Number(kecamatan.id)) || null;
     result.workbook_score = baseline ? Number(baseline.total_score || 0) : null;
+    result.workbook_ranking = baseline && baseline.ranking !== null && baseline.ranking !== undefined ? Number(baseline.ranking) : null;
     result.workbook_source = baseline ? baseline.source_file : null;
     return result;
   });

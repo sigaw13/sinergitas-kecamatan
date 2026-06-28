@@ -443,10 +443,12 @@ if (usePostgres) {
           score_e REAL DEFAULT 0,
           score_f REAL DEFAULT 0,
           total_score REAL DEFAULT 0,
+          ranking INTEGER,
           source_file TEXT,
           imported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
       `);
+      await client.query(`ALTER TABLE workbook_baselines ADD COLUMN IF NOT EXISTS ranking INTEGER`);
 
       await client.query(`
         CREATE TABLE IF NOT EXISTS evaluation_history (
@@ -855,6 +857,7 @@ if (usePostgres) {
       score_e REAL DEFAULT 0,
       score_f REAL DEFAULT 0,
       total_score REAL DEFAULT 0,
+      ranking INTEGER,
       source_file TEXT,
       imported_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (kecamatan_id) REFERENCES kecamatan(id) ON DELETE CASCADE
@@ -907,7 +910,8 @@ if (usePostgres) {
       ["aspect_c", "ind_2b_program", "INTEGER DEFAULT 0"], ["aspect_c", "ind_2b_indikator", "INTEGER DEFAULT 0"],
       ["aspect_d", "ind_3_pilihan", "TEXT"], ["aspect_d", "ind_2_detail", "TEXT"], ["aspect_d", "ind_2_jumlah", "INTEGER DEFAULT 0"],
       ["aspect_d", "ind_4_detail", "TEXT"],
-      ["assessment_files", "relative_path", "TEXT"]
+      ["assessment_files", "relative_path", "TEXT"],
+      ["workbook_baselines", "ranking", "INTEGER"]
       ,["kecamatan", "role", "TEXT NOT NULL DEFAULT 'kecamatan'"]
     ];
 

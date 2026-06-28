@@ -110,12 +110,16 @@ def ensure_schema(connection: sqlite3.Connection) -> None:
           score_e REAL DEFAULT 0,
           score_f REAL DEFAULT 0,
           total_score REAL DEFAULT 0,
+          ranking INTEGER,
           source_file TEXT,
           imported_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (kecamatan_id) REFERENCES kecamatan(id) ON DELETE CASCADE
         )
         """
     )
+    columns = {row[1] for row in connection.execute("PRAGMA table_info(workbook_baselines)")}
+    if "ranking" not in columns:
+        connection.execute("ALTER TABLE workbook_baselines ADD COLUMN ranking INTEGER")
 
 
 def kecamatan_map(connection: sqlite3.Connection) -> dict[str, int]:
@@ -176,15 +180,114 @@ def upsert_baseline(
 
 def number(value: object) -> float:
     try:
-        return round(float(value or 0), 2)
+        return round(float(value or 0), 3)
     except (TypeError, ValueError):
         return 0.0
+
+
+def int_number(value: object) -> int | None:
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return None
+
+
+def upsert_peringkat_baseline(
+    connection: sqlite3.Connection,
+    identifier: int,
+    total_score: float,
+    ranking: int | None,
+    source_file: str,
+) -> None:
+    connection.execute(
+        """
+        INSERT INTO workbook_baselines
+          (kecamatan_id, total_score, ranking, source_file, imported_at)
+        VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+        ON CONFLICT(kecamatan_id) DO UPDATE SET
+          total_score=excluded.total_score,
+          ranking=excluded.ranking,
+          source_file=excluded.source_file,
+          imported_at=CURRENT_TIMESTAMP
+        """,
+        (identifier, total_score, ranking, source_file),
+    )
 
 
 def infer_kecamatan_from_filename(filename: str, mapping: dict[str, int]) -> int | None:
     normalized = normalize_name(filename)
     candidates = sorted(mapping.items(), key=lambda item: len(item[0]), reverse=True)
     return next((identifier for name, identifier in candidates if name and name in normalized), None)
+
+
+def import_peringkat_sheet(
+    connection: sqlite3.Connection,
+    mapping: dict[str, int],
+    cells: dict[str, object],
+    source_file: str,
+) -> int:
+    if not cells:
+        return 0
+
+    imported = 0
+    final_header_row = None
+    for row in range(1, 200):
+        b = normalize_name(str(cells.get(f"B{row}", "")))
+        f = normalize_name(str(cells.get(f"F{row}", "")))
+        h = normalize_name(str(cells.get(f"H{row}", "")))
+        i = normalize_name(str(cells.get(f"I{row}", "")))
+        if b == "KECAMATAN" and "CAPAIANWAWANCARA" in f and "CAPAIANINPUTDATA" in h and i == "PERINGKAT":
+            final_header_row = row
+            break
+
+    if final_header_row:
+        row = final_header_row + 1
+        while row < final_header_row + 80:
+            name = str(cells.get(f"B{row}", "") or "").strip()
+            identifier = mapping.get(normalize_name(name))
+            if not name and not cells.get(f"C{row}"):
+                break
+            if identifier:
+                upsert_peringkat_baseline(
+                    connection,
+                    identifier,
+                    number(cells.get(f"I{row}")),
+                    int_number(cells.get(f"J{row}")),
+                    source_file,
+                )
+                imported += 1
+            row += 1
+        if imported:
+            return imported
+
+    simple_header_row = None
+    for row in range(1, 200):
+        b = normalize_name(str(cells.get(f"B{row}", "")))
+        c = normalize_name(str(cells.get(f"C{row}", "")))
+        d = normalize_name(str(cells.get(f"D{row}", "")))
+        if b == "KECAMATAN" and c == "CAPAIAN" and d == "PERINGKAT":
+            simple_header_row = row
+            break
+
+    if simple_header_row:
+        row = simple_header_row + 1
+        while row < simple_header_row + 80:
+            name = str(cells.get(f"B{row}", "") or "").strip()
+            identifier = mapping.get(normalize_name(name))
+            if not name and not cells.get(f"C{row}"):
+                break
+            if identifier:
+                upsert_peringkat_baseline(
+                    connection,
+                    identifier,
+                    number(cells.get(f"C{row}")),
+                    int_number(cells.get(f"D{row}")),
+                    source_file,
+                )
+                imported += 1
+            row += 1
+
+    return imported
 
 
 def import_file(
@@ -234,6 +337,10 @@ def import_file(
                 scores = [number(recap.get(f"{column}14")) for column in "ABCDEF"]
                 upsert_baseline(connection, identifier, scores, path.name)
                 baselines += 1
+
+        peringkat = reader.cells("PERINGKAT")
+        if peringkat:
+            baselines += import_peringkat_sheet(connection, mapping, peringkat, path.name)
     finally:
         reader.close()
     return contacts, baselines
