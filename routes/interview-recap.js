@@ -99,6 +99,18 @@ async function loadRows() {
   });
 }
 
+function getTopInterviewRows(rows, limit = 5) {
+  return rows
+    .filter(row => row.final && Number(row.final.finalScore || 0) > 0)
+    .sort((a, b) => {
+      const rankA = a.final.finalRank || Number.MAX_SAFE_INTEGER;
+      const rankB = b.final.finalRank || Number.MAX_SAFE_INTEGER;
+      if (rankA !== rankB) return rankA - rankB;
+      return Number(b.final.finalScore || 0) - Number(a.final.finalScore || 0);
+    })
+    .slice(0, limit);
+}
+
 async function upsertScore(kecamatanId, evaluator, presentationScore, collaborationScore, actorId) {
   const totalScore = round(presentationScore + collaborationScore, 3);
   await dbRun(
@@ -172,8 +184,10 @@ async function recalculateRanks() {
 router.get('/interview-recap', ensureAuthenticated, isSuperAdmin, async (req, res) => {
   try {
     const rows = await loadRows();
+    const topRows = getTopInterviewRows(rows, 5);
     res.render('interview-recap', {
-      rows,
+      rows: topRows,
+      allRows: rows,
       evaluators: EVALUATORS,
       username: req.session.username,
       success: req.query.success || null,
@@ -231,7 +245,7 @@ router.post('/interview-recap/save', ensureAuthenticated, isSuperAdmin, async (r
 
 router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, async (req, res) => {
   try {
-    const rows = await loadRows();
+    const rows = getTopInterviewRows(await loadRows(), 5);
     const headers = [
       'No', 'Kecamatan',
       ...EVALUATORS.flatMap(evaluator => [
@@ -266,7 +280,7 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
     });
 
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-    res.setHeader('Content-Disposition', 'attachment; filename="rekap-nilai-wawancara.csv"');
+    res.setHeader('Content-Disposition', 'attachment; filename="rekap-nilai-wawancara-top-5.csv"');
     res.send('\ufeff' + csvRows.join('\n'));
   } catch (error) {
     console.error('Gagal ekspor rekap wawancara:', error);
