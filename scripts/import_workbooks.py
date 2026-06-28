@@ -121,6 +121,56 @@ def ensure_schema(connection: sqlite3.Connection) -> None:
     if "ranking" not in columns:
         connection.execute("ALTER TABLE workbook_baselines ADD COLUMN ranking INTEGER")
 
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS interview_scores (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          kecamatan_id INTEGER NOT NULL,
+          evaluator_key TEXT NOT NULL,
+          evaluator_name TEXT NOT NULL,
+          presentation_score REAL DEFAULT 0,
+          collaboration_score REAL DEFAULT 0,
+          total_score REAL DEFAULT 0,
+          rank INTEGER,
+          source_file TEXT,
+          imported_at DATETIME,
+          updated_by INTEGER,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE (kecamatan_id, evaluator_key),
+          FOREIGN KEY (kecamatan_id) REFERENCES kecamatan(id) ON DELETE CASCADE
+        )
+        """
+    )
+    connection.execute(
+        "CREATE INDEX IF NOT EXISTS idx_interview_scores_kecamatan ON interview_scores(kecamatan_id)"
+    )
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS interview_final_scores (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          kecamatan_id INTEGER NOT NULL UNIQUE,
+          presentation_total REAL DEFAULT 0,
+          collaboration_total REAL DEFAULT 0,
+          interview_total REAL DEFAULT 0,
+          interview_percentage REAL DEFAULT 0,
+          interview_weighted_score REAL DEFAULT 0,
+          input_data_score REAL DEFAULT 0,
+          final_score REAL DEFAULT 0,
+          final_rank INTEGER,
+          source_file TEXT,
+          imported_at DATETIME,
+          updated_by INTEGER,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (kecamatan_id) REFERENCES kecamatan(id) ON DELETE CASCADE
+        )
+        """
+    )
+    connection.execute(
+        "CREATE INDEX IF NOT EXISTS idx_interview_final_scores_rank ON interview_final_scores(final_rank, final_score DESC)"
+    )
+
 
 def kecamatan_map(connection: sqlite3.Connection) -> dict[str, int]:
     return {
@@ -214,6 +264,184 @@ def upsert_peringkat_baseline(
     )
 
 
+
+EVALUATORS = {
+    "BAPPPEDA": ("bappeda", "BAPPPEDA"),
+    "BAPPEDA": ("bappeda", "BAPPPEDA"),
+    "DPMD": ("dpmd", "DPMD"),
+    "ASISTENI": ("asisten_i", "ASISTEN I"),
+    "ASISTENIII": ("asisten_iii", "ASISTEN III"),
+}
+
+
+def upsert_interview_score(
+    connection: sqlite3.Connection,
+    identifier: int,
+    evaluator_key: str,
+    evaluator_name: str,
+    presentation_score: float,
+    collaboration_score: float,
+    rank: int | None,
+    source_file: str,
+) -> None:
+    total_score = round(presentation_score + collaboration_score, 3)
+    connection.execute(
+        """
+        INSERT INTO interview_scores
+          (kecamatan_id, evaluator_key, evaluator_name, presentation_score,
+           collaboration_score, total_score, rank, source_file, imported_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        ON CONFLICT(kecamatan_id, evaluator_key) DO UPDATE SET
+          evaluator_name=excluded.evaluator_name,
+          presentation_score=excluded.presentation_score,
+          collaboration_score=excluded.collaboration_score,
+          total_score=excluded.total_score,
+          rank=excluded.rank,
+          source_file=excluded.source_file,
+          imported_at=CURRENT_TIMESTAMP,
+          updated_at=CURRENT_TIMESTAMP
+        """,
+        (
+            identifier,
+            evaluator_key,
+            evaluator_name,
+            presentation_score,
+            collaboration_score,
+            total_score,
+            rank,
+            source_file,
+        ),
+    )
+
+
+def upsert_interview_final(
+    connection: sqlite3.Connection,
+    identifier: int,
+    presentation_total: float,
+    collaboration_total: float,
+    interview_total: float,
+    interview_percentage: float,
+    interview_weighted_score: float,
+    input_data_score: float,
+    final_score: float,
+    final_rank: int | None,
+    source_file: str,
+) -> None:
+    connection.execute(
+        """
+        INSERT INTO interview_final_scores
+          (kecamatan_id, presentation_total, collaboration_total, interview_total,
+           interview_percentage, interview_weighted_score, input_data_score, final_score,
+           final_rank, source_file, imported_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        ON CONFLICT(kecamatan_id) DO UPDATE SET
+          presentation_total=excluded.presentation_total,
+          collaboration_total=excluded.collaboration_total,
+          interview_total=excluded.interview_total,
+          interview_percentage=excluded.interview_percentage,
+          interview_weighted_score=excluded.interview_weighted_score,
+          input_data_score=excluded.input_data_score,
+          final_score=excluded.final_score,
+          final_rank=excluded.final_rank,
+          source_file=excluded.source_file,
+          imported_at=CURRENT_TIMESTAMP,
+          updated_at=CURRENT_TIMESTAMP
+        """,
+        (
+            identifier,
+            presentation_total,
+            collaboration_total,
+            interview_total,
+            interview_percentage,
+            interview_weighted_score,
+            input_data_score,
+            final_score,
+            final_rank,
+            source_file,
+        ),
+    )
+
+
+def import_interview_sheet(
+    connection: sqlite3.Connection,
+    mapping: dict[str, int],
+    cells: dict[str, object],
+    source_file: str,
+) -> tuple[int, int]:
+    if not cells:
+        return 0, 0
+
+    score_rows = 0
+    final_rows = 0
+
+    final_header_row = None
+    for row in range(1, 200):
+        b = normalize_name(str(cells.get(f"B{row}", "")))
+        f = normalize_name(str(cells.get(f"F{row}", "")))
+        h = normalize_name(str(cells.get(f"H{row}", "")))
+        i = normalize_name(str(cells.get(f"I{row}", "")))
+        j = normalize_name(str(cells.get(f"J{row}", "")))
+        if b == "KECAMATAN" and "CAPAIANWAWANCARA" in f and "CAPAIANINPUTDATA" in h and (i == "PERINGKAT" or j == "RANK"):
+            final_header_row = row
+            break
+
+    if final_header_row:
+        for row in range(final_header_row + 1, final_header_row + 80):
+            name = str(cells.get(f"B{row}", "") or "").strip()
+            if not name and not cells.get(f"C{row}"):
+                break
+            identifier = mapping.get(normalize_name(name))
+            if not identifier:
+                continue
+            upsert_interview_final(
+                connection,
+                identifier,
+                number(cells.get(f"C{row}")),
+                number(cells.get(f"D{row}")),
+                number(cells.get(f"E{row}")),
+                number(cells.get(f"F{row}")),
+                number(cells.get(f"G{row}")) or number(cells.get(f"F{row}")),
+                number(cells.get(f"H{row}")),
+                number(cells.get(f"I{row}")),
+                int_number(cells.get(f"J{row}")),
+                source_file,
+            )
+            final_rows += 1
+
+    for row in range(1, 200):
+        evaluator = EVALUATORS.get(normalize_name(str(cells.get(f"A{row}", ""))))
+        if not evaluator:
+            continue
+        header_row = None
+        for probe in range(row + 1, min(row + 7, 200)):
+            if normalize_name(str(cells.get(f"B{probe}", ""))) == "KECAMATAN":
+                header_row = probe
+                break
+        if not header_row:
+            continue
+        for data_row in range(header_row + 1, header_row + 80):
+            name = str(cells.get(f"B{data_row}", "") or "").strip()
+            if not name and not cells.get(f"C{data_row}"):
+                break
+            identifier = mapping.get(normalize_name(name))
+            if not identifier:
+                continue
+            evaluator_key, evaluator_name = evaluator
+            upsert_interview_score(
+                connection,
+                identifier,
+                evaluator_key,
+                evaluator_name,
+                number(cells.get(f"C{data_row}")),
+                number(cells.get(f"D{data_row}")),
+                int_number(cells.get(f"F{data_row}")),
+                source_file,
+            )
+            score_rows += 1
+
+    return score_rows, final_rows
+
+
 def infer_kecamatan_from_filename(filename: str, mapping: dict[str, int]) -> int | None:
     normalized = normalize_name(filename)
     candidates = sorted(mapping.items(), key=lambda item: len(item[0]), reverse=True)
@@ -294,10 +522,11 @@ def import_file(
     connection: sqlite3.Connection,
     mapping: dict[str, int],
     path: Path,
-) -> tuple[int, int]:
+) -> tuple[int, int, int]:
     reader = XlsxReader(path)
     contacts = 0
     baselines = 0
+    interviews = 0
     try:
         master = reader.cells("LINK KECAMATAN")
         if master:
@@ -340,10 +569,12 @@ def import_file(
 
         peringkat = reader.cells("PERINGKAT")
         if peringkat:
+            score_rows, final_rows = import_interview_sheet(connection, mapping, peringkat, path.name)
+            interviews += score_rows + final_rows
             baselines += import_peringkat_sheet(connection, mapping, peringkat, path.name)
     finally:
         reader.close()
-    return contacts, baselines
+    return contacts, baselines, interviews
 
 
 def main() -> int:
@@ -373,16 +604,18 @@ def main() -> int:
         mapping = kecamatan_map(connection)
         total_contacts = 0
         total_baselines = 0
+        total_interviews = 0
         for path in files:
             if not path.exists():
                 print(f"⚠️ Dilewati, file tidak ditemukan: {path}")
                 continue
-            contacts, baselines = import_file(connection, mapping, path)
+            contacts, baselines, interviews = import_file(connection, mapping, path)
             total_contacts += contacts
             total_baselines += baselines
-            print(f"✓ {path.name}: kontak={contacts}, baseline={baselines}")
+            total_interviews += interviews
+            print(f"✓ {path.name}: kontak={contacts}, baseline={baselines}, wawancara={interviews}")
         connection.commit()
-        print(f"✅ Import selesai: {total_contacts} data kontak dan {total_baselines} baseline diproses.")
+        print(f"✅ Import selesai: {total_contacts} data kontak, {total_baselines} baseline, dan {total_interviews} nilai wawancara diproses.")
     finally:
         connection.close()
     return 0

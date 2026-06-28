@@ -75,6 +75,7 @@ app.use('/', require('./routes/auth'));
 app.use('/', require('./routes/account'));
 app.use('/', require('./routes/admin-users'));
 app.use('/', require('./routes/dashboard'));
+app.use('/', require('./routes/interview-recap'));
 app.use('/', require('./routes/admin'));
 app.use('/assessment', require('./routes/assessment'));
 app.use('/export', require('./routes/export'));

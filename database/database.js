@@ -451,6 +451,47 @@ if (usePostgres) {
       await client.query(`ALTER TABLE workbook_baselines ADD COLUMN IF NOT EXISTS ranking INTEGER`);
 
       await client.query(`
+        CREATE TABLE IF NOT EXISTS interview_scores (
+          id SERIAL PRIMARY KEY,
+          kecamatan_id INTEGER NOT NULL REFERENCES kecamatan(id) ON DELETE CASCADE,
+          evaluator_key TEXT NOT NULL,
+          evaluator_name TEXT NOT NULL,
+          presentation_score REAL DEFAULT 0,
+          collaboration_score REAL DEFAULT 0,
+          total_score REAL DEFAULT 0,
+          rank INTEGER,
+          source_file TEXT,
+          imported_at TIMESTAMP,
+          updated_by INTEGER REFERENCES kecamatan(id),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE (kecamatan_id, evaluator_key)
+        )
+      `);
+      await client.query(`CREATE INDEX IF NOT EXISTS idx_interview_scores_kecamatan ON interview_scores(kecamatan_id)`);
+
+      await client.query(`
+        CREATE TABLE IF NOT EXISTS interview_final_scores (
+          id SERIAL PRIMARY KEY,
+          kecamatan_id INTEGER NOT NULL UNIQUE REFERENCES kecamatan(id) ON DELETE CASCADE,
+          presentation_total REAL DEFAULT 0,
+          collaboration_total REAL DEFAULT 0,
+          interview_total REAL DEFAULT 0,
+          interview_percentage REAL DEFAULT 0,
+          interview_weighted_score REAL DEFAULT 0,
+          input_data_score REAL DEFAULT 0,
+          final_score REAL DEFAULT 0,
+          final_rank INTEGER,
+          source_file TEXT,
+          imported_at TIMESTAMP,
+          updated_by INTEGER REFERENCES kecamatan(id),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+      await client.query(`CREATE INDEX IF NOT EXISTS idx_interview_final_scores_rank ON interview_final_scores(final_rank, final_score DESC)`);
+
+      await client.query(`
         CREATE TABLE IF NOT EXISTS evaluation_history (
           id SERIAL PRIMARY KEY,
           kecamatan_id INTEGER NOT NULL REFERENCES kecamatan(id) ON DELETE CASCADE,
@@ -862,6 +903,47 @@ if (usePostgres) {
       imported_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (kecamatan_id) REFERENCES kecamatan(id) ON DELETE CASCADE
     )`);
+
+    sqliteDb.run(`CREATE TABLE IF NOT EXISTS interview_scores (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      kecamatan_id INTEGER NOT NULL,
+      evaluator_key TEXT NOT NULL,
+      evaluator_name TEXT NOT NULL,
+      presentation_score REAL DEFAULT 0,
+      collaboration_score REAL DEFAULT 0,
+      total_score REAL DEFAULT 0,
+      rank INTEGER,
+      source_file TEXT,
+      imported_at DATETIME,
+      updated_by INTEGER,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE (kecamatan_id, evaluator_key),
+      FOREIGN KEY (kecamatan_id) REFERENCES kecamatan(id) ON DELETE CASCADE,
+      FOREIGN KEY (updated_by) REFERENCES kecamatan(id)
+    )`);
+    sqliteDb.run(`CREATE INDEX IF NOT EXISTS idx_interview_scores_kecamatan ON interview_scores(kecamatan_id)`);
+
+    sqliteDb.run(`CREATE TABLE IF NOT EXISTS interview_final_scores (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      kecamatan_id INTEGER NOT NULL UNIQUE,
+      presentation_total REAL DEFAULT 0,
+      collaboration_total REAL DEFAULT 0,
+      interview_total REAL DEFAULT 0,
+      interview_percentage REAL DEFAULT 0,
+      interview_weighted_score REAL DEFAULT 0,
+      input_data_score REAL DEFAULT 0,
+      final_score REAL DEFAULT 0,
+      final_rank INTEGER,
+      source_file TEXT,
+      imported_at DATETIME,
+      updated_by INTEGER,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (kecamatan_id) REFERENCES kecamatan(id) ON DELETE CASCADE,
+      FOREIGN KEY (updated_by) REFERENCES kecamatan(id)
+    )`);
+    sqliteDb.run(`CREATE INDEX IF NOT EXISTS idx_interview_final_scores_rank ON interview_final_scores(final_rank, final_score DESC)`);
 
     sqliteDb.run(`CREATE TABLE IF NOT EXISTS evaluation_history (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
