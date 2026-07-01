@@ -393,14 +393,19 @@ def import_interview_sheet(
             identifier = mapping.get(normalize_name(name))
             if not identifier:
                 continue
+            interview_percentage = number(cells.get(f"F{row}"))
+            interview_weighted_score = number(cells.get(f"G{row}"))
+            if not interview_weighted_score and interview_percentage:
+                interview_weighted_score = round(interview_percentage * 0.5, 3)
+
             upsert_interview_final(
                 connection,
                 identifier,
                 number(cells.get(f"C{row}")),
                 number(cells.get(f"D{row}")),
                 number(cells.get(f"E{row}")),
-                number(cells.get(f"F{row}")),
-                number(cells.get(f"G{row}")) or number(cells.get(f"F{row}")),
+                interview_percentage,
+                interview_weighted_score,
                 number(cells.get(f"H{row}")),
                 number(cells.get(f"I{row}")),
                 int_number(cells.get(f"J{row}")),

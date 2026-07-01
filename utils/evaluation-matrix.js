@@ -102,7 +102,7 @@ function mapFilesByKey(files) {
     map.get(key).push({
       ...file,
       indicatorKey: key,
-      url: file.url || `/assessment/download/${file.id}`
+      url: file.url || `/assessment/preview/${file.id}`
     });
   }
   return map;

@@ -217,11 +217,12 @@ router.post('/interview-recap/save', ensureAuthenticated, isSuperAdmin, async (r
 
       const interviewTotal = round(presentationTotal + collaborationTotal, 3);
       const interviewPercentage = round((interviewTotal / 400) * 100, 3);
-      const interviewWeightedScore = interviewPercentage;
-      const inputDataScore = req.body[`input_data_${kecamatanId}`] === undefined || String(req.body[`input_data_${kecamatanId}`]).trim() === ''
+      const interviewWeightedScore = round(interviewPercentage * 0.5, 3);
+      const inputDataRawScore = req.body[`input_data_${kecamatanId}`] === undefined || String(req.body[`input_data_${kecamatanId}`]).trim() === ''
         ? Number(row.baseline ? row.baseline.totalScore : 0)
         : toNumber(req.body[`input_data_${kecamatanId}`]);
-      const finalScore = round((interviewWeightedScore * 0.5) + (inputDataScore * 0.5), 3);
+      const inputDataScore = round(inputDataRawScore * 0.5, 3);
+      const finalScore = round(interviewWeightedScore + inputDataScore, 3);
 
       await upsertFinal(kecamatanId, {
         presentationTotal: round(presentationTotal, 3),
@@ -254,7 +255,7 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
         `${evaluator.label} Total`
       ]),
       'Total Penampilan', 'Total Pengayaan', 'Total Wawancara',
-      'Capaian Wawancara (%)', 'Capaian Input Data', 'Nilai Akhir', 'Peringkat'
+      'Capaian Wawancara (%)', 'Capaian Wawancara Bobot 50%', 'Capaian Input Data', 'Nilai Akhir', 'Peringkat'
     ];
     const escape = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
     const csvRows = [headers.map(escape).join(',')];
@@ -273,7 +274,8 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
         final.collaborationTotal || 0,
         final.interviewTotal || 0,
         final.interviewPercentage || 0,
-        final.inputDataScore || (row.baseline ? row.baseline.totalScore : 0),
+        final.interviewWeightedScore || round((final.interviewPercentage || 0) * 0.5, 3),
+        final.inputDataScore || (row.baseline ? round(row.baseline.totalScore * 0.5, 3) : 0),
         final.finalScore || 0,
         final.finalRank || ''
       ].map(escape).join(','));

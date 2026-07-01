@@ -241,6 +241,30 @@ function dbRun(sql, params = []) {
   });
 }
 
+let previewLogSchemaReady = false;
+
+async function ensurePreviewLogSchema() {
+  if (previewLogSchemaReady) return;
+
+  await dbRun(`CREATE TABLE IF NOT EXISTS assessment_file_access_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    file_id INTEGER NOT NULL,
+    user_id INTEGER,
+    user_role TEXT,
+    kecamatan_id INTEGER,
+    action TEXT NOT NULL DEFAULT 'PREVIEW',
+    ip_address TEXT,
+    user_agent TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+
+  await dbRun('CREATE INDEX IF NOT EXISTS idx_assessment_file_access_logs_file_id ON assessment_file_access_logs(file_id)');
+  await dbRun('CREATE INDEX IF NOT EXISTS idx_assessment_file_access_logs_user_id ON assessment_file_access_logs(user_id)');
+  await dbRun('CREATE INDEX IF NOT EXISTS idx_assessment_file_access_logs_created_at ON assessment_file_access_logs(created_at)');
+
+  previewLogSchemaReady = true;
+}
+
 
 async function getFinalEvaluation(kecamatanId) {
   return dbGet(
@@ -629,7 +653,7 @@ async function listUploadedFiles(kecamatanId, instrument) {
     mimeType: row.mime_type,
     sizeBytes: Number(row.size_bytes || 0),
     uploadedAt: row.uploaded_at,
-    url: `/assessment/download/${row.id}`,
+    url: `/assessment/preview/${row.id}`,
     legacy: false,
     unmappedSubindicator: (
       instrument === 'a' && ['ind_2', 'ind_5', 'ind_9', 'ind_10', 'ind_12', 'ind_14'].includes(toMainIndicatorKey(row.indicator_key))
@@ -950,6 +974,32 @@ router.get('/scoring', ensureAuthenticated, getKecamatanId, async (req, res) => 
   }
 });
 
+router.get('/preview-logs', ensureAuthenticated, async (req, res) => {
+  try {
+    if (req.session.role !== 'superadmin') {
+      return res.status(403).send('Hanya superadmin yang dapat melihat log preview.');
+    }
+
+    await ensurePreviewLogSchema();
+
+    const logs = await dbAll(
+      `SELECT l.*, af.original_name AS original_filename, af.stored_name AS filename
+       FROM assessment_file_access_logs l
+       LEFT JOIN assessment_files af ON af.id = l.file_id
+       ORDER BY l.created_at DESC, l.id DESC
+       LIMIT 300`
+    );
+
+    res.render('assessment/preview-logs', {
+      title: 'Log Preview Bukti Dukung',
+      logs
+    });
+  } catch (error) {
+    console.error('Error loading preview logs:', error);
+    res.status(500).send('Gagal memuat log preview.');
+  }
+});
+
 router.get('/preview/:id', ensureAuthenticated, async (req, res) => {
   try {
     const fileId = Number.parseInt(req.params.id, 10)
@@ -978,18 +1028,22 @@ router.get('/preview/:id', ensureAuthenticated, async (req, res) => {
     }
 
     // Audit log opsional. Kalau tabel log belum ada, preview tetap jalan.
-    dbRun(
-      `INSERT INTO assessment_file_access_logs 
-       (user_id, file_id, action, ip_address, user_agent, created_at) 
-       VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
-      [
-        req.session.userId || null,
-        file.id,
-        'PREVIEW',
-        req.ip || null,
-        req.headers['user-agent'] || null
-      ]
-    ).catch(() => {})
+    ensurePreviewLogSchema()
+      .then(() => dbRun(
+        `INSERT INTO assessment_file_access_logs
+         (user_id, user_role, kecamatan_id, file_id, action, ip_address, user_agent, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
+        [
+          req.session.userId || null,
+          req.session.role || null,
+          file.kecamatan_id || null,
+          file.id,
+          'PREVIEW',
+          req.ip || null,
+          req.headers['user-agent'] || null
+        ]
+      ))
+      .catch(() => {})
 
     const mimeType = file.mime_type || 'application/pdf'
     const safeName = String(file.original_name || 'bukti.pdf').replace(/[\r\n"]/g, '')
@@ -1023,6 +1077,10 @@ router.get('/files/:instrument', ensureAuthenticated, getKecamatanId, async (req
 
 router.get('/download/:id', ensureAuthenticated, async (req, res) => {
   try {
+    if (req.session.role === 'evaluator') {
+      return res.status(403).send('Evaluator hanya dapat membuka file melalui menu Preview.');
+    }
+
     const fileId = Number.parseInt(req.params.id, 10);
     if (!Number.isInteger(fileId)) return res.status(400).send('File tidak valid.');
 

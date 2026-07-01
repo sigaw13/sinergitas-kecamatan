@@ -59,7 +59,7 @@
       <h2>Top 5 Rekap Nilai Akhir Hasil Wawancara</h2>
       <p class="muted">Halaman ini hanya menampilkan 5 kecamatan teratas sesuai format rekap wawancara.</p>
       <div class="note">
-        Rumus: Capaian Wawancara = Total Wawancara / 400 × 100. Nilai Akhir = 50% Capaian Wawancara + 50% Capaian Input Data/Survey Lapangan.
+        Rumus: Capaian Wawancara = Total Wawancara / 400 × 100. Bobot Wawancara 50% = Capaian Wawancara × 0,5. Nilai Akhir = Bobot Wawancara 50% + Bobot Input Data/Survey Lapangan 50%.
       </div>
       <div class="grid">
         <div class="metric-card"><h3>Total Kecamatan Dinilai</h3><div class="metric"><%= allRows.filter(row => row.final && row.final.finalScore > 0).length %></div></div>
@@ -82,8 +82,8 @@
             <th>CAPAIAN<br>WAWANCARA<br>(%)</th>
             <th>CAPAIAN<br>WAWANCARA<br>(BOBOT NILAI 50%)</th>
             <th>CAPAIAN INPUT<br>DATA DAN SURVEY<br>LAPANGAN<br>(BOBOT NILAI 50%)</th>
-            <th>PERINGKAT</th>
-            <th>Rank</th>
+            <th>NILAI<br>AKHIR</th>
+            <th>RANK</th>
           </tr>
         </thead>
         <tbody>
@@ -92,7 +92,10 @@
               <td colspan="10" class="center">Belum ada data rekap wawancara. Jalankan import Excel atau simpan nilai wawancara terlebih dahulu.</td>
             </tr>
           <% } %>
-          <% rows.forEach((row, index) => { const final = row.final || {}; %>
+          <% rows.forEach((row, index) => {
+            const final = row.final || {};
+            const interviewWeighted = Number(final.interviewWeightedScore || 0) || (Number(final.interviewPercentage || 0) * 0.5);
+          %>
             <tr>
               <td class="center"><%= index + 1 %></td>
               <td class="name"><%= row.nama %></td>
@@ -100,7 +103,7 @@
               <td class="right"><%= Number(final.collaborationTotal || 0).toFixed(2) %></td>
               <td class="right"><%= Number(final.interviewTotal || 0).toFixed(2) %></td>
               <td class="right"><%= Number(final.interviewPercentage || 0).toFixed(0) %></td>
-              <td class="right"><%= Number(final.interviewWeightedScore || final.interviewPercentage || 0).toFixed(0) %></td>
+              <td class="right"><%= interviewWeighted.toFixed(2) %></td>
               <td class="right"><%= Number(final.inputDataScore || 0).toFixed(2) %></td>
               <td class="right"><%= Number(final.finalScore || 0).toFixed(2) %></td>
               <td class="rank"><%= final.finalRank || index + 1 %></td>

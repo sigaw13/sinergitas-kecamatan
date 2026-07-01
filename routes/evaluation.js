@@ -360,7 +360,7 @@ router.get('/:id', ensureAuthenticated, isAdmin, requireKecamatanAccess('id'), a
 
       filesByInstrument.get(instrument).push({
         ...file,
-        url: `/assessment/download/${file.id}`
+        url: `/assessment/preview/${file.id}`
       });
     }
 
