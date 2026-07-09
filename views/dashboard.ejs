@@ -182,6 +182,10 @@
             <div class="instrument-card"><h3>Rata-rata Capaian</h3><div class="metric"><%= rata %>%</div><p style="min-height:0;text-align:center">Rata-rata progres upload data seluruh kecamatan.</p></div>
           </div>
           <canvas id="uploadVerificationChart" height="140"></canvas>
+          <div style="height:22px"></div>
+          <h3 style="font-size:15px;color:#273142;margin-bottom:8px">Grafik Status Verifikasi Upload</h3>
+          <p class="muted" style="margin-bottom:10px">Grafik ini tetap menampilkan jumlah upload yang sudah diverifikasi dan belum diverifikasi.</p>
+          <canvas id="uploadVerificationStatusChart" height="90"></canvas>
         </section>
       <% } %>
 
@@ -261,13 +265,29 @@
         };
 
         const uploadChartElement = document.getElementById('uploadVerificationChart');
+        const uploadVerificationData = <%- JSON.stringify(kecamatans.map(k => ({
+          nama: k.nama,
+          percent: k.progress_percent || 0,
+          verified: k.uploaded_verified_instruments || 0,
+          unverified: k.uploaded_unverified_instruments || 0
+        }))) %>;
+
+        const topFiveNames = new Set(
+          [...uploadVerificationData]
+            .sort((a, b) => Number(b.percent || 0) - Number(a.percent || 0))
+            .slice(0, 5)
+            .map(item => item.nama)
+        );
+
+        const topFiveColors = ['#d49a00', '#7047a5', '#e36b1c', '#16859d', '#5d73df'];
+        const topFiveColorMap = new Map(
+          [...uploadVerificationData]
+            .sort((a, b) => Number(b.percent || 0) - Number(a.percent || 0))
+            .slice(0, 5)
+            .map((item, index) => [item.nama, topFiveColors[index] || '#d49a00'])
+        );
+
         if (uploadChartElement) {
-          const uploadVerificationData = <%- JSON.stringify(kecamatans.map(k => ({
-            nama: k.nama,
-            percent: k.progress_percent || 0,
-            verified: k.uploaded_verified_instruments || 0,
-            unverified: k.uploaded_unverified_instruments || 0
-          }))) %>;
           new Chart(uploadChartElement, {
             type:'bar',
             data:{
@@ -276,9 +296,9 @@
                 {
                   label:'Capaian Upload Data (%)',
                   data: uploadVerificationData.map(item => item.percent),
-                  backgroundColor:'#22a447',
-                  borderColor:'#1c8b39',
-                  borderWidth:1
+                  backgroundColor: uploadVerificationData.map(item => topFiveColorMap.get(item.nama) || '#22a447'),
+                  borderColor: uploadVerificationData.map(item => topFiveNames.has(item.nama) ? '#273142' : '#1c8b39'),
+                  borderWidth: uploadVerificationData.map(item => topFiveNames.has(item.nama) ? 2 : 1)
                 }
               ]
             },
@@ -290,8 +310,9 @@
                   callbacks:{
                     label(context) {
                       const data = uploadVerificationData[context.dataIndex] || {};
+                      const topLabel = topFiveNames.has(data.nama) ? 'TOP 5 - ' : '';
                       return [
-                        `Capaian: ${Number(context.raw || 0)}%`,
+                        `${topLabel}Capaian: ${Number(context.raw || 0)}%`,
                         `Sudah diverifikasi: ${data.verified || 0} instrumen`,
                         `Belum diverifikasi: ${data.unverified || 0} instrumen`
                       ];
@@ -305,6 +326,28 @@
               }
             },
             plugins:[valueLabelPlugin]
+          });
+        }
+
+        const uploadStatusChartElement = document.getElementById('uploadVerificationStatusChart');
+        if (uploadStatusChartElement) {
+          new Chart(uploadStatusChartElement, {
+            type:'bar',
+            data:{
+              labels: uploadVerificationData.map(item => item.nama),
+              datasets:[
+                { label:'Sudah Diverifikasi', data:uploadVerificationData.map(item => item.verified), backgroundColor:'#22a447' },
+                { label:'Belum Diverifikasi', data:uploadVerificationData.map(item => item.unverified), backgroundColor:'#efb400' }
+              ]
+            },
+            options:{
+              responsive:true,
+              plugins:{legend:{position:'bottom'}},
+              scales:{
+                x:{stacked:true,ticks:{autoSkip:false,maxRotation:60,minRotation:30}},
+                y:{stacked:true,beginAtZero:true,max:6,ticks:{stepSize:1},title:{display:true,text:'Jumlah upload instrumen'}}
+              }
+            }
           });
         }
       </script>

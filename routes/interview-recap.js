@@ -198,6 +198,8 @@ async function upsertFinal(kecamatanId, values, actorId) {
 }
 
 async function recalculateRanks() {
+  await ensureTables();
+
   const finalRows = await dbAll(
     `SELECT kecamatan_id, final_score
      FROM interview_final_scores
@@ -218,6 +220,7 @@ async function recalculateRanks() {
 
 router.get('/interview-recap', ensureAuthenticated, isSuperAdmin, async (req, res) => {
   try {
+    await ensureTables();
     await recalculateRanks();
     const rows = getRankedInterviewRows(await loadRows());
     const evaluatedRows = rows.filter(row => row.final && Number(row.final.finalScore || 0) > 0);
@@ -231,7 +234,7 @@ router.get('/interview-recap', ensureAuthenticated, isSuperAdmin, async (req, re
     });
   } catch (error) {
     console.error('Gagal memuat rekap wawancara:', error);
-    res.status(500).send('Gagal memuat rekap nilai wawancara.');
+    res.status(500).send('Gagal memuat rekap nilai wawancara. Detail error tersimpan di log server.');
   }
 });
 
@@ -282,6 +285,7 @@ router.post('/interview-recap/save', ensureAuthenticated, isSuperAdmin, async (r
 
 router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, async (req, res) => {
   try {
+    await ensureTables();
     await recalculateRanks();
     const rows = getRankedInterviewRows(await loadRows());
     const headers = [
