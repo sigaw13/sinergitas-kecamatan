@@ -45,6 +45,44 @@ function field(body, prefix, kecamatanId, evaluatorKey) {
 }
 
 async function ensureTables() {
+  if (db.dialect === 'postgres') {
+    await dbRun(`CREATE TABLE IF NOT EXISTS interview_scores (
+      id SERIAL PRIMARY KEY,
+      kecamatan_id INTEGER NOT NULL,
+      evaluator_key TEXT NOT NULL,
+      evaluator_name TEXT NOT NULL,
+      presentation_score REAL DEFAULT 0,
+      collaboration_score REAL DEFAULT 0,
+      total_score REAL DEFAULT 0,
+      rank INTEGER,
+      updated_by INTEGER,
+      source_file TEXT,
+      imported_at TIMESTAMP,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(kecamatan_id, evaluator_key)
+    )`);
+
+    await dbRun(`CREATE TABLE IF NOT EXISTS interview_final_scores (
+      id SERIAL PRIMARY KEY,
+      kecamatan_id INTEGER NOT NULL UNIQUE,
+      presentation_total REAL DEFAULT 0,
+      collaboration_total REAL DEFAULT 0,
+      interview_total REAL DEFAULT 0,
+      interview_percentage REAL DEFAULT 0,
+      interview_weighted_score REAL DEFAULT 0,
+      input_data_score REAL DEFAULT 0,
+      final_score REAL DEFAULT 0,
+      final_rank INTEGER,
+      source_file TEXT,
+      imported_at TIMESTAMP,
+      updated_by INTEGER,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )`);
+    return;
+  }
+
   await dbRun(`CREATE TABLE IF NOT EXISTS interview_scores (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     kecamatan_id INTEGER NOT NULL,
@@ -56,7 +94,9 @@ async function ensureTables() {
     rank INTEGER,
     updated_by INTEGER,
     source_file TEXT,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    imported_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(kecamatan_id, evaluator_key)
   )`);
 
@@ -72,8 +112,10 @@ async function ensureTables() {
     final_score REAL DEFAULT 0,
     final_rank INTEGER,
     source_file TEXT,
+    imported_at DATETIME,
     updated_by INTEGER,
-    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 }
 

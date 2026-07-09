@@ -1,34 +1,30 @@
-# Patch Final Rekap Wawancara + Grafik Dashboard
+# Patch Kecil: Rekap Wawancara Error + Grafik Status Verifikasi Upload
 
 ## File yang diubah
 - routes/interview-recap.js
-- views/interview-recap.ejs
 - views/dashboard.ejs
 
-## Perbaikan
-1. Rekap wawancara tidak error saat tabel belum tersedia.
-2. Route rekap memastikan tabel dibuat dulu sebelum hitung ranking.
-3. Rekap wawancara menampilkan semua kecamatan.
-4. Ranking rekap dihitung ulang otomatis saat halaman dibuka dan saat ekspor CSV.
-5. Grafik capaian upload data tetap memakai persentase capaian.
-6. Bar Top 5 diberi warna berbeda dan border lebih tebal.
-7. Grafik status verifikasi upload dikembalikan:
+## Yang diperbaiki
+1. Rekap wawancara error di Railway/PostgreSQL karena fungsi ensureTables masih memakai syntax SQLite `AUTOINCREMENT`.
+   - Sekarang otomatis memakai `SERIAL PRIMARY KEY` kalau database PostgreSQL.
+   - SQLite lokal tetap memakai `AUTOINCREMENT`.
+2. Grafik Status Verifikasi Upload sekarang menampilkan semua kecamatan.
    - Sudah Diverifikasi
    - Belum Diverifikasi
+   - Belum Upload Final
+3. Grafik capaian persentase yang sudah OK tidak diubah.
+4. View rekap wawancara tidak diubah.
 
 ## Cara pasang
-Copy semua folder/file dalam patch ini ke project utama dan pilih Replace/Timpa.
+Copy folder `routes` dan `views` ke project utama, pilih Replace/Timpa.
 
 Lalu jalankan:
 ```bash
 git add .
-git commit -m "Fix interview recap and dashboard verification chart"
+git commit -m "Fix interview recap postgres and verification status chart"
 git push origin main
 ```
 
-## Setelah deploy Railway
-Buka:
-- /dashboard
+Setelah Railway selesai deploy, buka:
 - /interview-recap
-
-Jika /interview-recap masih error, buka log Railway untuk melihat detail error database.
+- /dashboard

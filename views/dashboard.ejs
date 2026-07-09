@@ -337,12 +337,28 @@
               labels: uploadVerificationData.map(item => item.nama),
               datasets:[
                 { label:'Sudah Diverifikasi', data:uploadVerificationData.map(item => item.verified), backgroundColor:'#22a447' },
-                { label:'Belum Diverifikasi', data:uploadVerificationData.map(item => item.unverified), backgroundColor:'#efb400' }
+                { label:'Belum Diverifikasi', data:uploadVerificationData.map(item => item.unverified), backgroundColor:'#efb400' },
+                {
+                  label:'Belum Upload Final',
+                  data: uploadVerificationData.map(item => Math.max(0, 6 - Number(item.verified || 0) - Number(item.unverified || 0))),
+                  backgroundColor:'#d9dde8'
+                }
               ]
             },
             options:{
               responsive:true,
-              plugins:{legend:{position:'bottom'}},
+              plugins:{
+                legend:{position:'bottom'},
+                tooltip:{
+                  callbacks:{
+                    footer(context) {
+                      const data = uploadVerificationData[context[0].dataIndex] || {};
+                      const empty = Math.max(0, 6 - Number(data.verified || 0) - Number(data.unverified || 0));
+                      return `Total instrumen: 6 | Belum upload final: ${empty}`;
+                    }
+                  }
+                }
+              },
               scales:{
                 x:{stacked:true,ticks:{autoSkip:false,maxRotation:60,minRotation:30}},
                 y:{stacked:true,beginAtZero:true,max:6,ticks:{stepSize:1},title:{display:true,text:'Jumlah upload instrumen'}}
