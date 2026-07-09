@@ -6,47 +6,80 @@ const db = require('../database/database');
 const { ensureAuthenticated, isSuperAdmin } = require('../middleware/auth');
 
 const EVALUATORS = [
-  { key: 'bappeda', label: 'BAPPPEDA' },
+  { key: 'bappeda', label: 'BAPPEDA' },
   { key: 'dpmd', label: 'DPMD' },
-  { key: 'asisten_i', label: 'ASISTEN I' },
-  { key: 'asisten_iii', label: 'ASISTEN III' }
+  { key: 'asisten1', label: 'ASISTEN I' },
+  { key: 'asisten3', label: 'ASISTEN III' }
 ];
-
-function dbGet(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (error, row) => (error ? reject(error) : resolve(row || null)));
-  });
-}
 
 function dbAll(sql, params = []) {
   return new Promise((resolve, reject) => {
-    db.all(sql, params, (error, rows) => (error ? reject(error) : resolve(Array.isArray(rows) ? rows : [])));
+    db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(Array.isArray(rows) ? rows : [])));
   });
 }
 
 function dbRun(sql, params = []) {
   return new Promise((resolve, reject) => {
-    db.run(sql, params, (error, result) => (error ? reject(error) : resolve(result || {})));
+    db.run(sql, params, function onRun(err) {
+      if (err) return reject(err);
+      return resolve(this);
+    });
   });
 }
 
 function toNumber(value) {
-  const raw = String(value ?? '').replace(',', '.').trim();
-  if (!raw) return 0;
-  const parsed = Number(raw);
+  if (value === null || value === undefined || value === '') return 0;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  const normalized = String(value).replace(/,/g, '.').replace(/[^0-9.-]/g, '');
+  const parsed = parseFloat(normalized);
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function round(value, digits = 3) {
-  const factor = 10 ** digits;
-  return Math.round((Number(value) || 0) * factor) / factor;
+function round(value, precision = 3) {
+  const multiplier = 10 ** precision;
+  return Math.round((Number(value) + Number.EPSILON) * multiplier) / multiplier;
 }
 
 function field(body, prefix, kecamatanId, evaluatorKey) {
   return body[`${prefix}_${kecamatanId}_${evaluatorKey}`];
 }
 
+async function ensureTables() {
+  await dbRun(`CREATE TABLE IF NOT EXISTS interview_scores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    kecamatan_id INTEGER NOT NULL,
+    evaluator_key TEXT NOT NULL,
+    evaluator_name TEXT NOT NULL,
+    presentation_score REAL DEFAULT 0,
+    collaboration_score REAL DEFAULT 0,
+    total_score REAL DEFAULT 0,
+    rank INTEGER,
+    updated_by INTEGER,
+    source_file TEXT,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(kecamatan_id, evaluator_key)
+  )`);
+
+  await dbRun(`CREATE TABLE IF NOT EXISTS interview_final_scores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    kecamatan_id INTEGER NOT NULL UNIQUE,
+    presentation_total REAL DEFAULT 0,
+    collaboration_total REAL DEFAULT 0,
+    interview_total REAL DEFAULT 0,
+    interview_percentage REAL DEFAULT 0,
+    interview_weighted_score REAL DEFAULT 0,
+    input_data_score REAL DEFAULT 0,
+    final_score REAL DEFAULT 0,
+    final_rank INTEGER,
+    source_file TEXT,
+    updated_by INTEGER,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+  )`);
+}
+
 async function loadRows() {
+  await ensureTables();
+
   const [kecamatans, scoreRows, finalRows, baselineRows] = await Promise.all([
     dbAll("SELECT id, nama, username FROM kecamatan WHERE role = 'kecamatan' ORDER BY nama"),
     dbAll('SELECT * FROM interview_scores'),
@@ -99,16 +132,18 @@ async function loadRows() {
   });
 }
 
-function getTopInterviewRows(rows, limit = 5) {
-  return rows
-    .filter(row => row.final && Number(row.final.finalScore || 0) > 0)
-    .sort((a, b) => {
-      const rankA = a.final.finalRank || Number.MAX_SAFE_INTEGER;
-      const rankB = b.final.finalRank || Number.MAX_SAFE_INTEGER;
-      if (rankA !== rankB) return rankA - rankB;
-      return Number(b.final.finalScore || 0) - Number(a.final.finalScore || 0);
-    })
-    .slice(0, limit);
+function getRankedInterviewRows(rows) {
+  return [...rows].sort((a, b) => {
+    const rankA = a.final && a.final.finalRank ? Number(a.final.finalRank) : Number.MAX_SAFE_INTEGER;
+    const rankB = b.final && b.final.finalRank ? Number(b.final.finalRank) : Number.MAX_SAFE_INTEGER;
+    if (rankA !== rankB) return rankA - rankB;
+
+    const scoreA = a.final ? Number(a.final.finalScore || 0) : 0;
+    const scoreB = b.final ? Number(b.final.finalScore || 0) : 0;
+    if (scoreA !== scoreB) return scoreB - scoreA;
+
+    return String(a.nama || '').localeCompare(String(b.nama || ''), 'id');
+  });
 }
 
 async function upsertScore(kecamatanId, evaluator, presentationScore, collaborationScore, actorId) {
@@ -183,11 +218,12 @@ async function recalculateRanks() {
 
 router.get('/interview-recap', ensureAuthenticated, isSuperAdmin, async (req, res) => {
   try {
-    const rows = await loadRows();
-    const topRows = getTopInterviewRows(rows, 5);
+    await recalculateRanks();
+    const rows = getRankedInterviewRows(await loadRows());
+    const evaluatedRows = rows.filter(row => row.final && Number(row.final.finalScore || 0) > 0);
     res.render('interview-recap', {
-      rows: topRows,
-      allRows: rows,
+      rows,
+      evaluatedRows,
       evaluators: EVALUATORS,
       username: req.session.username,
       success: req.query.success || null,
@@ -246,7 +282,8 @@ router.post('/interview-recap/save', ensureAuthenticated, isSuperAdmin, async (r
 
 router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, async (req, res) => {
   try {
-    const rows = getTopInterviewRows(await loadRows(), 5);
+    await recalculateRanks();
+    const rows = getRankedInterviewRows(await loadRows());
     const headers = [
       'No', 'Kecamatan',
       ...EVALUATORS.flatMap(evaluator => [
@@ -255,7 +292,7 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
         `${evaluator.label} Total`
       ]),
       'Total Penampilan', 'Total Pengayaan', 'Total Wawancara',
-      'Capaian Wawancara (%)', 'Capaian Wawancara Bobot 50%', 'Capaian Input Data', 'Nilai Akhir', 'Peringkat'
+      'Capaian Wawancara (%)', 'Capaian Wawancara Bobot 50%', 'Capaian Input Data Bobot 50%', 'Nilai Akhir', 'Peringkat'
     ];
     const escape = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
     const csvRows = [headers.map(escape).join(',')];
@@ -263,7 +300,7 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
     rows.forEach((row, index) => {
       const final = row.final || {};
       csvRows.push([
-        index + 1,
+        final.finalRank || index + 1,
         row.nama,
         ...EVALUATORS.flatMap(evaluator => [
           row.scores[evaluator.key].presentationScore,
@@ -282,7 +319,7 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
     });
 
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-    res.setHeader('Content-Disposition', 'attachment; filename="rekap-nilai-wawancara-top-5.csv"');
+    res.setHeader('Content-Disposition', 'attachment; filename="rekap-nilai-wawancara-semua-kecamatan.csv"');
     res.send('\ufeff' + csvRows.join('\n'));
   } catch (error) {
     console.error('Gagal ekspor rekap wawancara:', error);

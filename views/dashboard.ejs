@@ -175,12 +175,13 @@
         %>
         <section class="card">
           <h2>Grafik Capaian Kecamatan Berdasarkan Upload Data</h2>
-          <p class="muted">Grafik ini menampilkan jumlah Instrumen A sampai F yang sudah diunggah final oleh kecamatan, lalu dipisahkan menjadi sudah diverifikasi dan belum diverifikasi.</p>
+          <p class="muted">Grafik ini menampilkan persentase capaian pengisian berbasis upload data per kecamatan. Angka persentase ditampilkan di atas setiap batang seperti dashboard Excel.</p>
           <div class="grid" style="margin-top:14px">
             <div class="instrument-card"><h3>Upload Sudah Diverifikasi</h3><div class="metric"><%= totalUploadedVerified %></div><p style="min-height:0;text-align:center">Total instrumen berstatus upload final dan terverifikasi.</p></div>
             <div class="instrument-card"><h3>Upload Belum Diverifikasi</h3><div class="metric"><%= totalUploadedUnverified %></div><p style="min-height:0;text-align:center">Total instrumen berstatus upload final tetapi belum terverifikasi.</p></div>
+            <div class="instrument-card"><h3>Rata-rata Capaian</h3><div class="metric"><%= rata %>%</div><p style="min-height:0;text-align:center">Rata-rata progres upload data seluruh kecamatan.</p></div>
           </div>
-          <canvas id="uploadVerificationChart" height="120"></canvas>
+          <canvas id="uploadVerificationChart" height="140"></canvas>
         </section>
       <% } %>
 
@@ -238,10 +239,32 @@
           options:{ responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:100,title:{display:true,text:'Progres (%)'}}} }
         });
 
+        const valueLabelPlugin = {
+          id: 'valueLabelPlugin',
+          afterDatasetsDraw(chart) {
+            const { ctx } = chart;
+            chart.data.datasets.forEach((dataset, datasetIndex) => {
+              const meta = chart.getDatasetMeta(datasetIndex);
+              if (meta.hidden) return;
+              meta.data.forEach((bar, index) => {
+                const raw = Number(dataset.data[index] || 0);
+                ctx.save();
+                ctx.fillStyle = '#273142';
+                ctx.font = 'bold 11px Segoe UI';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText(`${raw}%`, bar.x, bar.y - 4);
+                ctx.restore();
+              });
+            });
+          }
+        };
+
         const uploadChartElement = document.getElementById('uploadVerificationChart');
         if (uploadChartElement) {
           const uploadVerificationData = <%- JSON.stringify(kecamatans.map(k => ({
             nama: k.nama,
+            percent: k.progress_percent || 0,
             verified: k.uploaded_verified_instruments || 0,
             unverified: k.uploaded_unverified_instruments || 0
           }))) %>;
@@ -250,18 +273,38 @@
             data:{
               labels: uploadVerificationData.map(item => item.nama),
               datasets:[
-                { label:'Sudah Diverifikasi', data:uploadVerificationData.map(item => item.verified), backgroundColor:'#22a447' },
-                { label:'Belum Diverifikasi', data:uploadVerificationData.map(item => item.unverified), backgroundColor:'#efb400' }
+                {
+                  label:'Capaian Upload Data (%)',
+                  data: uploadVerificationData.map(item => item.percent),
+                  backgroundColor:'#22a447',
+                  borderColor:'#1c8b39',
+                  borderWidth:1
+                }
               ]
             },
             options:{
               responsive:true,
-              plugins:{legend:{position:'bottom'}},
+              plugins:{
+                legend:{position:'bottom'},
+                tooltip:{
+                  callbacks:{
+                    label(context) {
+                      const data = uploadVerificationData[context.dataIndex] || {};
+                      return [
+                        `Capaian: ${Number(context.raw || 0)}%`,
+                        `Sudah diverifikasi: ${data.verified || 0} instrumen`,
+                        `Belum diverifikasi: ${data.unverified || 0} instrumen`
+                      ];
+                    }
+                  }
+                }
+              },
               scales:{
-                x:{stacked:true,ticks:{autoSkip:false,maxRotation:60,minRotation:30}},
-                y:{stacked:true,beginAtZero:true,max:6,ticks:{stepSize:1},title:{display:true,text:'Jumlah upload instrumen'}}
+                x:{ticks:{autoSkip:false,maxRotation:60,minRotation:30}},
+                y:{beginAtZero:true,max:100,ticks:{stepSize:10},title:{display:true,text:'Persentase capaian (%)'}}
               }
-            }
+            },
+            plugins:[valueLabelPlugin]
           });
         }
       </script>

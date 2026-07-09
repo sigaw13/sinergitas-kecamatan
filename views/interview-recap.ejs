@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Top 5 Rekap Nilai Wawancara SIESELON</title>
+  <title>Rekap Nilai Wawancara SIESELON</title>
   <style>
     * { box-sizing:border-box; margin:0; padding:0; }
     body { font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background:#f4f6fb; color:#273142; }
@@ -11,7 +11,7 @@
     .navbar h1 { font-size:20px; }
     .nav-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .navbar a { color:#fff; text-decoration:none; background:rgba(255,255,255,.17); padding:8px 12px; border-radius:7px; font-size:13px; }
-    .container { max-width:1500px; margin:28px auto; padding:0 18px; }
+    .container { max-width:1600px; margin:28px auto; padding:0 18px; }
     .card, .table-card { background:#fff; border-radius:13px; box-shadow:0 3px 14px rgba(25,42,70,.08); padding:22px; margin-bottom:22px; }
     .intro h2 { margin-bottom:8px; }
     .muted { color:#687386; line-height:1.55; }
@@ -40,7 +40,7 @@
 </head>
 <body>
   <nav class="navbar">
-    <h1>🎙️ Top 5 Rekap Nilai Wawancara</h1>
+    <h1>🎙️ Rekap Nilai Wawancara Semua Kecamatan</h1>
     <div class="nav-actions">
       <span>👤 <%= username %> — Superadmin</span>
       <a href="/dashboard">📊 Dashboard</a>
@@ -56,21 +56,21 @@
     <% if (error) { %><div class="message error">⚠️ <%= error %></div><% } %>
 
     <section class="card intro">
-      <h2>Top 5 Rekap Nilai Akhir Hasil Wawancara</h2>
-      <p class="muted">Halaman ini hanya menampilkan 5 kecamatan teratas sesuai format rekap wawancara.</p>
+      <h2>Rekap Nilai Akhir Hasil Wawancara</h2>
+      <p class="muted">Halaman ini menampilkan seluruh kecamatan beserta nilai akhir dan peringkat terbaru.</p>
       <div class="note">
         Rumus: Capaian Wawancara = Total Wawancara / 400 × 100. Bobot Wawancara 50% = Capaian Wawancara × 0,5. Nilai Akhir = Bobot Wawancara 50% + Bobot Input Data/Survey Lapangan 50%.
       </div>
       <div class="grid">
-        <div class="metric-card"><h3>Total Kecamatan Dinilai</h3><div class="metric"><%= allRows.filter(row => row.final && row.final.finalScore > 0).length %></div></div>
-        <div class="metric-card"><h3>Ditampilkan</h3><div class="metric"><%= rows.length %></div></div>
-        <div class="metric-card"><h3>Nilai Tertinggi</h3><div class="metric"><%= rows.length ? rows[0].final.finalScore.toFixed(2) : '0.00' %></div></div>
+        <div class="metric-card"><h3>Total Kecamatan</h3><div class="metric"><%= rows.length %></div></div>
+        <div class="metric-card"><h3>Sudah Dinilai</h3><div class="metric"><%= evaluatedRows.length %></div></div>
+        <div class="metric-card"><h3>Nilai Tertinggi</h3><div class="metric"><%= evaluatedRows.length ? evaluatedRows[0].final.finalScore.toFixed(2) : '0.00' %></div></div>
       </div>
     </section>
 
     <section class="table-card">
-      <h2>5 Teratas Nilai Akhir Wawancara</h2>
-      <p class="muted" style="margin:8px 0 14px">Data diurutkan berdasarkan peringkat akhir tertinggi.</p>
+      <h2>Rekap Seluruh Kecamatan</h2>
+      <p class="muted" style="margin:8px 0 14px">Data diurutkan berdasarkan peringkat akhir tertinggi dan diperbarui otomatis saat halaman dibuka.</p>
       <table>
         <thead>
           <tr>
@@ -95,24 +95,25 @@
           <% rows.forEach((row, index) => {
             const final = row.final || {};
             const interviewWeighted = Number(final.interviewWeightedScore || 0) || (Number(final.interviewPercentage || 0) * 0.5);
+            const displayRank = final.finalRank || (Number(final.finalScore || 0) > 0 ? index + 1 : '-');
           %>
             <tr>
-              <td class="center"><%= index + 1 %></td>
+              <td class="center"><%= displayRank %></td>
               <td class="name"><%= row.nama %></td>
               <td class="right"><%= Number(final.presentationTotal || 0).toFixed(2) %></td>
               <td class="right"><%= Number(final.collaborationTotal || 0).toFixed(2) %></td>
               <td class="right"><%= Number(final.interviewTotal || 0).toFixed(2) %></td>
-              <td class="right"><%= Number(final.interviewPercentage || 0).toFixed(0) %></td>
+              <td class="right"><%= Number(final.interviewPercentage || 0).toFixed(2) %></td>
               <td class="right"><%= interviewWeighted.toFixed(2) %></td>
               <td class="right"><%= Number(final.inputDataScore || 0).toFixed(2) %></td>
               <td class="right"><%= Number(final.finalScore || 0).toFixed(2) %></td>
-              <td class="rank"><%= final.finalRank || index + 1 %></td>
+              <td class="rank"><%= displayRank %></td>
             </tr>
           <% }) %>
         </tbody>
       </table>
       <div class="actions">
-        <a href="/interview-recap/export.csv" class="btn">📥 Ekspor CSV Top 5</a>
+        <a href="/interview-recap/export.csv" class="btn">📥 Ekspor CSV Semua Kecamatan</a>
         <a href="/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
       </div>
     </section>
