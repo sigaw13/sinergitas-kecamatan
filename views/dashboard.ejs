@@ -162,6 +162,7 @@
       <% const totalKecamatan = kecamatans.length; %>
       <% const mulai = kecamatans.filter(item => item.progress_percent > 0).length; %>
       <% const rata = totalKecamatan ? Math.round(kecamatans.reduce((sum,item)=>sum+item.progress_percent,0)/totalKecamatan) : 0; %>
+      <% const rataNilaiSistem = totalKecamatan ? (kecamatans.reduce((sum,item)=>sum+Number(item.system_temporary_percent || 0),0)/totalKecamatan) : 0; %>
       <div class="grid">
         <div class="instrument-card"><h3>Kecamatan Mulai Mengisi</h3><div class="metric"><%= mulai %>/<%= totalKecamatan %></div><p style="min-height:0;text-align:center">Berdasarkan progres numerik, bukan status final.</p></div>
         <div class="instrument-card"><h3>Rata-rata Progres Kabupaten</h3><div class="metric"><%= rata %>%</div><div class="progress"><div class="bar" style="width:<%= rata %>%"><%= rata %>%</div></div></div>
@@ -174,12 +175,12 @@
           const totalUploadedUnverified = kecamatans.reduce((sum,item)=>sum+(item.uploaded_unverified_instruments || 0),0);
         %>
         <section class="card">
-          <h2>Grafik Capaian Kecamatan Berdasarkan Upload Data</h2>
-          <p class="muted">Grafik ini menampilkan persentase capaian pengisian berbasis upload data per kecamatan. Angka persentase ditampilkan di atas setiap batang seperti dashboard Excel.</p>
+          <h2>Grafik Nilai Sistem Sementara Kecamatan</h2>
+          <p class="muted">Grafik ini menampilkan persentase nilai sistem sementara masing-masing kecamatan berdasarkan jawaban dan bukti dukung yang sudah diinput. Angka persentase ditampilkan di atas setiap batang.</p>
           <div class="grid" style="margin-top:14px">
             <div class="instrument-card"><h3>Upload Sudah Diverifikasi</h3><div class="metric"><%= totalUploadedVerified %></div><p style="min-height:0;text-align:center">Total instrumen berstatus upload final dan terverifikasi.</p></div>
             <div class="instrument-card"><h3>Upload Belum Diverifikasi</h3><div class="metric"><%= totalUploadedUnverified %></div><p style="min-height:0;text-align:center">Total instrumen berstatus upload final tetapi belum terverifikasi.</p></div>
-            <div class="instrument-card"><h3>Rata-rata Capaian</h3><div class="metric"><%= rata %>%</div><p style="min-height:0;text-align:center">Rata-rata progres upload data seluruh kecamatan.</p></div>
+            <div class="instrument-card"><h3>Rata-rata Nilai Sistem</h3><div class="metric"><%= Number(rataNilaiSistem || 0).toFixed(2) %>%</div><p style="min-height:0;text-align:center">Rata-rata nilai sistem sementara seluruh kecamatan.</p></div>
           </div>
           <canvas id="uploadVerificationChart" height="140"></canvas>
           <div style="height:22px"></div>
@@ -257,7 +258,7 @@
                 ctx.font = 'bold 11px Segoe UI';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
-                ctx.fillText(`${raw}%`, bar.x, bar.y - 4);
+                ctx.fillText(`${Number(raw || 0).toFixed(2)}%`, bar.x, bar.y - 4);
                 ctx.restore();
               });
             });
@@ -267,7 +268,9 @@
         const uploadChartElement = document.getElementById('uploadVerificationChart');
         const uploadVerificationData = <%- JSON.stringify(kecamatans.map(k => ({
           nama: k.nama,
-          percent: k.progress_percent || 0,
+          percent: Number(k.system_temporary_percent || 0),
+          score: Number(k.system_temporary_score || 0),
+          category: k.system_temporary_category || '-',
           verified: k.uploaded_verified_instruments || 0,
           unverified: k.uploaded_unverified_instruments || 0
         }))) %>;
@@ -294,7 +297,7 @@
               labels: uploadVerificationData.map(item => item.nama),
               datasets:[
                 {
-                  label:'Capaian Upload Data (%)',
+                  label:'Nilai Sistem Sementara (%)',
                   data: uploadVerificationData.map(item => item.percent),
                   backgroundColor: uploadVerificationData.map(item => topFiveColorMap.get(item.nama) || '#22a447'),
                   borderColor: uploadVerificationData.map(item => topFiveNames.has(item.nama) ? '#273142' : '#1c8b39'),
@@ -312,7 +315,9 @@
                       const data = uploadVerificationData[context.dataIndex] || {};
                       const topLabel = topFiveNames.has(data.nama) ? 'TOP 5 - ' : '';
                       return [
-                        `${topLabel}Capaian: ${Number(context.raw || 0)}%`,
+                        `${topLabel}Nilai Sistem Sementara: ${Number(data.score || 0).toFixed(2)}/100`,
+                        `Persentase: ${Number(data.percent || 0).toFixed(2)}%`,
+                        `Kategori: ${data.category || '-'}`,
                         `Sudah diverifikasi: ${data.verified || 0} instrumen`,
                         `Belum diverifikasi: ${data.unverified || 0} instrumen`
                       ];
@@ -322,7 +327,7 @@
               },
               scales:{
                 x:{ticks:{autoSkip:false,maxRotation:60,minRotation:30}},
-                y:{beginAtZero:true,max:100,ticks:{stepSize:10},title:{display:true,text:'Persentase capaian (%)'}}
+                y:{beginAtZero:true,max:100,ticks:{stepSize:10},title:{display:true,text:'Persentase Nilai Sistem Sementara (%)'}}
               }
             },
             plugins:[valueLabelPlugin]

@@ -253,7 +253,37 @@ async function getKecamatanProgressRows(authorizedIds = null) {
       });
     });
     const overall = calculateOverallProgress(progressDetails);
-    const result = { ...kecamatan, progress_percent: overall.percent, overall_progress: overall };
+
+    const rowA = tableMaps.a.get(Number(kecamatan.id)) || {};
+    const rowB = tableMaps.b.get(Number(kecamatan.id)) || {};
+    const rowC = tableMaps.c.get(Number(kecamatan.id)) || {};
+    const rowD = tableMaps.d.get(Number(kecamatan.id)) || {};
+    const rowE = tableMaps.e.get(Number(kecamatan.id)) || {};
+    const rowF = tableMaps.f.get(Number(kecamatan.id)) || {};
+
+    const evidenceA = expandEvidenceKeys('a', evidenceMap.get(`${Number(kecamatan.id)}:a`) || new Set());
+    const evidenceB = expandEvidenceKeys('b', evidenceMap.get(`${Number(kecamatan.id)}:b`) || new Set());
+    const evidenceC = expandEvidenceKeys('c', evidenceMap.get(`${Number(kecamatan.id)}:c`) || new Set());
+    const evidenceD = expandEvidenceKeys('d', evidenceMap.get(`${Number(kecamatan.id)}:d`) || new Set());
+    const evidenceE = expandEvidenceKeys('e', evidenceMap.get(`${Number(kecamatan.id)}:e`) || new Set());
+    const evidenceF = expandEvidenceKeys('f', evidenceMap.get(`${Number(kecamatan.id)}:f`) || new Set());
+
+    const aspectA = ScoringSystem.calculateAspectA(rowA, evidenceA);
+    const aspectB = ScoringSystem.calculateAspectB(rowB, evidenceB);
+    const aspectC = ScoringSystem.calculateAspectC(rowC, evidenceC);
+    const aspectD = ScoringSystem.calculateAspectD(rowD, evidenceD);
+    const aspectE = ScoringSystem.calculateAspectE(rowE, evidenceE);
+    const aspectF = ScoringSystem.calculateAspectF(rowF, evidenceF);
+    const temporaryScore = ScoringSystem.calculateTotalScore(aspectA, aspectB, aspectC, aspectD, aspectE, aspectF);
+
+    const result = {
+      ...kecamatan,
+      progress_percent: overall.percent,
+      overall_progress: overall,
+      system_temporary_score: Number(temporaryScore.totalScore || 0),
+      system_temporary_percent: Number(temporaryScore.percentage || 0),
+      system_temporary_category: temporaryScore.category || '-'
+    };
 
     progressDetails.forEach(detail => {
       const code = detail.instrument.toLowerCase();

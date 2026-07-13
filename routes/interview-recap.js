@@ -44,6 +44,26 @@ function field(body, prefix, kecamatanId, evaluatorKey) {
   return body[`${prefix}_${kecamatanId}_${evaluatorKey}`];
 }
 
+async function getColumns(tableName) {
+  if (db.dialect === 'postgres') {
+    const rows = await dbAll(
+      `SELECT column_name FROM information_schema.columns WHERE table_name = ?`,
+      [tableName]
+    );
+    return new Set(rows.map(row => String(row.column_name || '').toLowerCase()));
+  }
+
+  const rows = await dbAll(`PRAGMA table_info(${tableName})`);
+  return new Set(rows.map(row => String(row.name || '').toLowerCase()));
+}
+
+async function ensureColumn(tableName, columnName, definition) {
+  const columns = await getColumns(tableName);
+  if (!columns.has(String(columnName).toLowerCase())) {
+    await dbRun(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition}`);
+  }
+}
+
 async function ensureTables() {
   if (db.dialect === 'postgres') {
     await dbRun(`CREATE TABLE IF NOT EXISTS interview_scores (
@@ -80,43 +100,62 @@ async function ensureTables() {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`);
-    return;
+  } else {
+    await dbRun(`CREATE TABLE IF NOT EXISTS interview_scores (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      kecamatan_id INTEGER NOT NULL,
+      evaluator_key TEXT NOT NULL,
+      evaluator_name TEXT NOT NULL,
+      presentation_score REAL DEFAULT 0,
+      collaboration_score REAL DEFAULT 0,
+      total_score REAL DEFAULT 0,
+      rank INTEGER,
+      updated_by INTEGER,
+      source_file TEXT,
+      imported_at DATETIME,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(kecamatan_id, evaluator_key)
+    )`);
+
+    await dbRun(`CREATE TABLE IF NOT EXISTS interview_final_scores (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      kecamatan_id INTEGER NOT NULL UNIQUE,
+      presentation_total REAL DEFAULT 0,
+      collaboration_total REAL DEFAULT 0,
+      interview_total REAL DEFAULT 0,
+      interview_percentage REAL DEFAULT 0,
+      interview_weighted_score REAL DEFAULT 0,
+      input_data_score REAL DEFAULT 0,
+      final_score REAL DEFAULT 0,
+      final_rank INTEGER,
+      source_file TEXT,
+      imported_at DATETIME,
+      updated_by INTEGER,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`);
   }
 
-  await dbRun(`CREATE TABLE IF NOT EXISTS interview_scores (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    kecamatan_id INTEGER NOT NULL,
-    evaluator_key TEXT NOT NULL,
-    evaluator_name TEXT NOT NULL,
-    presentation_score REAL DEFAULT 0,
-    collaboration_score REAL DEFAULT 0,
-    total_score REAL DEFAULT 0,
-    rank INTEGER,
-    updated_by INTEGER,
-    source_file TEXT,
-    imported_at DATETIME,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(kecamatan_id, evaluator_key)
-  )`);
+  await ensureColumn('interview_scores', 'rank', 'INTEGER');
+  await ensureColumn('interview_scores', 'source_file', 'TEXT');
+  await ensureColumn('interview_scores', 'imported_at', db.dialect === 'postgres' ? 'TIMESTAMP' : 'DATETIME');
+  await ensureColumn('interview_scores', 'created_at', db.dialect === 'postgres' ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP');
+  await ensureColumn('interview_scores', 'updated_at', db.dialect === 'postgres' ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP');
 
-  await dbRun(`CREATE TABLE IF NOT EXISTS interview_final_scores (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    kecamatan_id INTEGER NOT NULL UNIQUE,
-    presentation_total REAL DEFAULT 0,
-    collaboration_total REAL DEFAULT 0,
-    interview_total REAL DEFAULT 0,
-    interview_percentage REAL DEFAULT 0,
-    interview_weighted_score REAL DEFAULT 0,
-    input_data_score REAL DEFAULT 0,
-    final_score REAL DEFAULT 0,
-    final_rank INTEGER,
-    source_file TEXT,
-    imported_at DATETIME,
-    updated_by INTEGER,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`);
+  await ensureColumn('interview_final_scores', 'presentation_total', 'REAL DEFAULT 0');
+  await ensureColumn('interview_final_scores', 'collaboration_total', 'REAL DEFAULT 0');
+  await ensureColumn('interview_final_scores', 'interview_total', 'REAL DEFAULT 0');
+  await ensureColumn('interview_final_scores', 'interview_percentage', 'REAL DEFAULT 0');
+  await ensureColumn('interview_final_scores', 'interview_weighted_score', 'REAL DEFAULT 0');
+  await ensureColumn('interview_final_scores', 'input_data_score', 'REAL DEFAULT 0');
+  await ensureColumn('interview_final_scores', 'final_score', 'REAL DEFAULT 0');
+  await ensureColumn('interview_final_scores', 'final_rank', 'INTEGER');
+  await ensureColumn('interview_final_scores', 'source_file', 'TEXT');
+  await ensureColumn('interview_final_scores', 'imported_at', db.dialect === 'postgres' ? 'TIMESTAMP' : 'DATETIME');
+  await ensureColumn('interview_final_scores', 'updated_by', 'INTEGER');
+  await ensureColumn('interview_final_scores', 'created_at', db.dialect === 'postgres' ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP');
+  await ensureColumn('interview_final_scores', 'updated_at', db.dialect === 'postgres' ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP');
 }
 
 async function loadRows() {
@@ -242,9 +281,11 @@ async function upsertFinal(kecamatanId, values, actorId) {
 async function recalculateRanks() {
   await ensureTables();
 
+  await dbRun('UPDATE interview_final_scores SET final_rank = NULL');
   const finalRows = await dbAll(
     `SELECT kecamatan_id, final_score
      FROM interview_final_scores
+     WHERE final_score > 0
      ORDER BY final_score DESC, kecamatan_id ASC`
   );
 
@@ -258,6 +299,20 @@ async function recalculateRanks() {
     previousScore = score;
     previousRank = rank;
   }
+}
+
+function getInputDataRawScore(row, body, kecamatanId) {
+  const bodyKey = `input_data_raw_${kecamatanId}`;
+  if (body && body[bodyKey] !== undefined && String(body[bodyKey]).trim() !== '') {
+    return toNumber(body[bodyKey]);
+  }
+  if (row.baseline && row.baseline.totalScore !== null && row.baseline.totalScore !== undefined) {
+    return Number(row.baseline.totalScore || 0);
+  }
+  if (row.final && row.final.inputDataScore) {
+    return Number(row.final.inputDataScore || 0) * 2;
+  }
+  return 0;
 }
 
 router.get('/interview-recap', ensureAuthenticated, isSuperAdmin, async (req, res) => {
@@ -288,20 +343,27 @@ router.post('/interview-recap/save', ensureAuthenticated, isSuperAdmin, async (r
       let presentationTotal = 0;
       let collaborationTotal = 0;
 
-      for (const evaluator of EVALUATORS) {
-        const presentationScore = toNumber(field(req.body, 'presentation', kecamatanId, evaluator.key));
-        const collaborationScore = toNumber(field(req.body, 'collaboration', kecamatanId, evaluator.key));
-        presentationTotal += presentationScore;
-        collaborationTotal += collaborationScore;
-        await upsertScore(kecamatanId, evaluator, presentationScore, collaborationScore, req.session.userId);
+      const manualPresentationKey = `presentation_total_${kecamatanId}`;
+      const manualCollaborationKey = `collaboration_total_${kecamatanId}`;
+      const hasManualTotals = req.body[manualPresentationKey] !== undefined || req.body[manualCollaborationKey] !== undefined;
+
+      if (hasManualTotals) {
+        presentationTotal = toNumber(req.body[manualPresentationKey]);
+        collaborationTotal = toNumber(req.body[manualCollaborationKey]);
+      } else {
+        for (const evaluator of EVALUATORS) {
+          const presentationScore = toNumber(field(req.body, 'presentation', kecamatanId, evaluator.key));
+          const collaborationScore = toNumber(field(req.body, 'collaboration', kecamatanId, evaluator.key));
+          presentationTotal += presentationScore;
+          collaborationTotal += collaborationScore;
+          await upsertScore(kecamatanId, evaluator, presentationScore, collaborationScore, req.session.userId);
+        }
       }
 
       const interviewTotal = round(presentationTotal + collaborationTotal, 3);
       const interviewPercentage = round((interviewTotal / 400) * 100, 3);
       const interviewWeightedScore = round(interviewPercentage * 0.5, 3);
-      const inputDataRawScore = req.body[`input_data_${kecamatanId}`] === undefined || String(req.body[`input_data_${kecamatanId}`]).trim() === ''
-        ? Number(row.baseline ? row.baseline.totalScore : 0)
-        : toNumber(req.body[`input_data_${kecamatanId}`]);
+      const inputDataRawScore = getInputDataRawScore(row, req.body, kecamatanId);
       const inputDataScore = round(inputDataRawScore * 0.5, 3);
       const finalScore = round(interviewWeightedScore + inputDataScore, 3);
 
@@ -311,7 +373,7 @@ router.post('/interview-recap/save', ensureAuthenticated, isSuperAdmin, async (r
         interviewTotal,
         interviewPercentage,
         interviewWeightedScore,
-        inputDataScore: round(inputDataScore, 3),
+        inputDataScore,
         finalScore,
         finalRank: null
       }, req.session.userId);
@@ -332,13 +394,14 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
     const rows = getRankedInterviewRows(await loadRows());
     const headers = [
       'No', 'Kecamatan',
-      ...EVALUATORS.flatMap(evaluator => [
-        `${evaluator.label} Penampilan`,
-        `${evaluator.label} Pengayaan`,
-        `${evaluator.label} Total`
-      ]),
-      'Total Penampilan', 'Total Pengayaan', 'Total Wawancara',
-      'Capaian Wawancara (%)', 'Capaian Wawancara Bobot 50%', 'Capaian Input Data Bobot 50%', 'Nilai Akhir', 'Peringkat'
+      'Aspek Penampilan dan Penguasaan Materi',
+      'Aspek Pengayaan Aksi Nyata/Kolaborasi Non APBD',
+      'Total Wawancara',
+      'Capaian Wawancara (%)',
+      'Capaian Wawancara Bobot 50%',
+      'Capaian Input Data Bobot 50%',
+      'Nilai Akhir',
+      'Rank'
     ];
     const escape = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
     const csvRows = [headers.map(escape).join(',')];
@@ -346,13 +409,8 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
     rows.forEach((row, index) => {
       const final = row.final || {};
       csvRows.push([
-        final.finalRank || index + 1,
+        final.finalRank || (Number(final.finalScore || 0) > 0 ? index + 1 : ''),
         row.nama,
-        ...EVALUATORS.flatMap(evaluator => [
-          row.scores[evaluator.key].presentationScore,
-          row.scores[evaluator.key].collaborationScore,
-          row.scores[evaluator.key].totalScore
-        ]),
         final.presentationTotal || 0,
         final.collaborationTotal || 0,
         final.interviewTotal || 0,

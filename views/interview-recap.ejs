@@ -11,7 +11,7 @@
     .navbar h1 { font-size:20px; }
     .nav-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .navbar a { color:#fff; text-decoration:none; background:rgba(255,255,255,.17); padding:8px 12px; border-radius:7px; font-size:13px; }
-    .container { max-width:1600px; margin:28px auto; padding:0 18px; }
+    .container { max-width:1680px; margin:28px auto; padding:0 18px; }
     .card, .table-card { background:#fff; border-radius:13px; box-shadow:0 3px 14px rgba(25,42,70,.08); padding:22px; margin-bottom:22px; }
     .intro h2 { margin-bottom:8px; }
     .muted { color:#687386; line-height:1.55; }
@@ -25,16 +25,21 @@
     .btn { display:inline-block; border:0; border-radius:7px; padding:9px 14px; text-decoration:none; color:#fff; background:linear-gradient(135deg,#5d73df,#7047a5); font-size:13px; cursor:pointer; }
     .btn-secondary { background:#687386; }
     .table-card { overflow-x:auto; }
-    table { width:100%; border-collapse:collapse; min-width:1150px; border:2px solid #111; }
-    th,td { padding:9px 8px; border:1px solid #111; vertical-align:middle; font-size:12px; }
+    table { width:100%; border-collapse:collapse; min-width:1180px; border:2px solid #111; }
+    th,td { padding:8px 7px; border:1px solid #111; vertical-align:middle; font-size:12px; }
     th { background:#fff; color:#000; text-align:center; font-weight:800; line-height:1.35; }
     td { background:#fff; color:#000; }
+    th.manual-header { background:#fff200; }
+    td.manual-cell { background:#fff200; }
+    .manual-input { width:100%; border:1px solid #777; border-radius:4px; padding:6px 7px; text-align:right; background:#fffde8; font-weight:700; }
+    .manual-input:focus { outline:2px solid #7047a5; background:#fff; }
     td.center { text-align:center; }
     td.right { text-align:right; }
     td.name { font-weight:500; min-width:190px; text-transform:uppercase; }
     .rank { font-weight:800; text-align:center; }
     .actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:16px; }
     .note { padding:12px; background:#fffaf0; border-left:4px solid #efb400; border-radius:8px; margin-top:12px; color:#6b5200; font-size:12px; line-height:1.5; }
+    .sticky-actions { position:sticky; bottom:0; background:#fff; border-top:1px solid #e2e5ec; padding-top:12px; }
     @media (max-width:720px) { .navbar { padding:12px 15px; } .container { padding:0 10px; } }
   </style>
 </head>
@@ -57,9 +62,9 @@
 
     <section class="card intro">
       <h2>Rekap Nilai Akhir Hasil Wawancara</h2>
-      <p class="muted">Halaman ini menampilkan seluruh kecamatan beserta nilai akhir dan peringkat terbaru.</p>
+      <p class="muted">Halaman ini menampilkan seluruh kecamatan. Kolom berwarna kuning diisi manual dari hasil wawancara.</p>
       <div class="note">
-        Rumus: Capaian Wawancara = Total Wawancara / 400 × 100. Bobot Wawancara 50% = Capaian Wawancara × 0,5. Nilai Akhir = Bobot Wawancara 50% + Bobot Input Data/Survey Lapangan 50%.
+        Rumus: Total = Aspek Penampilan + Aspek Pengayaan. Capaian Wawancara = Total / 400 × 100. Bobot Wawancara 50% = Capaian Wawancara × 0,5. Nilai Akhir = Bobot Wawancara 50% + Bobot Input Data/Survey Lapangan 50%.
       </div>
       <div class="grid">
         <div class="metric-card"><h3>Total Kecamatan</h3><div class="metric"><%= rows.length %></div></div>
@@ -70,52 +75,67 @@
 
     <section class="table-card">
       <h2>Rekap Seluruh Kecamatan</h2>
-      <p class="muted" style="margin:8px 0 14px">Data diurutkan berdasarkan peringkat akhir tertinggi dan diperbarui otomatis saat halaman dibuka.</p>
-      <table>
-        <thead>
-          <tr>
-            <th>NO</th>
-            <th>KECAMATAN</th>
-            <th>ASPEK<br>PENAMPILAN DAN<br>PENGUASAAN MATERI</th>
-            <th>ASPEK PENGAYAAN<br>AKSI NYATA/KOLABORASI<br>NON APBD YANG LANGSUNG<br>DIRASAKAN OLEH MASYARAKAT</th>
-            <th>TOTAL</th>
-            <th>CAPAIAN<br>WAWANCARA<br>(%)</th>
-            <th>CAPAIAN<br>WAWANCARA<br>(BOBOT NILAI 50%)</th>
-            <th>CAPAIAN INPUT<br>DATA DAN SURVEY<br>LAPANGAN<br>(BOBOT NILAI 50%)</th>
-            <th>NILAI<br>AKHIR</th>
-            <th>RANK</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (!rows.length) { %>
+      <p class="muted" style="margin:8px 0 14px">Isi manual dua kolom kuning, lalu klik Simpan Rekap Wawancara. Kolom lain dihitung otomatis.</p>
+
+      <form method="POST" action="/interview-recap/save">
+        <table>
+          <thead>
             <tr>
-              <td colspan="10" class="center">Belum ada data rekap wawancara. Jalankan import Excel atau simpan nilai wawancara terlebih dahulu.</td>
+              <th>NO</th>
+              <th>KECAMATAN</th>
+              <th class="manual-header">ASPEK PENAMPILAN DAN<br>PENGUASAAN MATERI<br><small>(isi manual nilai hasil wawancara)</small></th>
+              <th class="manual-header">ASPEK PENGAYAAN AKSI NYATA/<br>KOLABORASI NON APBD YANG LANGSUNG<br>DIRASAKAN OLEH MASYARAKAT<br><small>(isi manual nilai hasil wawancara)</small></th>
+              <th>TOTAL</th>
+              <th>CAPAIAN<br>WAWANCARA<br>(%)</th>
+              <th>CAPAIAN<br>WAWANCARA<br>(BOBOT NILAI 50%)</th>
+              <th>CAPAIAN INPUT<br>DATA DAN SURVEY<br>LAPANGAN<br>(BOBOT NILAI 50%)</th>
+              <th>NILAI<br>AKHIR</th>
+              <th>RANK</th>
             </tr>
-          <% } %>
-          <% rows.forEach((row, index) => {
-            const final = row.final || {};
-            const interviewWeighted = Number(final.interviewWeightedScore || 0) || (Number(final.interviewPercentage || 0) * 0.5);
-            const displayRank = final.finalRank || (Number(final.finalScore || 0) > 0 ? index + 1 : '-');
-          %>
-            <tr>
-              <td class="center"><%= displayRank %></td>
-              <td class="name"><%= row.nama %></td>
-              <td class="right"><%= Number(final.presentationTotal || 0).toFixed(2) %></td>
-              <td class="right"><%= Number(final.collaborationTotal || 0).toFixed(2) %></td>
-              <td class="right"><%= Number(final.interviewTotal || 0).toFixed(2) %></td>
-              <td class="right"><%= Number(final.interviewPercentage || 0).toFixed(2) %></td>
-              <td class="right"><%= interviewWeighted.toFixed(2) %></td>
-              <td class="right"><%= Number(final.inputDataScore || 0).toFixed(2) %></td>
-              <td class="right"><%= Number(final.finalScore || 0).toFixed(2) %></td>
-              <td class="rank"><%= displayRank %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-      <div class="actions">
-        <a href="/interview-recap/export.csv" class="btn">📥 Ekspor CSV Semua Kecamatan</a>
-        <a href="/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
-      </div>
+          </thead>
+          <tbody>
+            <% if (!rows.length) { %>
+              <tr>
+                <td colspan="10" class="center">Belum ada data kecamatan.</td>
+              </tr>
+            <% } %>
+            <% rows.forEach((row, index) => {
+              const final = row.final || {};
+              const presentationTotal = Number(final.presentationTotal || 0);
+              const collaborationTotal = Number(final.collaborationTotal || 0);
+              const interviewTotal = Number(final.interviewTotal || 0);
+              const interviewPercentage = Number(final.interviewPercentage || 0);
+              const interviewWeighted = Number(final.interviewWeightedScore || 0) || (interviewPercentage * 0.5);
+              const inputDataRaw = row.baseline ? Number(row.baseline.totalScore || 0) : (Number(final.inputDataScore || 0) * 2);
+              const inputDataWeighted = Number(final.inputDataScore || 0) || (inputDataRaw * 0.5);
+              const finalScore = Number(final.finalScore || 0);
+              const displayRank = final.finalRank || (finalScore > 0 ? index + 1 : '-');
+            %>
+              <tr>
+                <td class="center"><%= displayRank %></td>
+                <td class="name"><%= row.nama %><input type="hidden" name="input_data_raw_<%= row.id %>" value="<%= inputDataRaw.toFixed(3) %>"></td>
+                <td class="manual-cell">
+                  <input class="manual-input" type="number" step="0.01" min="0" name="presentation_total_<%= row.id %>" value="<%= presentationTotal ? presentationTotal.toFixed(2) : '' %>" placeholder="0.00">
+                </td>
+                <td class="manual-cell">
+                  <input class="manual-input" type="number" step="0.01" min="0" name="collaboration_total_<%= row.id %>" value="<%= collaborationTotal ? collaborationTotal.toFixed(2) : '' %>" placeholder="0.00">
+                </td>
+                <td class="right"><%= interviewTotal.toFixed(2) %></td>
+                <td class="right"><%= interviewPercentage.toFixed(2) %></td>
+                <td class="right"><%= Number(interviewWeighted || 0).toFixed(2) %></td>
+                <td class="right"><%= Number(inputDataWeighted || 0).toFixed(2) %></td>
+                <td class="right"><strong><%= finalScore.toFixed(2) %></strong></td>
+                <td class="rank"><%= displayRank %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <div class="actions sticky-actions">
+          <button type="submit" class="btn">💾 Simpan Rekap Wawancara</button>
+          <a href="/interview-recap/export.csv" class="btn">📥 Ekspor CSV Semua Kecamatan</a>
+          <a href="/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+        </div>
+      </form>
     </section>
   </main>
 </body>
