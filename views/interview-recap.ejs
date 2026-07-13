@@ -29,9 +29,9 @@
     th,td { padding:8px 7px; border:1px solid #111; vertical-align:middle; font-size:12px; }
     th { background:#fff; color:#000; text-align:center; font-weight:800; line-height:1.35; }
     td { background:#fff; color:#000; }
-    th.manual-header { background:#fff200; }
-    td.manual-cell { background:#fff200; }
-    .manual-input { width:100%; border:1px solid #777; border-radius:4px; padding:6px 7px; text-align:right; background:#fffde8; font-weight:700; }
+    th.manual-header { background:#fff; }
+    td.manual-cell { background:#fff; }
+    .manual-input { width:100%; border:1px solid #777; border-radius:4px; padding:6px 7px; text-align:right; background:#fff; font-weight:700; }
     .manual-input:focus { outline:2px solid #7047a5; background:#fff; }
     td.center { text-align:center; }
     td.right { text-align:right; }
@@ -62,9 +62,9 @@
 
     <section class="card intro">
       <h2>Rekap Nilai Akhir Hasil Wawancara</h2>
-      <p class="muted">Halaman ini menampilkan seluruh kecamatan. Kolom berwarna kuning diisi manual dari hasil wawancara.</p>
+      <p class="muted">Halaman ini menampilkan seluruh kecamatan. Kolom nilai manual dibuat putih dan tetap dihitung otomatis melalui rumus.</p>
       <div class="note">
-        Rumus: Total = Aspek Penampilan + Aspek Pengayaan. Capaian Wawancara = Total / 400 × 100. Bobot Wawancara 50% = Capaian Wawancara × 0,5. Nilai Akhir = Bobot Wawancara 50% + Bobot Input Data/Survey Lapangan 50%.
+        Rumus: Total = Aspek Penampilan + Aspek Pengayaan. Capaian Wawancara = Total / 400 × 100. Nilai Akhir = (Capaian Wawancara × 0,5) + (Capaian Input Data/Survey Lapangan × 0,5).
       </div>
       <div class="grid">
         <div class="metric-card"><h3>Total Kecamatan</h3><div class="metric"><%= rows.length %></div></div>
@@ -75,7 +75,7 @@
 
     <section class="table-card">
       <h2>Rekap Seluruh Kecamatan</h2>
-      <p class="muted" style="margin:8px 0 14px">Isi manual dua kolom kuning, lalu klik Simpan Rekap Wawancara. Kolom lain dihitung otomatis.</p>
+      <p class="muted" style="margin:8px 0 14px">Isi manual kolom Aspek Penampilan, Aspek Pengayaan, dan Capaian Input Data/Survey Lapangan, lalu klik Simpan Rekap Wawancara. Total, capaian, nilai akhir, dan rank dihitung otomatis.</p>
 
       <form method="POST" action="/interview-recap/save">
         <table>
@@ -88,7 +88,7 @@
               <th>TOTAL</th>
               <th>CAPAIAN<br>WAWANCARA<br>(%)</th>
               <th>CAPAIAN<br>WAWANCARA<br>(BOBOT NILAI 50%)</th>
-              <th>CAPAIAN INPUT<br>DATA DAN SURVEY<br>LAPANGAN<br>(BOBOT NILAI 50%)</th>
+              <th class="manual-header">CAPAIAN INPUT<br>DATA DAN SURVEY<br>LAPANGAN<br>(BOBOT NILAI 50%)<br><small>(isi manual nilai hasil wawancara)</small></th>
               <th>NILAI<br>AKHIR</th>
               <th>RANK</th>
             </tr>
@@ -106,14 +106,14 @@
               const interviewTotal = Number(final.interviewTotal || 0);
               const interviewPercentage = Number(final.interviewPercentage || 0);
               const interviewWeighted = Number(final.interviewWeightedScore || 0) || (interviewPercentage * 0.5);
-              const inputDataRaw = row.baseline ? Number(row.baseline.totalScore || 0) : (Number(final.inputDataScore || 0) * 2);
+              const inputDataRaw = Number(final.inputDataScore || 0) > 0 ? (Number(final.inputDataScore || 0) * 2) : (row.baseline ? Number(row.baseline.totalScore || 0) : 0);
               const inputDataWeighted = Number(final.inputDataScore || 0) || (inputDataRaw * 0.5);
               const finalScore = Number(final.finalScore || 0);
               const displayRank = final.finalRank || (finalScore > 0 ? index + 1 : '-');
             %>
               <tr>
-                <td class="center"><%= displayRank %></td>
-                <td class="name"><%= row.nama %><input type="hidden" name="input_data_raw_<%= row.id %>" value="<%= inputDataRaw.toFixed(3) %>"></td>
+                <td class="center"><%= index + 1 %></td>
+                <td class="name"><%= row.nama %></td>
                 <td class="manual-cell">
                   <input class="manual-input" type="number" step="0.01" min="0" name="presentation_total_<%= row.id %>" value="<%= presentationTotal ? presentationTotal.toFixed(2) : '' %>" placeholder="0.00">
                 </td>
@@ -123,7 +123,9 @@
                 <td class="right"><%= interviewTotal.toFixed(2) %></td>
                 <td class="right"><%= interviewPercentage.toFixed(2) %></td>
                 <td class="right"><%= Number(interviewWeighted || 0).toFixed(2) %></td>
-                <td class="right"><%= Number(inputDataWeighted || 0).toFixed(2) %></td>
+                <td class="manual-cell">
+                  <input class="manual-input" type="number" step="0.01" min="0" max="100" name="input_data_raw_<%= row.id %>" value="<%= inputDataRaw ? inputDataRaw.toFixed(2) : '' %>" placeholder="0.00">
+                </td>
                 <td class="right"><strong><%= finalScore.toFixed(2) %></strong></td>
                 <td class="rank"><%= displayRank %></td>
               </tr>

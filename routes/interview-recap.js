@@ -306,11 +306,11 @@ function getInputDataRawScore(row, body, kecamatanId) {
   if (body && body[bodyKey] !== undefined && String(body[bodyKey]).trim() !== '') {
     return toNumber(body[bodyKey]);
   }
-  if (row.baseline && row.baseline.totalScore !== null && row.baseline.totalScore !== undefined) {
-    return Number(row.baseline.totalScore || 0);
-  }
   if (row.final && row.final.inputDataScore) {
     return Number(row.final.inputDataScore || 0) * 2;
+  }
+  if (row.baseline && row.baseline.totalScore !== null && row.baseline.totalScore !== undefined) {
+    return Number(row.baseline.totalScore || 0);
   }
   return 0;
 }
@@ -399,7 +399,7 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
       'Total Wawancara',
       'Capaian Wawancara (%)',
       'Capaian Wawancara Bobot 50%',
-      'Capaian Input Data Bobot 50%',
+      'Capaian Input Data/Survey Lapangan',
       'Nilai Akhir',
       'Rank'
     ];
@@ -416,7 +416,7 @@ router.get('/interview-recap/export.csv', ensureAuthenticated, isSuperAdmin, asy
         final.interviewTotal || 0,
         final.interviewPercentage || 0,
         final.interviewWeightedScore || round((final.interviewPercentage || 0) * 0.5, 3),
-        final.inputDataScore || (row.baseline ? round(row.baseline.totalScore * 0.5, 3) : 0),
+        final.inputDataScore ? round(Number(final.inputDataScore || 0) * 2, 3) : (row.baseline ? Number(row.baseline.totalScore || 0) : 0),
         final.finalScore || 0,
         final.finalRank || ''
       ].map(escape).join(','));
